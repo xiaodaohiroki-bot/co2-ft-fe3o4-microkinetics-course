@@ -149,6 +149,23 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notebooks</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/01_rwgs_minimal_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RWGS temperature-dependence exercise</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -159,14 +176,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#roadmap" id="toc-roadmap" class="nav-link active" data-scroll-target="#roadmap"><span class="header-section-number">1</span> Roadmap</a>
-  <ul class="collapse">
-  <li><a href="#phase-1-fe3o4-rwgs-mvp" id="toc-phase-1-fe3o4-rwgs-mvp" class="nav-link" data-scroll-target="#phase-1-fe3o4-rwgs-mvp"><span class="header-section-number">1.1</span> Phase 1: Fe3O4-RWGS MVP</a></li>
-  <li><a href="#phase-2-パラメータと検証" id="toc-phase-2-パラメータと検証" class="nav-link" data-scroll-target="#phase-2-パラメータと検証"><span class="header-section-number">1.2</span> Phase 2: パラメータと検証</a></li>
-  <li><a href="#phase-3-反応器感度解析" id="toc-phase-3-反応器感度解析" class="nav-link" data-scroll-target="#phase-3-反応器感度解析"><span class="header-section-number">1.3</span> Phase 3: 反応器・感度解析</a></li>
-  <li><a href="#phase-4-将来拡張" id="toc-phase-4-将来拡張" class="nav-link" data-scroll-target="#phase-4-将来拡張"><span class="header-section-number">1.4</span> Phase 4: 将来拡張</a></li>
-  <li><a href="#deliverables" id="toc-deliverables" class="nav-link" data-scroll-target="#deliverables"><span class="header-section-number">1.5</span> Deliverables</a></li>
-  </ul></li>
+  <li><a href="#phase-1-fe3o4-rwgs-mvp" id="toc-phase-1-fe3o4-rwgs-mvp" class="nav-link active" data-scroll-target="#phase-1-fe3o4-rwgs-mvp"><span class="header-section-number">1</span> Phase 1: Fe3O4-RWGS MVP</a></li>
+  <li><a href="#phase-2-パラメータと検証" id="toc-phase-2-パラメータと検証" class="nav-link" data-scroll-target="#phase-2-パラメータと検証"><span class="header-section-number">2</span> Phase 2: パラメータと検証</a></li>
+  <li><a href="#phase-3-反応器感度解析" id="toc-phase-3-反応器感度解析" class="nav-link" data-scroll-target="#phase-3-反応器感度解析"><span class="header-section-number">3</span> Phase 3: 反応器・感度解析</a></li>
+  <li><a href="#phase-4-将来拡張" id="toc-phase-4-将来拡張" class="nav-link" data-scroll-target="#phase-4-将来拡張"><span class="header-section-number">4</span> Phase 4: 将来拡張</a></li>
+  <li><a href="#deliverables" id="toc-deliverables" class="nav-link" data-scroll-target="#deliverables"><span class="header-section-number">5</span> Deliverables</a></li>
   </ul>
 </nav>
     </div>
@@ -192,11 +206,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="roadmap" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Roadmap</h1>
 <p>このロードマップは、CO2-FT / Fe3O4 microkinetics 教材を、最小 Fe3O4-RWGS model から段階的に拡張するための計画である。最初の段階では、Fe3O4 を RWGS-active phase として扱い、CO2 から CO と H2O を生成する反応のみを実装対象にする。</p>
-<section id="phase-1-fe3o4-rwgs-mvp" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="phase-1-fe3o4-rwgs-mvp"><span class="header-section-number">1.1</span> Phase 1: Fe3O4-RWGS MVP</h2>
+<section id="phase-1-fe3o4-rwgs-mvp" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="phase-1-fe3o4-rwgs-mvp"><span class="header-section-number">1</span> Phase 1: Fe3O4-RWGS MVP</h2>
 <p>最初のゴールは、Fe3O4 上 RWGS の最小7ステップ機構を、保存則に矛盾しない形で実装することである。</p>
 <ul>
 <li>gas species と surface species を定義する。</li>
@@ -206,8 +218,8 @@ ul.task-list li input[type="checkbox"] {
 <li>CO 生成速度と H2O 生成速度を返す基礎関数を作る。</li>
 </ul>
 </section>
-<section id="phase-2-パラメータと検証" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="phase-2-パラメータと検証"><span class="header-section-number">1.2</span> Phase 2: パラメータと検証</h2>
+<section id="phase-2-パラメータと検証" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="phase-2-パラメータと検証"><span class="header-section-number">2</span> Phase 2: パラメータと検証</h2>
 <p>次に、速度定数、吸着平衡、温度依存性を扱う。</p>
 <ul>
 <li>Arrhenius parameter の入力形式を整理する。</li>
@@ -216,8 +228,8 @@ ul.task-list li input[type="checkbox"] {
 <li>文献値を入れる場合は出典を明記し、不明な箇所は <code>[citation needed]</code> とする。</li>
 </ul>
 </section>
-<section id="phase-3-反応器感度解析" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="phase-3-反応器感度解析"><span class="header-section-number">1.3</span> Phase 3: 反応器・感度解析</h2>
+<section id="phase-3-反応器感度解析" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="phase-3-反応器感度解析"><span class="header-section-number">3</span> Phase 3: 反応器・感度解析</h2>
 <p>Fe3O4-RWGS model が安定して動くようになった後、反応器モデルと感度解析へ進む。</p>
 <ul>
 <li>batch / CSTR / PFR の最小例を追加する。</li>
@@ -225,8 +237,8 @@ ul.task-list li input[type="checkbox"] {
 <li>CO2 conversion、CO formation rate、H2O formation rate の解釈を整理する。</li>
 </ul>
 </section>
-<section id="phase-4-将来拡張" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="phase-4-将来拡張"><span class="header-section-number">1.4</span> Phase 4: 将来拡張</h2>
+<section id="phase-4-将来拡張" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="phase-4-将来拡張"><span class="header-section-number">4</span> Phase 4: 将来拡張</h2>
 <p>以下は重要な研究課題だが、MVP では実装しない。</p>
 <ul>
 <li>FeCx-FT model</li>
@@ -238,8 +250,8 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>これらを扱う場合は、Fe3O4-RWGS model の拡張なのか、FeCx-FT model への移行なのかを明確に分ける。Fe3O4 単独で C2+ 炭化水素生成を説明する記述は避ける。</p>
 </section>
-<section id="deliverables" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="deliverables"><span class="header-section-number">1.5</span> Deliverables</h2>
+<section id="deliverables" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="deliverables"><span class="header-section-number">5</span> Deliverables</h2>
 <ul>
 <li>Quarto website として読める教材ページ</li>
 <li>最小 Fe3O4-RWGS mechanism</li>
@@ -249,7 +261,6 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

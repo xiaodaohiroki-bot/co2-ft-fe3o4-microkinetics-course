@@ -2,8 +2,6 @@
 title: "Fe3O4上RWGSの最小素反応ネットワーク"
 ---
 
-# Fe3O4上RWGSの最小素反応ネットワーク
-
 この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。
 
 本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。
@@ -61,6 +59,14 @@ MVP で扱う表面種は次の7つである。
 
 この表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。
 
+### COOH* と HCOO* を含めない理由
+
+RWGS では、`CO2*` の直接解離経路だけでなく、`COOH*` を経由する carboxyl 経路や、`HCOO*` を経由する formate 経路も候補になり得る。
+
+本 MVP では、Fe3O4-RWGS の direct dissociation / redox 型の最小モデルを作ることを目的とするため、`COOH*` と `HCOO*` は明示的な表面種として含めない。
+
+したがって、本章の反応機構は `COOH*` や `HCOO*` が不要であると断定するものではなく、最小モデルとして意図的に省略しているものである。これらの中間体は、将来の拡張モデルで direct / COOH / HCOO 経路を比較するときに追加する。
+
 ## 7ステップ最小反応機構
 
 Fe3O4-RWGS MVP では、反応 ID を必ず `R1` から `R7` とする。表記は以後も変えない。
@@ -110,8 +116,17 @@ $$
 `*` は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。
 
 $$
-\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{O*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}} = 1
+\theta_*
++ \theta_{\mathrm{CO_2}}
++ \theta_{\mathrm{H}}
++ \theta_{\mathrm{CO}}
++ \theta_{\mathrm{O}}
++ \theta_{\mathrm{OH}}
++ \theta_{\mathrm{H_2O}}
+= 1
 $$
+
+ここで $\theta_{\mathrm{CO_2}}$ は `CO2*` の被覆率を表す。同様に、$\theta_{\mathrm{H}}$ は `H*`、$\theta_{\mathrm{CO}}$ は `CO*`、$\theta_{\mathrm{O}}$ は `O*`、$\theta_{\mathrm{OH}}$ は `OH*`、$\theta_{\mathrm{H_2O}}$ は `H2O*` の被覆率を表す。
 
 `CO2*` は CO2 activation の入口である。`R1` で生成し、`R3` で `CO*` と `O*` に変換される。
 
@@ -149,6 +164,7 @@ $$
 - ASF distribution
 - Fe3O4 から FeCx への dynamic phase transformation
 - FeCx site 上の FT reaction network
+- `COOH*` や `HCOO*` を含む competing pathway の比較
 
 これらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。
 
@@ -181,5 +197,12 @@ C2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、term
 3. 任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。
 
 $$
-\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{O*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}}
+\theta_*
++ \theta_{\mathrm{CO_2}}
++ \theta_{\mathrm{H}}
++ \theta_{\mathrm{CO}}
++ \theta_{\mathrm{O}}
++ \theta_{\mathrm{OH}}
++ \theta_{\mathrm{H_2O}}
+= 1
 $$

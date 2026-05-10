@@ -20,6 +20,10 @@ website:
             text: Fe3O4-RWGS Network
           - href: lessons/03_rate_equations.qmd
             text: Rate Equations
+      - section: Notebooks
+        contents:
+          - href: notebooks/01_rwgs_minimal_model.ipynb
+            text: RWGS temperature-dependence exercise
 
 format:
   html:

@@ -178,6 +178,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notebooks</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_rwgs_minimal_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RWGS temperature-dependence exercise</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -188,21 +205,21 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fe3o4上rwgsの最小素反応ネットワーク" id="toc-fe3o4上rwgsの最小素反応ネットワーク" class="nav-link active" data-scroll-target="#fe3o4上rwgsの最小素反応ネットワーク"><span class="header-section-number">1</span> Fe3O4上RWGSの最小素反応ネットワーク</a>
+  <li><a href="#学習目標" id="toc-学習目標" class="nav-link active" data-scroll-target="#学習目標"><span class="header-section-number">1</span> 学習目標</a></li>
+  <li><a href="#この章で扱うモデル範囲" id="toc-この章で扱うモデル範囲" class="nav-link" data-scroll-target="#この章で扱うモデル範囲"><span class="header-section-number">2</span> この章で扱うモデル範囲</a></li>
+  <li><a href="#気相種リスト" id="toc-気相種リスト" class="nav-link" data-scroll-target="#気相種リスト"><span class="header-section-number">3</span> 気相種リスト</a></li>
+  <li><a href="#表面種リスト" id="toc-表面種リスト" class="nav-link" data-scroll-target="#表面種リスト"><span class="header-section-number">4</span> 表面種リスト</a>
   <ul class="collapse">
-  <li><a href="#学習目標" id="toc-学習目標" class="nav-link" data-scroll-target="#学習目標"><span class="header-section-number">1.1</span> 学習目標</a></li>
-  <li><a href="#この章で扱うモデル範囲" id="toc-この章で扱うモデル範囲" class="nav-link" data-scroll-target="#この章で扱うモデル範囲"><span class="header-section-number">1.2</span> この章で扱うモデル範囲</a></li>
-  <li><a href="#気相種リスト" id="toc-気相種リスト" class="nav-link" data-scroll-target="#気相種リスト"><span class="header-section-number">1.3</span> 気相種リスト</a></li>
-  <li><a href="#表面種リスト" id="toc-表面種リスト" class="nav-link" data-scroll-target="#表面種リスト"><span class="header-section-number">1.4</span> 表面種リスト</a></li>
-  <li><a href="#ステップ最小反応機構" id="toc-ステップ最小反応機構" class="nav-link" data-scroll-target="#ステップ最小反応機構"><span class="header-section-number">1.5</span> 7ステップ最小反応機構</a></li>
-  <li><a href="#各表面種の役割" id="toc-各表面種の役割" class="nav-link" data-scroll-target="#各表面種の役割"><span class="header-section-number">1.6</span> 各表面種の役割</a></li>
-  <li><a href="#この最小モデルで説明できること" id="toc-この最小モデルで説明できること" class="nav-link" data-scroll-target="#この最小モデルで説明できること"><span class="header-section-number">1.7</span> この最小モデルで説明できること</a></li>
-  <li><a href="#この最小モデルで説明できないこと" id="toc-この最小モデルで説明できないこと" class="nav-link" data-scroll-target="#この最小モデルで説明できないこと"><span class="header-section-number">1.8</span> この最小モデルで説明できないこと</a></li>
-  <li><a href="#c2生成に関する注意" id="toc-c2生成に関する注意" class="nav-link" data-scroll-target="#c2生成に関する注意"><span class="header-section-number">1.9</span> C2+生成に関する注意</a></li>
-  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">1.10</span> この章の要点</a></li>
-  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">1.11</span> 確認問題</a></li>
-  <li><a href="#計算演習" id="toc-計算演習" class="nav-link" data-scroll-target="#計算演習"><span class="header-section-number">1.12</span> 計算演習</a></li>
+  <li><a href="#cooh-と-hcoo-を含めない理由" id="toc-cooh-と-hcoo-を含めない理由" class="nav-link" data-scroll-target="#cooh-と-hcoo-を含めない理由"><span class="header-section-number">4.1</span> COOH* と HCOO* を含めない理由</a></li>
   </ul></li>
+  <li><a href="#ステップ最小反応機構" id="toc-ステップ最小反応機構" class="nav-link" data-scroll-target="#ステップ最小反応機構"><span class="header-section-number">5</span> 7ステップ最小反応機構</a></li>
+  <li><a href="#各表面種の役割" id="toc-各表面種の役割" class="nav-link" data-scroll-target="#各表面種の役割"><span class="header-section-number">6</span> 各表面種の役割</a></li>
+  <li><a href="#この最小モデルで説明できること" id="toc-この最小モデルで説明できること" class="nav-link" data-scroll-target="#この最小モデルで説明できること"><span class="header-section-number">7</span> この最小モデルで説明できること</a></li>
+  <li><a href="#この最小モデルで説明できないこと" id="toc-この最小モデルで説明できないこと" class="nav-link" data-scroll-target="#この最小モデルで説明できないこと"><span class="header-section-number">8</span> この最小モデルで説明できないこと</a></li>
+  <li><a href="#c2生成に関する注意" id="toc-c2生成に関する注意" class="nav-link" data-scroll-target="#c2生成に関する注意"><span class="header-section-number">9</span> C2+生成に関する注意</a></li>
+  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">10</span> この章の要点</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">11</span> 確認問題</a></li>
+  <li><a href="#計算演習" id="toc-計算演習" class="nav-link" data-scroll-target="#計算演習"><span class="header-section-number">12</span> 計算演習</a></li>
   </ul>
 </nav>
     </div>
@@ -228,12 +245,10 @@ window.Quarto = {
 </header>
 
 
-<section id="fe3o4上rwgsの最小素反応ネットワーク" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Fe3O4上RWGSの最小素反応ネットワーク</h1>
 <p>この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。</p>
 <p>本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。</p>
-<section id="学習目標" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1.1</span> 学習目標</h2>
+<section id="学習目標" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1</span> 学習目標</h2>
 <p>この章を終えると、次のことができるようになる。</p>
 <ul>
 <li>Fe3O4-RWGS MVP で使う気相種と表面種を列挙する。</li>
@@ -243,8 +258,8 @@ window.Quarto = {
 <li>この最小モデルで説明できる範囲と、説明できない範囲を区別する。</li>
 </ul>
 </section>
-<section id="この章で扱うモデル範囲" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="この章で扱うモデル範囲"><span class="header-section-number">1.2</span> この章で扱うモデル範囲</h2>
+<section id="この章で扱うモデル範囲" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="この章で扱うモデル範囲"><span class="header-section-number">2</span> この章で扱うモデル範囲</h2>
 <p>この章で扱う総括反応は RWGS である。</p>
 <pre class="text"><code>CO2 + H2 &lt;=&gt; CO + H2O</code></pre>
 <p>LaTeX では次のように書く。</p>
@@ -253,8 +268,8 @@ window.Quarto = {
 \]</span></p>
 <p>モデルは単一種類の表面サイト <code>*</code> を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。</p>
 </section>
-<section id="気相種リスト" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="気相種リスト"><span class="header-section-number">1.3</span> 気相種リスト</h2>
+<section id="気相種リスト" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="気相種リスト"><span class="header-section-number">3</span> 気相種リスト</h2>
 <p>MVP で扱う気相種は4つだけである。</p>
 <table class="caption-top table">
 <thead>
@@ -283,8 +298,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="表面種リスト" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="表面種リスト"><span class="header-section-number">1.4</span> 表面種リスト</h2>
+<section id="表面種リスト" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="表面種リスト"><span class="header-section-number">4</span> 表面種リスト</h2>
 <p>MVP で扱う表面種は次の7つである。</p>
 <table class="caption-top table">
 <colgroup>
@@ -329,9 +344,15 @@ window.Quarto = {
 </tbody>
 </table>
 <p>この表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。</p>
+<section id="cooh-と-hcoo-を含めない理由" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="cooh-と-hcoo-を含めない理由"><span class="header-section-number">4.1</span> COOH* と HCOO* を含めない理由</h3>
+<p>RWGS では、<code>CO2*</code> の直接解離経路だけでなく、<code>COOH*</code> を経由する carboxyl 経路や、<code>HCOO*</code> を経由する formate 経路も候補になり得る。</p>
+<p>本 MVP では、Fe3O4-RWGS の direct dissociation / redox 型の最小モデルを作ることを目的とするため、<code>COOH*</code> と <code>HCOO*</code> は明示的な表面種として含めない。</p>
+<p>したがって、本章の反応機構は <code>COOH*</code> や <code>HCOO*</code> が不要であると断定するものではなく、最小モデルとして意図的に省略しているものである。これらの中間体は、将来の拡張モデルで direct / COOH / HCOO 経路を比較するときに追加する。</p>
 </section>
-<section id="ステップ最小反応機構" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="ステップ最小反応機構"><span class="header-section-number">1.5</span> 7ステップ最小反応機構</h2>
+</section>
+<section id="ステップ最小反応機構" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="ステップ最小反応機構"><span class="header-section-number">5</span> 7ステップ最小反応機構</h2>
 <p>Fe3O4-RWGS MVP では、反応 ID を必ず <code>R1</code> から <code>R7</code> とする。表記は以後も変えない。</p>
 <table class="caption-top table">
 <colgroup>
@@ -416,12 +437,20 @@ window.Quarto = {
 \mathrm{R7:\ H_2O* \rightleftharpoons H_2O + *}
 \]</span></p>
 </section>
-<section id="各表面種の役割" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="各表面種の役割"><span class="header-section-number">1.6</span> 各表面種の役割</h2>
+<section id="各表面種の役割" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="各表面種の役割"><span class="header-section-number">6</span> 各表面種の役割</h2>
 <p><code>*</code> は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。</p>
 <p><span class="math display">\[
-\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{O*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}} = 1
+\theta_*
++ \theta_{\mathrm{CO_2}}
++ \theta_{\mathrm{H}}
++ \theta_{\mathrm{CO}}
++ \theta_{\mathrm{O}}
++ \theta_{\mathrm{OH}}
++ \theta_{\mathrm{H_2O}}
+= 1
 \]</span></p>
+<p>ここで <span class="math inline">\(\theta_{\mathrm{CO_2}}\)</span> は <code>CO2*</code> の被覆率を表す。同様に、<span class="math inline">\(\theta_{\mathrm{H}}\)</span> は <code>H*</code>、<span class="math inline">\(\theta_{\mathrm{CO}}\)</span> は <code>CO*</code>、<span class="math inline">\(\theta_{\mathrm{O}}\)</span> は <code>O*</code>、<span class="math inline">\(\theta_{\mathrm{OH}}\)</span> は <code>OH*</code>、<span class="math inline">\(\theta_{\mathrm{H_2O}}\)</span> は <code>H2O*</code> の被覆率を表す。</p>
 <p><code>CO2*</code> は CO2 activation の入口である。<code>R1</code> で生成し、<code>R3</code> で <code>CO*</code> と <code>O*</code> に変換される。</p>
 <p><code>H*</code> は H2 dissociation により生成する表面水素である。<code>R5</code> と <code>R6</code> で表面酸素種を水素化する。</p>
 <p><code>CO*</code> は CO 生成直前の表面中間体である。<code>R4</code> で脱離して <code>CO</code> になる。</p>
@@ -429,8 +458,8 @@ window.Quarto = {
 <p><code>OH*</code> は <code>O*</code> の水素化で生じる表面ヒドロキシ種である。さらに <code>H*</code> と反応して <code>H2O*</code> になる。</p>
 <p><code>H2O*</code> は水生成直前の吸着水である。<code>R7</code> で脱離して気相 <code>H2O</code> になり、空サイト <code>*</code> を再生する。</p>
 </section>
-<section id="この最小モデルで説明できること" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="この最小モデルで説明できること"><span class="header-section-number">1.7</span> この最小モデルで説明できること</h2>
+<section id="この最小モデルで説明できること" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="この最小モデルで説明できること"><span class="header-section-number">7</span> この最小モデルで説明できること</h2>
 <p>この最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。</p>
 <ul>
 <li>CO2 adsorption と CO2 activation</li>
@@ -442,8 +471,8 @@ window.Quarto = {
 </ul>
 <p>この範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。</p>
 </section>
-<section id="この最小モデルで説明できないこと" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="この最小モデルで説明できないこと"><span class="header-section-number">1.8</span> この最小モデルで説明できないこと</h2>
+<section id="この最小モデルで説明できないこと" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="この最小モデルで説明できないこと"><span class="header-section-number">8</span> この最小モデルで説明できないこと</h2>
 <p>このモデルは、次の現象を説明するためのものではない。</p>
 <ul>
 <li>CH4 生成の詳細機構</li>
@@ -453,16 +482,17 @@ window.Quarto = {
 <li>ASF distribution</li>
 <li>Fe3O4 から FeCx への dynamic phase transformation</li>
 <li>FeCx site 上の FT reaction network</li>
+<li><code>COOH*</code> や <code>HCOO*</code> を含む competing pathway の比較</li>
 </ul>
 <p>これらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。</p>
 </section>
-<section id="c2生成に関する注意" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="c2生成に関する注意"><span class="header-section-number">1.9</span> C2+生成に関する注意</h2>
+<section id="c2生成に関する注意" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="c2生成に関する注意"><span class="header-section-number">9</span> C2+生成に関する注意</h2>
 <p>C2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。</p>
 <p>C2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。</p>
 </section>
-<section id="この章の要点" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">1.10</span> この章の要点</h2>
+<section id="この章の要点" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">10</span> この章の要点</h2>
 <ul>
 <li>Fe3O4-RWGS MVP では、気相種を <code>CO2</code>, <code>H2</code>, <code>CO</code>, <code>H2O</code> に限定する。</li>
 <li>表面種は <code>*</code>, <code>CO2*</code>, <code>H*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の7種類である。</li>
@@ -471,8 +501,8 @@ window.Quarto = {
 <li>C2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。</li>
 </ul>
 </section>
-<section id="確認問題" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">1.11</span> 確認問題</h2>
+<section id="確認問題" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">11</span> 確認問題</h2>
 <ol type="1">
 <li>Fe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。</li>
 <li><code>R3: CO2* + * &lt;=&gt; CO* + O*</code> が site balance を満たす理由を説明せよ。</li>
@@ -481,19 +511,25 @@ window.Quarto = {
 <li><code>R7</code> が空サイト <code>*</code> の再生にどのように関わるか説明せよ。</li>
 </ol>
 </section>
-<section id="計算演習" class="level2" data-number="1.12">
-<h2 data-number="1.12" class="anchored" data-anchor-id="計算演習"><span class="header-section-number">1.12</span> 計算演習</h2>
+<section id="計算演習" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="計算演習"><span class="header-section-number">12</span> 計算演習</h2>
 <ol type="1">
 <li><code>R1</code> から <code>R7</code> について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。</li>
 <li><code>R3</code>, <code>R5</code>, <code>R6</code> について、C、H、O の elemental mass balance を確認せよ。</li>
 <li>任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。</li>
 </ol>
 <p><span class="math display">\[
-\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{O*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}}
+\theta_*
++ \theta_{\mathrm{CO_2}}
++ \theta_{\mathrm{H}}
++ \theta_{\mathrm{CO}}
++ \theta_{\mathrm{O}}
++ \theta_{\mathrm{OH}}
++ \theta_{\mathrm{H_2O}}
+= 1
 \]</span></p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

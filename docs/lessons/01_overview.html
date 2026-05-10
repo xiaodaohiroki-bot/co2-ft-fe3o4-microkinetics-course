@@ -178,6 +178,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notebooks</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_rwgs_minimal_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RWGS temperature-dependence exercise</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -188,24 +205,21 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#co2-ftとfe系触媒の全体像" id="toc-co2-ftとfe系触媒の全体像" class="nav-link active" data-scroll-target="#co2-ftとfe系触媒の全体像"><span class="header-section-number">1</span> CO2-FTとFe系触媒の全体像</a>
+  <li><a href="#学習目標" id="toc-学習目標" class="nav-link active" data-scroll-target="#学習目標"><span class="header-section-number">1</span> 学習目標</a></li>
+  <li><a href="#co2-ftとは何か" id="toc-co2-ftとは何か" class="nav-link" data-scroll-target="#co2-ftとは何か"><span class="header-section-number">2</span> CO2-FTとは何か</a></li>
+  <li><a href="#co2水素化を-rwgs-ft-として見る理由" id="toc-co2水素化を-rwgs-ft-として見る理由" class="nav-link" data-scroll-target="#co2水素化を-rwgs-ft-として見る理由"><span class="header-section-number">3</span> CO2水素化を RWGS + FT として見る理由</a></li>
+  <li><a href="#fe3o4fe金属fe-carbide相の役割分担" id="toc-fe3o4fe金属fe-carbide相の役割分担" class="nav-link" data-scroll-target="#fe3o4fe金属fe-carbide相の役割分担"><span class="header-section-number">4</span> Fe3O4、Fe金属、Fe carbide相の役割分担</a></li>
+  <li><a href="#なぜmvpをfe3o4-rwgsに限定するのか" id="toc-なぜmvpをfe3o4-rwgsに限定するのか" class="nav-link" data-scroll-target="#なぜmvpをfe3o4-rwgsに限定するのか"><span class="header-section-number">5</span> なぜMVPをFe3O4-RWGSに限定するのか</a></li>
+  <li><a href="#反応指標の定義" id="toc-反応指標の定義" class="nav-link" data-scroll-target="#反応指標の定義"><span class="header-section-number">6</span> 反応指標の定義</a>
   <ul class="collapse">
-  <li><a href="#学習目標" id="toc-学習目標" class="nav-link" data-scroll-target="#学習目標"><span class="header-section-number">1.1</span> 学習目標</a></li>
-  <li><a href="#co2-ftとは何か" id="toc-co2-ftとは何か" class="nav-link" data-scroll-target="#co2-ftとは何か"><span class="header-section-number">1.2</span> CO2-FTとは何か</a></li>
-  <li><a href="#co2水素化を-rwgs-ft-として見る理由" id="toc-co2水素化を-rwgs-ft-として見る理由" class="nav-link" data-scroll-target="#co2水素化を-rwgs-ft-として見る理由"><span class="header-section-number">1.3</span> CO2水素化を RWGS + FT として見る理由</a></li>
-  <li><a href="#fe3o4fe金属fe-carbide相の役割分担" id="toc-fe3o4fe金属fe-carbide相の役割分担" class="nav-link" data-scroll-target="#fe3o4fe金属fe-carbide相の役割分担"><span class="header-section-number">1.4</span> Fe3O4、Fe金属、Fe carbide相の役割分担</a></li>
-  <li><a href="#なぜmvpをfe3o4-rwgsに限定するのか" id="toc-なぜmvpをfe3o4-rwgsに限定するのか" class="nav-link" data-scroll-target="#なぜmvpをfe3o4-rwgsに限定するのか"><span class="header-section-number">1.5</span> なぜMVPをFe3O4-RWGSに限定するのか</a></li>
-  <li><a href="#反応指標の定義" id="toc-反応指標の定義" class="nav-link" data-scroll-target="#反応指標の定義"><span class="header-section-number">1.6</span> 反応指標の定義</a>
-  <ul class="collapse">
-  <li><a href="#co2転化率" id="toc-co2転化率" class="nav-link" data-scroll-target="#co2転化率"><span class="header-section-number">1.6.1</span> CO2転化率</a></li>
-  <li><a href="#炭素基準の選択率" id="toc-炭素基準の選択率" class="nav-link" data-scroll-target="#炭素基準の選択率"><span class="header-section-number">1.6.2</span> 炭素基準の選択率</a></li>
-  <li><a href="#co選択率" id="toc-co選択率" class="nav-link" data-scroll-target="#co選択率"><span class="header-section-number">1.6.3</span> CO選択率</a></li>
-  <li><a href="#ch4選択率" id="toc-ch4選択率" class="nav-link" data-scroll-target="#ch4選択率"><span class="header-section-number">1.6.4</span> CH4選択率</a></li>
-  <li><a href="#c2選択率" id="toc-c2選択率" class="nav-link" data-scroll-target="#c2選択率"><span class="header-section-number">1.6.5</span> C2+選択率</a></li>
+  <li><a href="#co2転化率" id="toc-co2転化率" class="nav-link" data-scroll-target="#co2転化率"><span class="header-section-number">6.1</span> CO2転化率</a></li>
+  <li><a href="#炭素基準の選択率" id="toc-炭素基準の選択率" class="nav-link" data-scroll-target="#炭素基準の選択率"><span class="header-section-number">6.2</span> 炭素基準の選択率</a></li>
+  <li><a href="#co選択率" id="toc-co選択率" class="nav-link" data-scroll-target="#co選択率"><span class="header-section-number">6.3</span> CO選択率</a></li>
+  <li><a href="#ch4選択率" id="toc-ch4選択率" class="nav-link" data-scroll-target="#ch4選択率"><span class="header-section-number">6.4</span> CH4選択率</a></li>
+  <li><a href="#c2選択率" id="toc-c2選択率" class="nav-link" data-scroll-target="#c2選択率"><span class="header-section-number">6.5</span> C2+選択率</a></li>
   </ul></li>
-  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">1.7</span> この章の要点</a></li>
-  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">1.8</span> 確認問題</a></li>
-  </ul></li>
+  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">7</span> この章の要点</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">8</span> 確認問題</a></li>
   </ul>
 </nav>
     </div>
@@ -231,12 +245,10 @@ window.Quarto = {
 </header>
 
 
-<section id="co2-ftとfe系触媒の全体像" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> CO2-FTとFe系触媒の全体像</h1>
 <p>この章では、CO2 hydrogenation を Fe 系触媒で考えるときの全体像を整理する。特に、CO2 Fischer-Tropsch (CO2-FT) を <strong>RWGS (reverse water-gas shift) と FT (Fischer-Tropsch synthesis) の組み合わせ</strong>として見る理由を説明し、この教材の MVP を <strong>Fe3O4 上の RWGS 最小モデル</strong>に限定する意味を明確にする。</p>
 <p>ここで重要なのは、Fe3O4、Fe metal、Fe carbide (FeCx) を同じ役割の相として扱わないことである。本教材の初期モデルでは、Fe3O4 を RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明できるとは主張しない。</p>
-<section id="学習目標" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1.1</span> 学習目標</h2>
+<section id="学習目標" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1</span> 学習目標</h2>
 <p>この章を終えると、次のことを説明できるようになる。</p>
 <ul>
 <li>CO2-FT を CO2 hydrogenation の一部として位置づける。</li>
@@ -246,8 +258,8 @@ window.Quarto = {
 <li>CO2転化率、CO選択率、CH4選択率、C2+選択率を炭素基準で定義する。</li>
 </ul>
 </section>
-<section id="co2-ftとは何か" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="co2-ftとは何か"><span class="header-section-number">1.2</span> CO2-FTとは何か</h2>
+<section id="co2-ftとは何か" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="co2-ftとは何か"><span class="header-section-number">2</span> CO2-FTとは何か</h2>
 <p>CO2-FT は、CO2 と H2 から炭化水素を合成する反応群を指す。一般には、CO2 が直接長鎖炭化水素へ変換される単一反応としてではなく、複数の反応過程が結合したものとして扱う方が理解しやすい。</p>
 <p>最も基本的な入口は RWGS である。</p>
 <p><span class="math display">\[
@@ -255,8 +267,8 @@ window.Quarto = {
 \]</span></p>
 <p>この反応で生じた CO は、条件と触媒相が適切であれば FT 型の炭化水素生成へ進む可能性がある。ただし、RWGS と FT は同じ活性点、同じ相、同じ律速過程で進むとは限らない。</p>
 </section>
-<section id="co2水素化を-rwgs-ft-として見る理由" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="co2水素化を-rwgs-ft-として見る理由"><span class="header-section-number">1.3</span> CO2水素化を RWGS + FT として見る理由</h2>
+<section id="co2水素化を-rwgs-ft-として見る理由" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="co2水素化を-rwgs-ft-として見る理由"><span class="header-section-number">3</span> CO2水素化を RWGS + FT として見る理由</h2>
 <p>CO2 hydrogenation では、生成物として CO、CH4、C2+ hydrocarbons、H2O などが観測され得る。これらを一つの総括反応だけで扱うと、どの過程が CO2 活性化を支配し、どの過程が炭素鎖成長を支配しているのかが見えにくくなる。</p>
 <p>そこで、まず次のように分けて考える。</p>
 <table class="caption-top table">
@@ -283,8 +295,8 @@ window.Quarto = {
 <p>この分解は、モデル化にも有効である。RWGS の microkinetic model では、CO2 adsorption、H2 dissociation、O removal、CO desorption などを明示する。一方、FT model では、C1 intermediate、C-C coupling、chain growth、chain termination などが必要になる。</p>
 <p>本教材では、最初に RWGS 部分だけを扱う。FT 部分は将来拡張として扱い、MVP には含めない。</p>
 </section>
-<section id="fe3o4fe金属fe-carbide相の役割分担" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="fe3o4fe金属fe-carbide相の役割分担"><span class="header-section-number">1.4</span> Fe3O4、Fe金属、Fe carbide相の役割分担</h2>
+<section id="fe3o4fe金属fe-carbide相の役割分担" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="fe3o4fe金属fe-carbide相の役割分担"><span class="header-section-number">4</span> Fe3O4、Fe金属、Fe carbide相の役割分担</h2>
 <p>Fe 系触媒は反応条件下で複数の相を取り得る。ここでは、教材上の役割を次のように分ける。</p>
 <table class="caption-top table">
 <colgroup>
@@ -319,19 +331,19 @@ window.Quarto = {
 </table>
 <p>この整理は、Fe3O4 の重要性を小さく見るためではない。むしろ、Fe3O4 が担う可能性のある RWGS と、FeCx が担う可能性のある FT を分けることで、モデルの仮定を検証しやすくするためである。</p>
 </section>
-<section id="なぜmvpをfe3o4-rwgsに限定するのか" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="なぜmvpをfe3o4-rwgsに限定するのか"><span class="header-section-number">1.5</span> なぜMVPをFe3O4-RWGSに限定するのか</h2>
+<section id="なぜmvpをfe3o4-rwgsに限定するのか" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="なぜmvpをfe3o4-rwgsに限定するのか"><span class="header-section-number">5</span> なぜMVPをFe3O4-RWGSに限定するのか</h2>
 <p>MVP を Fe3O4-RWGS に限定する理由は3つある。</p>
 <p>第一に、RWGS は CO2 hydrogenation の入口として重要であり、CO2、H2、CO、H2O だけでも mass balance と site balance の訓練ができる。</p>
 <p>第二に、Fe3O4 上の RWGS 最小モデルは、表面被覆率、空サイト、吸着・脱離、酸素除去を含むため、microkinetic model の基本要素を学ぶのに適している。</p>
 <p>第三に、C2+ 生成や ASF 分布を扱うには、FeCx 相、C-C coupling、chain growth、termination などの別の仮定が必要になる。これらを最初から混ぜると、どの仮定がどの結果を生んだのかが分かりにくくなる。</p>
 <p>したがって、本教材の初期段階では Fe3O4-RWGS の最小7ステップ機構を扱う。FeCx-FT、C2+ selectivity、ASF distribution、dynamic phase transformation は、機構・パラメータ・検証方法を分けた将来拡張とする。</p>
 </section>
-<section id="反応指標の定義" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="反応指標の定義"><span class="header-section-number">1.6</span> 反応指標の定義</h2>
+<section id="反応指標の定義" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="反応指標の定義"><span class="header-section-number">6</span> 反応指標の定義</h2>
 <p>ここでは、炭素基準でよく使う指標を定義する。入口 CO2 のモル流量を <span class="math inline">\(F_{\mathrm{CO_2,in}}\)</span>、出口 CO2 のモル流量を <span class="math inline">\(F_{\mathrm{CO_2,out}}\)</span> とする。</p>
-<section id="co2転化率" class="level3" data-number="1.6.1">
-<h3 data-number="1.6.1" class="anchored" data-anchor-id="co2転化率"><span class="header-section-number">1.6.1</span> CO2転化率</h3>
+<section id="co2転化率" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="co2転化率"><span class="header-section-number">6.1</span> CO2転化率</h3>
 <p>CO2転化率 <span class="math inline">\(X_{\mathrm{CO_2}}\)</span> は、入口 CO2 のうち反応で消費された割合である。</p>
 <p><span class="math display">\[
 X_{\mathrm{CO_2}}
@@ -339,8 +351,8 @@ X_{\mathrm{CO_2}}
 {F_{\mathrm{CO_2,in}}}
 \]</span></p>
 </section>
-<section id="炭素基準の選択率" class="level3" data-number="1.6.2">
-<h3 data-number="1.6.2" class="anchored" data-anchor-id="炭素基準の選択率"><span class="header-section-number">1.6.2</span> 炭素基準の選択率</h3>
+<section id="炭素基準の選択率" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="炭素基準の選択率"><span class="header-section-number">6.2</span> 炭素基準の選択率</h3>
 <p>炭素数 <span class="math inline">\(n_i\)</span> を持つ炭素含有生成物 <span class="math inline">\(i\)</span> の出口モル流量を <span class="math inline">\(F_i\)</span> とすると、炭素基準の選択率 <span class="math inline">\(S_i\)</span> は次のように書ける。</p>
 <p><span class="math display">\[
 S_i
@@ -349,8 +361,8 @@ S_i
 \]</span></p>
 <p>ここで和は、CO、CH4、C2+ hydrocarbons など、炭素を含む生成物全体について取る。</p>
 </section>
-<section id="co選択率" class="level3" data-number="1.6.3">
-<h3 data-number="1.6.3" class="anchored" data-anchor-id="co選択率"><span class="header-section-number">1.6.3</span> CO選択率</h3>
+<section id="co選択率" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="co選択率"><span class="header-section-number">6.3</span> CO選択率</h3>
 <p>CO は炭素数1の生成物なので、CO選択率は次のように表せる。</p>
 <p><span class="math display">\[
 S_{\mathrm{CO}}
@@ -359,8 +371,8 @@ S_{\mathrm{CO}}
 \]</span></p>
 <p>Fe3O4-RWGS MVP では、主にこの CO 生成を追跡する。</p>
 </section>
-<section id="ch4選択率" class="level3" data-number="1.6.4">
-<h3 data-number="1.6.4" class="anchored" data-anchor-id="ch4選択率"><span class="header-section-number">1.6.4</span> CH4選択率</h3>
+<section id="ch4選択率" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="ch4選択率"><span class="header-section-number">6.4</span> CH4選択率</h3>
 <p>CH4 も炭素数1の生成物なので、CH4選択率は次のように表せる。</p>
 <p><span class="math display">\[
 S_{\mathrm{CH_4}}
@@ -369,8 +381,8 @@ S_{\mathrm{CH_4}}
 \]</span></p>
 <p>ただし、CH4 生成を説明するには RWGS だけでは不十分であり、追加の C1 hydrogenation model が必要になる。</p>
 </section>
-<section id="c2選択率" class="level3" data-number="1.6.5">
-<h3 data-number="1.6.5" class="anchored" data-anchor-id="c2選択率"><span class="header-section-number">1.6.5</span> C2+選択率</h3>
+<section id="c2選択率" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="c2選択率"><span class="header-section-number">6.5</span> C2+選択率</h3>
 <p>C2+選択率は、炭素数2以上の炭化水素への炭素配分を表す。</p>
 <p><span class="math display">\[
 S_{\mathrm{C2+}}
@@ -380,8 +392,8 @@ S_{\mathrm{C2+}}
 <p>C2+選択率をモデル化するには、C-C coupling、chain growth、chain termination を含む FeCx-FT model が必要である。本教材の MVP では、C2+生成は実装しない。</p>
 </section>
 </section>
-<section id="この章の要点" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">1.7</span> この章の要点</h2>
+<section id="この章の要点" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">7</span> この章の要点</h2>
 <ul>
 <li>CO2-FT は、RWGS と FT を分けて考えると機構を整理しやすい。</li>
 <li>Fe3O4 は MVP では RWGS-active phase として扱う。</li>
@@ -390,8 +402,8 @@ S_{\mathrm{C2+}}
 <li>反応指標は、CO2転化率と炭素基準選択率を分けて定義する。</li>
 </ul>
 </section>
-<section id="確認問題" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">1.8</span> 確認問題</h2>
+<section id="確認問題" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">8</span> 確認問題</h2>
 <ol type="1">
 <li>CO2 hydrogenation を RWGS + FT として分けて考える利点を説明せよ。</li>
 <li>本教材の MVP で Fe3O4 をどのような相として扱うか説明せよ。</li>
@@ -401,7 +413,6 @@ S_{\mathrm{C2+}}
 </ol>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

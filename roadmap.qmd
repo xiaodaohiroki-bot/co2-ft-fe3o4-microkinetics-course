@@ -2,8 +2,6 @@
 title: "Roadmap"
 ---
 
-# Roadmap
-
 このロードマップは、CO2-FT / Fe3O4 microkinetics 教材を、最小 Fe3O4-RWGS model から段階的に拡張するための計画である。最初の段階では、Fe3O4 を RWGS-active phase として扱い、CO2 から CO と H2O を生成する反応のみを実装対象にする。
 
 ## Phase 1: Fe3O4-RWGS MVP

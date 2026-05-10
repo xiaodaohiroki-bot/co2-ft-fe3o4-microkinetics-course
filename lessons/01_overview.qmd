@@ -2,8 +2,6 @@
 title: "CO2-FTとFe系触媒の全体像"
 ---
 
-# CO2-FTとFe系触媒の全体像
-
 この章では、CO2 hydrogenation を Fe 系触媒で考えるときの全体像を整理する。特に、CO2 Fischer-Tropsch (CO2-FT) を **RWGS (reverse water-gas shift) と FT (Fischer-Tropsch synthesis) の組み合わせ**として見る理由を説明し、この教材の MVP を **Fe3O4 上の RWGS 最小モデル**に限定する意味を明確にする。
 
 ここで重要なのは、Fe3O4、Fe metal、Fe carbide (FeCx) を同じ役割の相として扱わないことである。本教材の初期モデルでは、Fe3O4 を RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明できるとは主張しない。

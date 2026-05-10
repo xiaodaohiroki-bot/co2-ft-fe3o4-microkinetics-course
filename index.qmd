@@ -2,8 +2,6 @@
 title: "CO2-FT / Fe3O4 Microkinetics Course"
 ---
 
-# CO2-FT / Fe3O4 Microkinetics Course
-
 このサイトは、CO2 hydrogenation と Fe 系触媒を題材に、microkinetic model の作り方を学ぶための Quarto 教材である。最初の実装対象は **Fe3O4 上の RWGS (reverse water-gas shift) 最小モデル** に限定する。
 
 Fe3O4 はここでは主に RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明するとは主張しない。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は、将来拡張として明示的に分けて扱う。
