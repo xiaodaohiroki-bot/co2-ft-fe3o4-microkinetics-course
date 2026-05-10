@@ -1,52 +1,77 @@
 name: fe3o4_rwgs_minimal
+version: 0.1.0
 description: >
-  Teaching mechanism for a minimal Fe3O4-centered RWGS network.
-  Parameters are placeholders until literature-backed values are added.
+  Machine-readable minimal seven-step RWGS mechanism for Fe3O4.
+  This file defines species and elementary steps only. It intentionally does
+  not include rate constants, DFT values, experimental values, FeCx-FT steps,
+  chain-growth chemistry, or invented literature data.
 
-species:
-  gas:
-    CO2:
-      composition: {C: 1, O: 2}
-    H2:
-      composition: {H: 2}
-    H2O:
-      composition: {H: 2, O: 1}
-    CO:
-      composition: {C: 1, O: 1}
-  surface:
-    "*":
-      composition: {}
-      sites: 1
-    CO2*:
-      composition: {C: 1, O: 2}
-      sites: 1
-    H*:
-      composition: {H: 1}
-      sites: 1
-    COOH*:
-      composition: {C: 1, O: 2, H: 1}
-      sites: 1
-    CO*:
-      composition: {C: 1, O: 1}
-      sites: 1
-    OH*:
-      composition: {O: 1, H: 1}
-      sites: 1
+scope:
+  catalyst_phase: Fe3O4
+  model_role: RWGS-active phase
+  excludes:
+    - FeCx-FT reactions
+    - C-C coupling
+    - chain growth
+    - ASF distribution
+    - dynamic phase transformation
+    - fitted kinetic parameters
+    - DFT energies
+
+gas_species:
+  - CO2
+  - H2
+  - CO
+  - H2O
+
+surface_species:
+  - "*"
+  - CO2*
+  - H*
+  - CO*
+  - O*
+  - OH*
+  - H2O*
 
 reactions:
-  - label: CO2 adsorption
-    equation: CO2 + * <=> CO2*
-  - label: H2 dissociation
-    equation: H2 + 2* <=> 2H*
-  - label: COOH formation
-    equation: CO2* + H* <=> COOH* + *
-  - label: COOH cleavage
-    equation: COOH* + * <=> CO* + OH*
-  - label: water formation
-    equation: OH* + H* <=> H2O + 2*
-  - label: CO desorption
-    equation: CO* <=> CO + *
+  - id: R1
+    equation: "CO2 + * <=> CO2*"
+    type: adsorption_desorption
+    reversible: true
+    description: "CO2 adsorption on an empty Fe3O4 surface site."
 
-notes:
-  - "TODO: citation needed for each elementary step."
-  - "TODO: replace placeholder mechanism with surface-specific Fe3O4 evidence."
+  - id: R2
+    equation: "H2 + 2* <=> 2H*"
+    type: dissociative_adsorption_recombination
+    reversible: true
+    description: "Dissociative H2 adsorption to form adsorbed hydrogen."
+
+  - id: R3
+    equation: "CO2* + * <=> CO* + O*"
+    type: surface_dissociation_recombination
+    reversible: true
+    description: "Dissociation of adsorbed CO2 into adsorbed CO and adsorbed O."
+
+  - id: R4
+    equation: "CO* <=> CO + *"
+    type: desorption_adsorption
+    reversible: true
+    description: "CO desorption from the surface and regeneration of an empty site."
+
+  - id: R5
+    equation: "O* + H* <=> OH* + *"
+    type: surface_hydrogenation_dehydrogenation
+    reversible: true
+    description: "Hydrogenation of adsorbed O to form adsorbed OH."
+
+  - id: R6
+    equation: "OH* + H* <=> H2O* + *"
+    type: surface_hydrogenation_dehydrogenation
+    reversible: true
+    description: "Hydrogenation of adsorbed OH to form adsorbed H2O."
+
+  - id: R7
+    equation: "H2O* <=> H2O + *"
+    type: desorption_adsorption
+    reversible: true
+    description: "H2O desorption from the surface and regeneration of an empty site."
