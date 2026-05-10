@@ -1,25 +1,95 @@
 ---
-title: "Fe3O4 RWGS Minimal Network"
+title: "Fe3O4-RWGS の最小反応ネットワーク"
 ---
 
-# Fe3O4 RWGS Minimal Network
+# Fe3O4-RWGS の最小反応ネットワーク
 
-The first mechanism focuses on RWGS-like chemistry:
+このレッスンでは、Fe3O4-RWGS の MVP に使う最小 elementary-step network を定義する。ここでのネットワークは教育用の出発点であり、特定の Fe3O4 termination や欠陥構造を完全に表すものではない。
 
-```text
-CO2 + * <=> CO2*
-H2 + 2* <=> 2H*
-CO2* + H* <=> COOH* + *
-COOH* + * <=> CO* + OH*
-OH* + H* <=> H2O + 2*
-CO* <=> CO + *
-```
+## 学習目標
 
-Here `*` is a generic surface site. This is intentionally minimal and should be treated as a teaching network, not a final Fe3O4 surface model.
+- Gas species と surface species を列挙する。
+- 空サイト `*` を含む最小 RWGS network を `R1` から `R7` として書く。
+- 各 elementary step が site balance と elemental mass balance を満たすことを確認する。
+- 将来の拡張点を、MVP の範囲外として明確に分ける。
 
-## Extension Points
+## Species Set
 
-- Split generic sites into Fe, O, vacancy, or interface sites.
-- Add formate-mediated pathways.
-- Add oxygen vacancy formation and reoxidation.
-- Couple the RWGS network to carbide-forming C1 chemistry.
+MVP では、gas species を次の4種に限定する。
+
+| species | role |
+|---|---|
+| $\mathrm{CO_2}$ | reactant |
+| $\mathrm{H_2}$ | reactant |
+| $\mathrm{CO}$ | product |
+| $\mathrm{H_2O}$ | product |
+
+Surface species は、generic surface site `*` を使って次のように表す。
+
+| species | meaning |
+|---|---|
+| `*` | empty surface site |
+| `CO2*` | adsorbed CO2 |
+| `H*` | adsorbed H |
+| `COOH*` | carboxyl-like intermediate |
+| `CO*` | adsorbed CO |
+| `OH*` | adsorbed OH |
+| `H2O*` | adsorbed H2O |
+
+ここでは `*` を単一サイトとして扱う。Fe site、O site、oxygen vacancy、interface site を分ける multi-site model は MVP では扱わない。
+
+## Minimal RWGS Network
+
+最小ネットワークは次の7 step とする。
+
+| ID | elementary step | role |
+|---|---|---|
+| `R1` | $\mathrm{CO_2 + * \rightleftharpoons CO_2*}$ | CO2 adsorption |
+| `R2` | $\mathrm{H_2 + 2* \rightleftharpoons 2H*}$ | H2 dissociation |
+| `R3` | $\mathrm{CO_2* + H* \rightleftharpoons COOH* + *}$ | COOH formation |
+| `R4` | $\mathrm{COOH* + * \rightleftharpoons CO* + OH*}$ | COOH cleavage |
+| `R5` | $\mathrm{CO* \rightleftharpoons CO + *}$ | CO desorption |
+| `R6` | $\mathrm{OH* + H* \rightleftharpoons H_2O* + *}$ | H2O formation |
+| `R7` | $\mathrm{H_2O* \rightleftharpoons H_2O + *}$ | H2O desorption |
+
+この network は、CO2 adsorption、H2 dissociation、COOH formation、COOH cleavage、CO desorption、H2O formation、H2O desorption を含む。Formate pathway や oxygen vacancy pathway は、この初期版では追加しない。
+
+## Stoichiometry Check
+
+各 step は、反応前後で表面サイト数が保存されるように書く。
+
+| ID | site balance |
+|---|---|
+| `R1` | 1 site to 1 site |
+| `R2` | 2 sites to 2 sites |
+| `R3` | 2 sites to 2 sites |
+| `R4` | 2 sites to 2 sites |
+| `R5` | 1 site to 1 site |
+| `R6` | 2 sites to 2 sites |
+| `R7` | 1 site to 1 site |
+
+Elemental mass balance も各 step で保存される。たとえば `R4` では、
+
+$$
+\mathrm{COOH* + * \rightleftharpoons CO* + OH*}
+$$
+
+の両辺で C は1、O は2、H は1である。`R6` では、
+
+$$
+\mathrm{OH* + H* \rightleftharpoons H_2O* + *}
+$$
+
+の両辺で O は1、H は2である。
+
+## MVP 外の拡張
+
+次の要素は重要だが、この lesson series の最初の実装には入れない。
+
+- Formate-mediated pathway
+- Oxygen vacancy formation and healing
+- Distinct Fe and O surface sites
+- FeCx formation
+- Fischer-Tropsch chain growth
+
+これらを追加する場合は、Fe3O4-RWGS model の拡張なのか、FeCx-FT model への移行なのかを明示する。

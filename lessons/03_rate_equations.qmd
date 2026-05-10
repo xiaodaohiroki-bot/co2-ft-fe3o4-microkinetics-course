@@ -1,24 +1,108 @@
 ---
-title: "Rate Equations and Balance Checks"
+title: "速度式と保存則"
 ---
 
-# Rate Equations and Balance Checks
+# 速度式と保存則
 
-For an elementary step, a simple mass-action form is:
+このレッスンでは、前の lesson で定義した Fe3O4-RWGS minimal network を mass-action form の速度式に変換する。目的は、反応速度を計算する前に、site balance、mass balance、steady-state condition の形を明確にすることである。
 
-```text
-r_forward = k_forward * product(activity_reactants)
-r_reverse = k_reverse * product(activity_products)
-r_net = r_forward - r_reverse
-```
+## 学習目標
 
-For a surface mechanism, gas activities and surface coverages must be handled consistently. Empty sites are also species and must be included in the site balance.
+- Elementary step `R1` から `R7` について forward rate、reverse rate、net rate を書く。
+- Surface coverage と gas activity を区別する。
+- Empty-site coverage を site balance に含める。
+- Adsorbed intermediates の steady-state equations を立てる。
 
-## Balance Checks
+## Rate Form
 
-The test suite starts with two non-negotiable checks:
+任意の elementary step `Rj` について、forward rate と reverse rate を次のように表す。
 
-- `test_site_balance.py`: every elementary step conserves surface sites.
-- `test_mass_balance.py`: every elementary step conserves elemental composition.
+$$
+r_{j,f} = k_{j,f} \prod_i a_i^{\nu_{i,j}^{f}}
+$$
 
-These checks should run before any lesson interprets rates or coverages.
+$$
+r_{j,r} = k_{j,r} \prod_i a_i^{\nu_{i,j}^{r}}
+$$
+
+Net rate は、
+
+$$
+r_j = r_{j,f} - r_{j,r}
+$$
+
+である。ここで $a_i$ は gas species では pressure または fugacity に対応する activity、surface species では coverage に対応する量として扱う。
+
+## Example: R1 CO2 Adsorption
+
+`R1` の CO2 adsorption を、
+
+$$
+\mathrm{CO_2 + * \rightleftharpoons CO_2*}
+$$
+
+と書くと、速度式は次のようになる。
+
+$$
+r_1 = k_{1,f} P_{\mathrm{CO_2}} \theta_* - k_{1,r}\theta_{\mathrm{CO_2*}}
+$$
+
+ここで $P_{\mathrm{CO_2}}$ は CO2 pressure、$\theta_*$ は empty-site coverage、$\theta_{\mathrm{CO_2*}}$ は adsorbed CO2 coverage である。
+
+## Example: R6 H2O Formation
+
+`R6` の H2O formation は、
+
+$$
+\mathrm{OH* + H* \rightleftharpoons H_2O* + *}
+$$
+
+と書く。この net rate は次の形になる。
+
+$$
+r_6 = k_{6,f}\theta_{\mathrm{OH*}}\theta_{\mathrm{H*}} - k_{6,r}\theta_{\mathrm{H_2O*}}\theta_*
+$$
+
+`R7` で `H2O*` が gas-phase H2O と empty site に戻る。
+
+## Surface Site Balance
+
+単一サイト MVP では、全 coverage の和が1になる。
+
+$$
+\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{COOH*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}} = 1
+$$
+
+この式は、空サイト `*` も surface species として扱うことを意味する。Empty site を除外すると、吸着・脱離 step の site balance が崩れる。
+
+## Steady-State Equations
+
+Adsorbed intermediate $X*$ について、steady-state approximation は次の形で書ける。
+
+$$
+\frac{d\theta_{X*}}{dt} = \sum_j \nu_{X*,j} r_j = 0
+$$
+
+MVP では、`CO2*`、`H*`、`COOH*`、`CO*`、`OH*`、`H2O*` についてこの条件を立てる。実際に解くときは、site balance と steady-state equations を同時に満たす coverage を求める。
+
+## Balance Checks Before Interpretation
+
+速度式を解く前に、各 elementary step について次を確認する。
+
+- Elemental mass balance: C、H、O の原子数が保存される。
+- Site balance: surface site の総数が保存される。
+- Reversibility: reverse rate を書く場合、対応する species が定義されている。
+- Reaction ID: `R1` から `R7` の番号と速度式の添字が一致している。
+
+これらの確認は、rate constant の値や実験との一致より前に行う。保存則を満たさない network から得た coverage や rate は、化学的に解釈できない。
+
+## MVP での出力
+
+最初の計算で目指す出力は、C2+ selectivity ではなく、次のような RWGS に限定した量である。
+
+- Steady-state surface coverages
+- Net CO formation rate
+- Net H2O formation rate
+- Rate sensitivity within the RWGS network
+
+FeCx-FT や chain growth を議論するには、別の species set と elementary step が必要である。この lesson では、Fe3O4-RWGS model の範囲にとどめる。

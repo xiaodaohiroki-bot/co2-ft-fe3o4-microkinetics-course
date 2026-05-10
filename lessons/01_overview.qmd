@@ -1,19 +1,57 @@
 ---
-title: "Overview: CO2-FT, Fe3O4, and Microkinetics"
+title: "概要: Fe3O4-RWGS マイクロキネティクス"
 ---
 
-# Overview
+# 概要
 
-CO2 Fischer-Tropsch (CO2-FT) chemistry couples CO2 activation with hydrogenation and carbon-chain growth. Iron catalysts are attractive because they can support RWGS activity, carbide formation, and hydrocarbon synthesis under related reaction environments.
+このレッスンでは、CO2 hydrogenation の中でも **Fe3O4 上の RWGS (reverse water-gas shift)** に範囲を限定して、microkinetic model を作るための考え方を整理する。
 
-For this course, Fe3O4 is treated as a starting point for learning how oxide surfaces participate in CO2 activation and water formation. Later lessons can connect this oxide-centered view to Fe carbide phases and oxide-carbide interfaces.
+本コースの MVP は、Fe3O4 を主に RWGS-active phase として扱い、CO2 から CO と H2O が生じる最小反応ネットワークを記述することである。Fe carbide (FeCx) 上の Fischer-Tropsch chain growth、C2+ 炭化水素生成、酸化物から炭化物への動的相変化は、この段階では実装しない。
 
-## Modeling Habit
+## 学習目標
 
-Before fitting rates or interpreting catalyst design, every mechanism should pass three checks:
+このレッスンの目標は次の4点である。
 
-- Species are defined clearly.
-- Site balance is conserved.
-- Elemental mass balance is conserved for every elementary step.
+- Fe3O4-RWGS model の対象範囲を明確にする。
+- microkinetic model に必要な gas species、surface species、elementary step を区別する。
+- site balance と elemental mass balance を、速度解析より前に確認すべき制約として扱う。
+- Fe3O4-RWGS と FeCx-FT を混同しない。
 
-These checks do not prove that a mechanism is true, but they prevent many avoidable modeling mistakes.
+## MVP の範囲
+
+MVP で扱う総括反応は次の RWGS 反応である。
+
+$$
+\mathrm{CO_2 + H_2 \rightleftharpoons CO + H_2O}
+$$
+
+この反応を、Fe3O4 表面上の吸着種と空サイト `*` を含む elementary step に分解する。最小ネットワークは `R1` から `R7` までの7反応として扱う。ここでの目的は、実験データに対する最終的な機構決定ではなく、反応ネットワーク、速度式、保存則の作り方を学ぶことである。
+
+## この段階で扱わないこと
+
+Fe 系 CO2-FT では、Fe3O4、Fe carbide、界面、K promoter、酸素空孔などが重要になり得る。しかし MVP では、以下を実装しない。
+
+- FeCx 上の Fischer-Tropsch chain growth
+- C-C coupling
+- C2+ hydrocarbon selectivity
+- Fe3O4 から FeCx への相変化 kinetics
+- K promoter の位置依存効果
+
+これらは後続の拡張課題であり、最初の Fe3O4-RWGS model の結論として主張しない。
+
+## モデル化の基本手順
+
+Fe3O4-RWGS の microkinetic model は、次の順序で構築する。
+
+1. Gas species と surface species を定義する。
+2. 空サイト `*` を含む site balance を定義する。
+3. `R1` から `R7` までの elementary step の stoichiometry を書く。
+4. 各 step について mass balance と site balance を確認する。
+5. Mass-action form で forward rate、reverse rate、net rate を書く。
+6. Adsorbed intermediate に steady-state condition を課す。
+
+## 解釈の注意
+
+Fe3O4-RWGS model で CO 生成を説明できても、それだけで Fe3O4 が C2+ hydrocarbon formation を説明するとは言えない。CO2-FT 全体を議論する場合は、RWGS-active phase、carbide phase、phase transformation、interface の役割を分けて扱う必要がある。
+
+このコースの最初の目標は、Fe3O4 上の RWGS を保存則に矛盾しない形で記述し、後から拡張できる土台を作ることである。
