@@ -1,5 +1,6 @@
 from src.microkinetics.reactions import Reaction, Species
-from src.microkinetics.solver import SURFACE_SPECIES, solve_steady_state, site_balance
+from src.microkinetics.rates import SURFACE_SPECIES, site_balance
+from src.microkinetics.solver import solve_steady_state
 
 
 SPECIES = {
