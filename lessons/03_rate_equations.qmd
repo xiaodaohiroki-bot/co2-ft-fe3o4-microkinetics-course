@@ -267,3 +267,7 @@ $$
 1. 任意の被覆率セットについて site balance を計算し、1になるように正規化せよ。
 2. 与えられた $k_{1,f}$、$k_{1,r}$、$P_{\mathrm{CO_2}}$、$\theta_*$、$\theta_{\mathrm{CO_2}}$ から $r_1$ を計算せよ。
 3. 仮に $K_4$ と $k_{4,f}$ が与えられているとき、$k_{4,r}=k_{4,f}/K_4$ を使って逆反応速度定数を求めよ。
+
+## 関連Notebook
+
+- [Fe3O4-RWGS最小モデルの温度依存性演習](../notebooks/01_rwgs_minimal_model.ipynb)

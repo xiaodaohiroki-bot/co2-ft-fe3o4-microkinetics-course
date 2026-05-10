@@ -29,7 +29,7 @@ Create and activate a Python environment, then install the scientific Python dep
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install numpy scipy pytest
+python -m pip install -r requirements.txt
 ```
 
 Install Quarto separately from the official site:
@@ -63,6 +63,19 @@ For local preview:
 ```powershell
 quarto preview
 ```
+
+## GitHub Pages Publication
+
+This project is configured to render the Quarto website into `docs/`. To publish it with GitHub Pages:
+
+1. Commit the rendered `docs/` directory to the default branch.
+2. Open the GitHub repository page.
+3. Go to **Settings** > **Pages**.
+4. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
+5. Select the default branch, then choose the `/docs` folder.
+6. Save the setting and wait for GitHub Pages to publish the site.
+
+The workflow at `.github/workflows/quarto-render.yml` runs `pytest` and `quarto render` on pushes and pull requests. It validates that the site can be rendered, but the Pages source remains the committed `docs/` directory.
 
 ## Run Tests
 
