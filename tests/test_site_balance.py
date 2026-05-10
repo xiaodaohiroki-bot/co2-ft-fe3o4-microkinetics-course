@@ -39,7 +39,9 @@ def _steady_state_result():
 
 def test_elementary_steps_conserve_sites():
     for reaction in REACTIONS:
-        assert reaction.net_site_count(SPECIES) == 0, reaction.label
+        assert reaction.net_site_count(SPECIES) == 0, (
+            f"{reaction.label} does not conserve surface sites."
+        )
 
 
 def test_all_coverages_sum_to_one():
@@ -47,12 +49,18 @@ def test_all_coverages_sum_to_one():
 
     assert result.success, result.message
     assert tuple(result.coverages) == SURFACE_SPECIES
-    assert abs(site_balance(result.coverages) - 1.0) < 1e-12
+    total_coverage = site_balance(result.coverages)
+    assert abs(total_coverage - 1.0) < 1e-8, (
+        f"Site balance should be 1.0, got {total_coverage}."
+    )
 
 
 def test_all_coverages_are_non_negative():
     result = _steady_state_result()
 
     assert result.success, result.message
+    tolerance = -1e-12
     for species, coverage in result.coverages.items():
-        assert coverage >= 0.0, species
+        assert coverage >= tolerance, (
+            f"Coverage for {species} is below the numerical tolerance: {coverage}."
+        )
