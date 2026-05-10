@@ -1,0 +1,24 @@
+---
+title: "Rate Equations and Balance Checks"
+---
+
+# Rate Equations and Balance Checks
+
+For an elementary step, a simple mass-action form is:
+
+```text
+r_forward = k_forward * product(activity_reactants)
+r_reverse = k_reverse * product(activity_products)
+r_net = r_forward - r_reverse
+```
+
+For a surface mechanism, gas activities and surface coverages must be handled consistently. Empty sites are also species and must be included in the site balance.
+
+## Balance Checks
+
+The test suite starts with two non-negotiable checks:
+
+- `test_site_balance.py`: every elementary step conserves surface sites.
+- `test_mass_balance.py`: every elementary step conserves elemental composition.
+
+These checks should run before any lesson interprets rates or coverages.

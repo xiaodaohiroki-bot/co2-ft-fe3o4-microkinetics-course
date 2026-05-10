@@ -1,0 +1,19 @@
+---
+title: "Overview: CO2-FT, Fe3O4, and Microkinetics"
+---
+
+# Overview
+
+CO2 Fischer-Tropsch (CO2-FT) chemistry couples CO2 activation with hydrogenation and carbon-chain growth. Iron catalysts are attractive because they can support RWGS activity, carbide formation, and hydrocarbon synthesis under related reaction environments.
+
+For this course, Fe3O4 is treated as a starting point for learning how oxide surfaces participate in CO2 activation and water formation. Later lessons can connect this oxide-centered view to Fe carbide phases and oxide-carbide interfaces.
+
+## Modeling Habit
+
+Before fitting rates or interpreting catalyst design, every mechanism should pass three checks:
+
+- Species are defined clearly.
+- Site balance is conserved.
+- Elemental mass balance is conserved for every elementary step.
+
+These checks do not prove that a mechanism is true, but they prevent many avoidable modeling mistakes.

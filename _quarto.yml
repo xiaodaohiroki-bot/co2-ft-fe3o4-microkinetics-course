@@ -1,0 +1,24 @@
+project:
+  type: book
+  output-dir: _site
+
+book:
+  title: "CO2-FT Fe3O4 Microkinetics Course"
+  author: "Yoshito"
+  chapters:
+    - index.qmd
+    - roadmap.qmd
+    - lessons/01_overview.qmd
+    - lessons/02_fe3o4_rwgs_network.qmd
+    - lessons/03_rate_equations.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+
+execute:
+  echo: true
+  warning: false
+  message: false

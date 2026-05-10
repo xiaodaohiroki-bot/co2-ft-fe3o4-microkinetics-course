@@ -1,0 +1,33 @@
+---
+title: "Roadmap"
+---
+
+# Roadmap
+
+This course will grow from a minimal, auditable mechanism toward research-useful CO2-FT models.
+
+## Phase 1: Minimal RWGS Network
+
+- Define gas species, surface species, and empty Fe3O4 sites.
+- Encode adsorption, dissociation, hydrogenation, and desorption steps.
+- Verify site balance and elemental mass balance.
+- Solve steady-state coverages for a simple parameter set.
+
+## Phase 2: Fe3O4 to Fe Carbide Context
+
+- Add the role of oxygen removal and carburization.
+- Compare oxide-rich and carbide-rich assumptions.
+- Identify where K promotion, phase distance, and interface structure enter the model.
+
+## Phase 3: Selectivity and Rate Control
+
+- Add C1 intermediates and first C-C coupling options.
+- Introduce degree of rate control.
+- Compare model conclusions against literature-derived constraints.
+
+## Deliverables
+
+- A Quarto book.
+- A minimal Python microkinetic solver.
+- Mechanism files with explicit provenance notes.
+- Tests that catch balance errors before interpretation.

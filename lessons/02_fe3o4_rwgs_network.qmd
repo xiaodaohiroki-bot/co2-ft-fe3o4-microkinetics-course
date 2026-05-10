@@ -1,0 +1,25 @@
+---
+title: "Fe3O4 RWGS Minimal Network"
+---
+
+# Fe3O4 RWGS Minimal Network
+
+The first mechanism focuses on RWGS-like chemistry:
+
+```text
+CO2 + * <=> CO2*
+H2 + 2* <=> 2H*
+CO2* + H* <=> COOH* + *
+COOH* + * <=> CO* + OH*
+OH* + H* <=> H2O + 2*
+CO* <=> CO + *
+```
+
+Here `*` is a generic surface site. This is intentionally minimal and should be treated as a teaching network, not a final Fe3O4 surface model.
+
+## Extension Points
+
+- Split generic sites into Fe, O, vacancy, or interface sites.
+- Add formate-mediated pathways.
+- Add oxygen vacancy formation and reoxidation.
+- Couple the RWGS network to carbide-forming C1 chemistry.

@@ -1,0 +1,28 @@
+---
+title: "CO2-FT Fe3O4 Microkinetics Course"
+---
+
+# Course Home
+
+This Quarto book is a working course for connecting CO2 Fischer-Tropsch chemistry, Fe3O4 surface reaction networks, and microkinetic modeling.
+
+The first version focuses on a minimal RWGS-centered mechanism that can later be extended toward carburization, Fe carbide formation, and chain-growth chemistry.
+
+## Learning Goals
+
+- Explain why Fe3O4 and Fe carbide phases both matter in CO2-FT.
+- Translate a proposed elementary-step network into rate equations.
+- Check site balance and mass balance before interpreting model output.
+- Use sensitivity analysis to separate controlling assumptions from cosmetic parameters.
+
+## Repository Map
+
+```text
+lessons/      Quarto lesson chapters
+mechanisms/   Mechanism definitions
+src/          Python source code for model examples
+tests/        Balance and regression checks
+notebooks/    Exploratory notebooks
+data/         Input data and parameter tables
+figures/      Generated and manually prepared figures
+```
