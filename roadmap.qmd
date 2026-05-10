@@ -4,30 +4,52 @@ title: "Roadmap"
 
 # Roadmap
 
-This course will grow from a minimal, auditable mechanism toward research-useful CO2-FT models.
+このロードマップは、CO2-FT / Fe3O4 microkinetics 教材を、最小 Fe3O4-RWGS model から段階的に拡張するための計画である。最初の段階では、Fe3O4 を RWGS-active phase として扱い、CO2 から CO と H2O を生成する反応のみを実装対象にする。
 
-## Phase 1: Minimal RWGS Network
+## Phase 1: Fe3O4-RWGS MVP
 
-- Define gas species, surface species, and empty Fe3O4 sites.
-- Encode adsorption, dissociation, hydrogenation, and desorption steps.
-- Verify site balance and elemental mass balance.
-- Solve steady-state coverages for a simple parameter set.
+最初のゴールは、Fe3O4 上 RWGS の最小7ステップ機構を、保存則に矛盾しない形で実装することである。
 
-## Phase 2: Fe3O4 to Fe Carbide Context
+- gas species と surface species を定義する。
+- `R1-R7` の elementary step を整理する。
+- site balance と elemental mass balance をテストする。
+- `scipy.optimize.root` で steady-state surface coverage を解く。
+- CO 生成速度と H2O 生成速度を返す基礎関数を作る。
 
-- Add the role of oxygen removal and carburization.
-- Compare oxide-rich and carbide-rich assumptions.
-- Identify where K promotion, phase distance, and interface structure enter the model.
+## Phase 2: パラメータと検証
 
-## Phase 3: Selectivity and Rate Control
+次に、速度定数、吸着平衡、温度依存性を扱う。
 
-- Add C1 intermediates and first C-C coupling options.
-- Introduce degree of rate control.
-- Compare model conclusions against literature-derived constraints.
+- Arrhenius parameter の入力形式を整理する。
+- pressure と activity の扱いを明確にする。
+- 熱力学整合性を確認するためのチェックを追加する。
+- 文献値を入れる場合は出典を明記し、不明な箇所は `[citation needed]` とする。
+
+## Phase 3: 反応器・感度解析
+
+Fe3O4-RWGS model が安定して動くようになった後、反応器モデルと感度解析へ進む。
+
+- batch / CSTR / PFR の最小例を追加する。
+- degree of rate control や local sensitivity を導入する。
+- CO2 conversion、CO formation rate、H2O formation rate の解釈を整理する。
+
+## Phase 4: 将来拡張
+
+以下は重要な研究課題だが、MVP では実装しない。
+
+- FeCx-FT model
+- C2+ hydrocarbon formation
+- C-C coupling
+- ASF distribution
+- Fe3O4 から FeCx への dynamic phase transformation
+- K promoter や oxide-carbide interface の詳細効果
+
+これらを扱う場合は、Fe3O4-RWGS model の拡張なのか、FeCx-FT model への移行なのかを明確に分ける。Fe3O4 単独で C2+ 炭化水素生成を説明する記述は避ける。
 
 ## Deliverables
 
-- A Quarto book.
-- A minimal Python microkinetic solver.
-- Mechanism files with explicit provenance notes.
-- Tests that catch balance errors before interpretation.
+- Quarto website として読める教材ページ
+- 最小 Fe3O4-RWGS mechanism
+- steady-state coverage solver
+- site balance / mass balance tests
+- 将来の文献整理と `[citation needed]` の解消

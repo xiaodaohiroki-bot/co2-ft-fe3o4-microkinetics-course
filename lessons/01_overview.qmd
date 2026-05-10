@@ -1,57 +1,148 @@
 ---
-title: "概要: Fe3O4-RWGS マイクロキネティクス"
+title: "CO2-FTとFe系触媒の全体像"
 ---
 
-# 概要
+# CO2-FTとFe系触媒の全体像
 
-このレッスンでは、CO2 hydrogenation の中でも **Fe3O4 上の RWGS (reverse water-gas shift)** に範囲を限定して、microkinetic model を作るための考え方を整理する。
+この章では、CO2 hydrogenation を Fe 系触媒で考えるときの全体像を整理する。特に、CO2 Fischer-Tropsch (CO2-FT) を **RWGS (reverse water-gas shift) と FT (Fischer-Tropsch synthesis) の組み合わせ**として見る理由を説明し、この教材の MVP を **Fe3O4 上の RWGS 最小モデル**に限定する意味を明確にする。
 
-本コースの MVP は、Fe3O4 を主に RWGS-active phase として扱い、CO2 から CO と H2O が生じる最小反応ネットワークを記述することである。Fe carbide (FeCx) 上の Fischer-Tropsch chain growth、C2+ 炭化水素生成、酸化物から炭化物への動的相変化は、この段階では実装しない。
+ここで重要なのは、Fe3O4、Fe metal、Fe carbide (FeCx) を同じ役割の相として扱わないことである。本教材の初期モデルでは、Fe3O4 を RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明できるとは主張しない。
 
 ## 学習目標
 
-このレッスンの目標は次の4点である。
+この章を終えると、次のことを説明できるようになる。
 
-- Fe3O4-RWGS model の対象範囲を明確にする。
-- microkinetic model に必要な gas species、surface species、elementary step を区別する。
-- site balance と elemental mass balance を、速度解析より前に確認すべき制約として扱う。
-- Fe3O4-RWGS と FeCx-FT を混同しない。
+- CO2-FT を CO2 hydrogenation の一部として位置づける。
+- CO2 hydrogenation を RWGS + FT として分けて考える理由を説明する。
+- Fe3O4、Fe metal、Fe carbide 相の役割を区別する。
+- この教材の MVP を Fe3O4-RWGS に限定する理由を説明する。
+- CO2転化率、CO選択率、CH4選択率、C2+選択率を炭素基準で定義する。
 
-## MVP の範囲
+## CO2-FTとは何か
 
-MVP で扱う総括反応は次の RWGS 反応である。
+CO2-FT は、CO2 と H2 から炭化水素を合成する反応群を指す。一般には、CO2 が直接長鎖炭化水素へ変換される単一反応としてではなく、複数の反応過程が結合したものとして扱う方が理解しやすい。
+
+最も基本的な入口は RWGS である。
 
 $$
 \mathrm{CO_2 + H_2 \rightleftharpoons CO + H_2O}
 $$
 
-この反応を、Fe3O4 表面上の吸着種と空サイト `*` を含む elementary step に分解する。最小ネットワークは `R1` から `R7` までの7反応として扱う。ここでの目的は、実験データに対する最終的な機構決定ではなく、反応ネットワーク、速度式、保存則の作り方を学ぶことである。
+この反応で生じた CO は、条件と触媒相が適切であれば FT 型の炭化水素生成へ進む可能性がある。ただし、RWGS と FT は同じ活性点、同じ相、同じ律速過程で進むとは限らない。
 
-## この段階で扱わないこと
+## CO2水素化を RWGS + FT として見る理由
 
-Fe 系 CO2-FT では、Fe3O4、Fe carbide、界面、K promoter、酸素空孔などが重要になり得る。しかし MVP では、以下を実装しない。
+CO2 hydrogenation では、生成物として CO、CH4、C2+ hydrocarbons、H2O などが観測され得る。これらを一つの総括反応だけで扱うと、どの過程が CO2 活性化を支配し、どの過程が炭素鎖成長を支配しているのかが見えにくくなる。
 
-- FeCx 上の Fischer-Tropsch chain growth
-- C-C coupling
-- C2+ hydrocarbon selectivity
-- Fe3O4 から FeCx への相変化 kinetics
-- K promoter の位置依存効果
+そこで、まず次のように分けて考える。
 
-これらは後続の拡張課題であり、最初の Fe3O4-RWGS model の結論として主張しない。
+| 過程 | 主な役割 | 代表的な生成物 |
+|---|---|---|
+| RWGS | CO2 から CO を作る | CO, H2O |
+| FT | CO 由来の C1 種から炭化水素を作る | CH4, C2+ hydrocarbons |
 
-## モデル化の基本手順
+この分解は、モデル化にも有効である。RWGS の microkinetic model では、CO2 adsorption、H2 dissociation、O removal、CO desorption などを明示する。一方、FT model では、C1 intermediate、C-C coupling、chain growth、chain termination などが必要になる。
 
-Fe3O4-RWGS の microkinetic model は、次の順序で構築する。
+本教材では、最初に RWGS 部分だけを扱う。FT 部分は将来拡張として扱い、MVP には含めない。
 
-1. Gas species と surface species を定義する。
-2. 空サイト `*` を含む site balance を定義する。
-3. `R1` から `R7` までの elementary step の stoichiometry を書く。
-4. 各 step について mass balance と site balance を確認する。
-5. Mass-action form で forward rate、reverse rate、net rate を書く。
-6. Adsorbed intermediate に steady-state condition を課す。
+## Fe3O4、Fe金属、Fe carbide相の役割分担
 
-## 解釈の注意
+Fe 系触媒は反応条件下で複数の相を取り得る。ここでは、教材上の役割を次のように分ける。
 
-Fe3O4-RWGS model で CO 生成を説明できても、それだけで Fe3O4 が C2+ hydrocarbon formation を説明するとは言えない。CO2-FT 全体を議論する場合は、RWGS-active phase、carbide phase、phase transformation、interface の役割を分けて扱う必要がある。
+| 相 | 教材での扱い | 注意点 |
+|---|---|---|
+| Fe3O4 | MVP では RWGS-active phase として扱う | CO2 activation と H2O 生成に注目する |
+| Fe metal | 将来拡張で扱う可能性がある | 還元状態、炭化への入口として重要になり得る [citation needed] |
+| Fe carbide (FeCx) | FeCx-FT の将来拡張で扱う | C-C coupling や chain growth を議論するには別モデルが必要 |
 
-このコースの最初の目標は、Fe3O4 上の RWGS を保存則に矛盾しない形で記述し、後から拡張できる土台を作ることである。
+この整理は、Fe3O4 の重要性を小さく見るためではない。むしろ、Fe3O4 が担う可能性のある RWGS と、FeCx が担う可能性のある FT を分けることで、モデルの仮定を検証しやすくするためである。
+
+## なぜMVPをFe3O4-RWGSに限定するのか
+
+MVP を Fe3O4-RWGS に限定する理由は3つある。
+
+第一に、RWGS は CO2 hydrogenation の入口として重要であり、CO2、H2、CO、H2O だけでも mass balance と site balance の訓練ができる。
+
+第二に、Fe3O4 上の RWGS 最小モデルは、表面被覆率、空サイト、吸着・脱離、酸素除去を含むため、microkinetic model の基本要素を学ぶのに適している。
+
+第三に、C2+ 生成や ASF 分布を扱うには、FeCx 相、C-C coupling、chain growth、termination などの別の仮定が必要になる。これらを最初から混ぜると、どの仮定がどの結果を生んだのかが分かりにくくなる。
+
+したがって、本教材の初期段階では Fe3O4-RWGS の最小7ステップ機構を扱う。FeCx-FT、C2+ selectivity、ASF distribution、dynamic phase transformation は、機構・パラメータ・検証方法を分けた将来拡張とする。
+
+## 反応指標の定義
+
+ここでは、炭素基準でよく使う指標を定義する。入口 CO2 のモル流量を $F_{\mathrm{CO_2,in}}$、出口 CO2 のモル流量を $F_{\mathrm{CO_2,out}}$ とする。
+
+### CO2転化率
+
+CO2転化率 $X_{\mathrm{CO_2}}$ は、入口 CO2 のうち反応で消費された割合である。
+
+$$
+X_{\mathrm{CO_2}}
+= \frac{F_{\mathrm{CO_2,in}} - F_{\mathrm{CO_2,out}}}
+{F_{\mathrm{CO_2,in}}}
+$$
+
+### 炭素基準の選択率
+
+炭素数 $n_i$ を持つ炭素含有生成物 $i$ の出口モル流量を $F_i$ とすると、炭素基準の選択率 $S_i$ は次のように書ける。
+
+$$
+S_i
+= \frac{n_i F_i}
+{\sum_j n_j F_j}
+$$
+
+ここで和は、CO、CH4、C2+ hydrocarbons など、炭素を含む生成物全体について取る。
+
+### CO選択率
+
+CO は炭素数1の生成物なので、CO選択率は次のように表せる。
+
+$$
+S_{\mathrm{CO}}
+= \frac{F_{\mathrm{CO}}}
+{\sum_j n_j F_j}
+$$
+
+Fe3O4-RWGS MVP では、主にこの CO 生成を追跡する。
+
+### CH4選択率
+
+CH4 も炭素数1の生成物なので、CH4選択率は次のように表せる。
+
+$$
+S_{\mathrm{CH_4}}
+= \frac{F_{\mathrm{CH_4}}}
+{\sum_j n_j F_j}
+$$
+
+ただし、CH4 生成を説明するには RWGS だけでは不十分であり、追加の C1 hydrogenation model が必要になる。
+
+### C2+選択率
+
+C2+選択率は、炭素数2以上の炭化水素への炭素配分を表す。
+
+$$
+S_{\mathrm{C2+}}
+= \frac{\sum_{i \in \mathrm{C2+}} n_i F_i}
+{\sum_j n_j F_j}
+$$
+
+C2+選択率をモデル化するには、C-C coupling、chain growth、chain termination を含む FeCx-FT model が必要である。本教材の MVP では、C2+生成は実装しない。
+
+## この章の要点
+
+- CO2-FT は、RWGS と FT を分けて考えると機構を整理しやすい。
+- Fe3O4 は MVP では RWGS-active phase として扱う。
+- Fe3O4 単独で C2+ 炭化水素生成を説明するとは書かない。
+- FeCx-FT、C2+生成、ASF分布、動的相変化は将来拡張として扱う。
+- 反応指標は、CO2転化率と炭素基準選択率を分けて定義する。
+
+## 確認問題
+
+1. CO2 hydrogenation を RWGS + FT として分けて考える利点を説明せよ。
+2. 本教材の MVP で Fe3O4 をどのような相として扱うか説明せよ。
+3. Fe3O4-RWGS model だけでは C2+選択率を説明できない理由を述べよ。
+4. CO2転化率 $X_{\mathrm{CO_2}}$ の定義式を書き、各記号の意味を説明せよ。
+5. 炭素基準の $S_{\mathrm{C2+}}$ を定義し、CH4選択率との違いを説明せよ。
