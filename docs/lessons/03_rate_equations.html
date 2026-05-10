@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>速度式と保存則 – CO2-FT / Fe3O4 Microkinetics Course</title>
+<title>速度式・サイトバランス・熱力学整合性 – CO2-FT / Fe3O4 Microkinetics Course</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -188,16 +188,22 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#速度式と保存則" id="toc-速度式と保存則" class="nav-link active" data-scroll-target="#速度式と保存則"><span class="header-section-number">1</span> 速度式と保存則</a>
+  <li><a href="#速度式サイトバランス熱力学整合性" id="toc-速度式サイトバランス熱力学整合性" class="nav-link active" data-scroll-target="#速度式サイトバランス熱力学整合性"><span class="header-section-number">1</span> 速度式・サイトバランス・熱力学整合性</a>
   <ul class="collapse">
   <li><a href="#学習目標" id="toc-学習目標" class="nav-link" data-scroll-target="#学習目標"><span class="header-section-number">1.1</span> 学習目標</a></li>
-  <li><a href="#rate-form" id="toc-rate-form" class="nav-link" data-scroll-target="#rate-form"><span class="header-section-number">1.2</span> Rate Form</a></li>
-  <li><a href="#example-r1-co2-adsorption" id="toc-example-r1-co2-adsorption" class="nav-link" data-scroll-target="#example-r1-co2-adsorption"><span class="header-section-number">1.3</span> Example: R1 CO2 Adsorption</a></li>
-  <li><a href="#example-r6-h2o-formation" id="toc-example-r6-h2o-formation" class="nav-link" data-scroll-target="#example-r6-h2o-formation"><span class="header-section-number">1.4</span> Example: R6 H2O Formation</a></li>
-  <li><a href="#surface-site-balance" id="toc-surface-site-balance" class="nav-link" data-scroll-target="#surface-site-balance"><span class="header-section-number">1.5</span> Surface Site Balance</a></li>
-  <li><a href="#steady-state-equations" id="toc-steady-state-equations" class="nav-link" data-scroll-target="#steady-state-equations"><span class="header-section-number">1.6</span> Steady-State Equations</a></li>
-  <li><a href="#balance-checks-before-interpretation" id="toc-balance-checks-before-interpretation" class="nav-link" data-scroll-target="#balance-checks-before-interpretation"><span class="header-section-number">1.7</span> Balance Checks Before Interpretation</a></li>
-  <li><a href="#mvp-での出力" id="toc-mvp-での出力" class="nav-link" data-scroll-target="#mvp-での出力"><span class="header-section-number">1.8</span> MVP での出力</a></li>
+  <li><a href="#前提となるr1-r7機構" id="toc-前提となるr1-r7機構" class="nav-link" data-scroll-target="#前提となるr1-r7機構"><span class="header-section-number">1.2</span> 前提となるR1-R7機構</a></li>
+  <li><a href="#素反応速度式の一般形" id="toc-素反応速度式の一般形" class="nav-link" data-scroll-target="#素反応速度式の一般形"><span class="header-section-number">1.3</span> 素反応速度式の一般形</a></li>
+  <li><a href="#前進速度と逆反応速度" id="toc-前進速度と逆反応速度" class="nav-link" data-scroll-target="#前進速度と逆反応速度"><span class="header-section-number">1.4</span> 前進速度と逆反応速度</a></li>
+  <li><a href="#mass-action-kinetics" id="toc-mass-action-kinetics" class="nav-link" data-scroll-target="#mass-action-kinetics"><span class="header-section-number">1.5</span> mass-action kinetics</a></li>
+  <li><a href="#fe3o4-rwgs最小モデルのサイトバランス" id="toc-fe3o4-rwgs最小モデルのサイトバランス" class="nav-link" data-scroll-target="#fe3o4-rwgs最小モデルのサイトバランス"><span class="header-section-number">1.6</span> Fe3O4-RWGS最小モデルのサイトバランス</a></li>
+  <li><a href="#r1からr7の速度式例" id="toc-r1からr7の速度式例" class="nav-link" data-scroll-target="#r1からr7の速度式例"><span class="header-section-number">1.7</span> R1からR7の速度式例</a></li>
+  <li><a href="#各表面被覆率の定常状態方程式" id="toc-各表面被覆率の定常状態方程式" class="nav-link" data-scroll-target="#各表面被覆率の定常状態方程式"><span class="header-section-number">1.8</span> 各表面被覆率の定常状態方程式</a></li>
+  <li><a href="#co2-h2-co-h2oの正味生成速度" id="toc-co2-h2-co-h2oの正味生成速度" class="nav-link" data-scroll-target="#co2-h2-co-h2oの正味生成速度"><span class="header-section-number">1.9</span> CO2, H2, CO, H2Oの正味生成速度</a></li>
+  <li><a href="#詳細釣り合い" id="toc-詳細釣り合い" class="nav-link" data-scroll-target="#詳細釣り合い"><span class="header-section-number">1.10</span> 詳細釣り合い</a></li>
+  <li><a href="#逆反応速度定数を独立にフィットすべきでない理由" id="toc-逆反応速度定数を独立にフィットすべきでない理由" class="nav-link" data-scroll-target="#逆反応速度定数を独立にフィットすべきでない理由"><span class="header-section-number">1.11</span> 逆反応速度定数を独立にフィットすべきでない理由</a></li>
+  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">1.12</span> この章の要点</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">1.13</span> 確認問題</a></li>
+  <li><a href="#計算演習" id="toc-計算演習" class="nav-link" data-scroll-target="#計算演習"><span class="header-section-number">1.14</span> 計算演習</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -207,7 +213,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lessons/01_overview.html">Lessons</a></li><li class="breadcrumb-item"><a href="../lessons/03_rate_equations.html">Rate Equations</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">速度式と保存則</h1>
+<h1 class="title">速度式・サイトバランス・熱力学整合性</h1>
 </div>
 
 
@@ -224,94 +230,256 @@ window.Quarto = {
 </header>
 
 
-<section id="速度式と保存則" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> 速度式と保存則</h1>
-<p>このレッスンでは、前の lesson で定義した Fe3O4-RWGS minimal network を mass-action form の速度式に変換する。目的は、反応速度を計算する前に、site balance、mass balance、steady-state condition の形を明確にすることである。</p>
+<section id="速度式サイトバランス熱力学整合性" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 速度式・サイトバランス・熱力学整合性</h1>
+<p>この章では、第2章で定義した Fe3O4-RWGS 最小7ステップ機構に対して、素反応速度式、サイトバランス、定常状態方程式、熱力学整合性を整理する。目的は、数値計算を始める前に、どの量を独立に与え、どの量を保存則や平衡関係から制約すべきかを明確にすることである。</p>
+<p>この章では PFR、パラメータ推定、FeCx-FT の詳細は扱わない。対象は Fe3O4 上 RWGS の最小モデルに限定する。</p>
 <section id="学習目標" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1.1</span> 学習目標</h2>
+<p>この章を終えると、次のことができるようになる。</p>
 <ul>
-<li>Elementary step <code>R1</code> から <code>R7</code> について forward rate、reverse rate、net rate を書く。</li>
-<li>Surface coverage と gas activity を区別する。</li>
-<li>Empty-site coverage を site balance に含める。</li>
-<li>Adsorbed intermediates の steady-state equations を立てる。</li>
+<li>素反応ごとの前進速度、逆反応速度、正味速度を定義する。</li>
+<li>mass-action kinetics に基づいて R1 から R7 の速度式を書く。</li>
+<li>Fe3O4-RWGS 最小モデルの site balance を書く。</li>
+<li>表面被覆率の steady-state equations を立てる。</li>
+<li>CO2、H2、CO、H2O の正味生成速度を R1-R7 の速度で表す。</li>
+<li>詳細釣り合いと熱力学整合性の意味を説明する。</li>
+<li>逆反応速度定数を自由にフィットすべきでない理由を説明する。</li>
 </ul>
 </section>
-<section id="rate-form" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="rate-form"><span class="header-section-number">1.2</span> Rate Form</h2>
-<p>任意の elementary step <code>Rj</code> について、forward rate と reverse rate を次のように表す。</p>
-<p><span class="math display">\[
-r_{j,f} = k_{j,f} \prod_i a_i^{\nu_{i,j}^{f}}
-\]</span></p>
-<p><span class="math display">\[
-r_{j,r} = k_{j,r} \prod_i a_i^{\nu_{i,j}^{r}}
-\]</span></p>
-<p>Net rate は、</p>
+<section id="前提となるr1-r7機構" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="前提となるr1-r7機構"><span class="header-section-number">1.2</span> 前提となるR1-R7機構</h2>
+<p>本章では、第2章と同じ反応 ID と素反応だけを使う。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Reaction ID</th>
+<th>Elementary step</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R1</code></td>
+<td><code>CO2 + * &lt;=&gt; CO2*</code></td>
+</tr>
+<tr class="even">
+<td><code>R2</code></td>
+<td><code>H2 + 2* &lt;=&gt; 2H*</code></td>
+</tr>
+<tr class="odd">
+<td><code>R3</code></td>
+<td><code>CO2* + * &lt;=&gt; CO* + O*</code></td>
+</tr>
+<tr class="even">
+<td><code>R4</code></td>
+<td><code>CO* &lt;=&gt; CO + *</code></td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td><code>O* + H* &lt;=&gt; OH* + *</code></td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td><code>OH* + H* &lt;=&gt; H2O* + *</code></td>
+</tr>
+<tr class="odd">
+<td><code>R7</code></td>
+<td><code>H2O* &lt;=&gt; H2O + *</code></td>
+</tr>
+</tbody>
+</table>
+<p>余分な素反応は追加しない。</p>
+</section>
+<section id="素反応速度式の一般形" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="素反応速度式の一般形"><span class="header-section-number">1.3</span> 素反応速度式の一般形</h2>
+<p>素反応 <code>Rj</code> の正味速度 <span class="math inline">\(r_j\)</span> は、前進速度 <span class="math inline">\(r_{j,f}\)</span> と逆反応速度 <span class="math inline">\(r_{j,r}\)</span> の差として定義する。</p>
 <p><span class="math display">\[
 r_j = r_{j,f} - r_{j,r}
 \]</span></p>
-<p>である。ここで <span class="math inline">\(a_i\)</span> は gas species では pressure または fugacity に対応する activity、surface species では coverage に対応する量として扱う。</p>
+<p>ここで <span class="math inline">\(r_j &gt; 0\)</span> は、表に書いた左辺から右辺へ進む向きを意味する。</p>
 </section>
-<section id="example-r1-co2-adsorption" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="example-r1-co2-adsorption"><span class="header-section-number">1.3</span> Example: R1 CO2 Adsorption</h2>
-<p><code>R1</code> の CO2 adsorption を、</p>
+<section id="前進速度と逆反応速度" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="前進速度と逆反応速度"><span class="header-section-number">1.4</span> 前進速度と逆反応速度</h2>
+<p>mass-action kinetics では、前進速度と逆反応速度を reactant activity の積として書く。</p>
 <p><span class="math display">\[
-\mathrm{CO_2 + * \rightleftharpoons CO_2*}
+r_{j,f}
+= k_{j,f} \prod_i a_i^{\nu_{ij,f}}
 \]</span></p>
-<p>と書くと、速度式は次のようになる。</p>
 <p><span class="math display">\[
-r_1 = k_{1,f} P_{\mathrm{CO_2}} \theta_* - k_{1,r}\theta_{\mathrm{CO_2*}}
+r_{j,r}
+= k_{j,r} \prod_i a_i^{\nu_{ij,r}}
 \]</span></p>
-<p>ここで <span class="math inline">\(P_{\mathrm{CO_2}}\)</span> は CO2 pressure、<span class="math inline">\(\theta_*\)</span> は empty-site coverage、<span class="math inline">\(\theta_{\mathrm{CO_2*}}\)</span> は adsorbed CO2 coverage である。</p>
+<p>ここで <span class="math inline">\(k_{j,f}\)</span> と <span class="math inline">\(k_{j,r}\)</span> は前進・逆反応速度定数、<span class="math inline">\(a_i\)</span> は species <span class="math inline">\(i\)</span> の activity、<span class="math inline">\(\nu_{ij,f}\)</span> と <span class="math inline">\(\nu_{ij,r}\)</span> は前進側・逆反応側での反応次数である。</p>
+<p>この MVP では、気相種の activity を分圧 <span class="math inline">\(P_i\)</span>、表面種の activity を被覆率 <span class="math inline">\(\theta_i\)</span> で近似する。</p>
 </section>
-<section id="example-r6-h2o-formation" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="example-r6-h2o-formation"><span class="header-section-number">1.4</span> Example: R6 H2O Formation</h2>
-<p><code>R6</code> の H2O formation は、</p>
+<section id="mass-action-kinetics" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="mass-action-kinetics"><span class="header-section-number">1.5</span> mass-action kinetics</h2>
+<p>たとえば <code>R1</code> は次の吸着・脱離反応である。</p>
+<pre class="text"><code>R1: CO2 + * &lt;=&gt; CO2*</code></pre>
+<p>LaTeX では次のように書く。</p>
 <p><span class="math display">\[
-\mathrm{OH* + H* \rightleftharpoons H_2O* + *}
+\mathrm{R1:\ CO_2 + * \rightleftharpoons CO_2*}
 \]</span></p>
-<p>と書く。この net rate は次の形になる。</p>
+<p>このとき、正味速度は次のようになる。</p>
 <p><span class="math display">\[
-r_6 = k_{6,f}\theta_{\mathrm{OH*}}\theta_{\mathrm{H*}} - k_{6,r}\theta_{\mathrm{H_2O*}}\theta_*
+r_1
+= k_{1,f} P_{\mathrm{CO_2}} \theta_*
+- k_{1,r} \theta_{\mathrm{CO_2}}
 \]</span></p>
-<p><code>R7</code> で <code>H2O*</code> が gas-phase H2O と empty site に戻る。</p>
+<p>表面種の添字では、簡潔さのため <code>CO2*</code> を <span class="math inline">\(\theta_{\mathrm{CO_2}}\)</span> と書く。以後も、<span class="math inline">\(\theta_{\mathrm{H}}\)</span> は <code>H*</code>、<span class="math inline">\(\theta_{\mathrm{O}}\)</span> は <code>O*</code>、<span class="math inline">\(\theta_{\mathrm{H_2O}}\)</span> は <code>H2O*</code> の被覆率を表す。</p>
 </section>
-<section id="surface-site-balance" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="surface-site-balance"><span class="header-section-number">1.5</span> Surface Site Balance</h2>
-<p>単一サイト MVP では、全 coverage の和が1になる。</p>
+<section id="fe3o4-rwgs最小モデルのサイトバランス" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="fe3o4-rwgs最小モデルのサイトバランス"><span class="header-section-number">1.6</span> Fe3O4-RWGS最小モデルのサイトバランス</h2>
+<p>本MVPでは、単一種類の表面サイト <code>*</code> を仮定する。したがって、全表面被覆率の和は1である。</p>
 <p><span class="math display">\[
-\theta_* + \theta_{\mathrm{CO_2*}} + \theta_{\mathrm{H*}} + \theta_{\mathrm{COOH*}} + \theta_{\mathrm{CO*}} + \theta_{\mathrm{OH*}} + \theta_{\mathrm{H_2O*}} = 1
+\theta_*
++ \theta_{\mathrm{CO_2}}
++ \theta_{\mathrm{H}}
++ \theta_{\mathrm{CO}}
++ \theta_{\mathrm{O}}
++ \theta_{\mathrm{OH}}
++ \theta_{\mathrm{H_2O}}
+= 1
 \]</span></p>
-<p>この式は、空サイト <code>*</code> も surface species として扱うことを意味する。Empty site を除外すると、吸着・脱離 step の site balance が崩れる。</p>
+<p>この式は、空サイト <code>*</code> も表面種として数えることを意味する。空サイトを site balance に含めないと、吸着・脱離反応で表面サイト数が保存されない。</p>
 </section>
-<section id="steady-state-equations" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="steady-state-equations"><span class="header-section-number">1.6</span> Steady-State Equations</h2>
-<p>Adsorbed intermediate <span class="math inline">\(X*\)</span> について、steady-state approximation は次の形で書ける。</p>
+<section id="r1からr7の速度式例" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="r1からr7の速度式例"><span class="header-section-number">1.7</span> R1からR7の速度式例</h2>
+<p>第2章の7ステップに対して、mass-action form の正味速度を次のように書く。</p>
 <p><span class="math display">\[
-\frac{d\theta_{X*}}{dt} = \sum_j \nu_{X*,j} r_j = 0
+r_1
+= k_{1,f} P_{\mathrm{CO_2}} \theta_*
+- k_{1,r} \theta_{\mathrm{CO_2}}
 \]</span></p>
-<p>MVP では、<code>CO2*</code>、<code>H*</code>、<code>COOH*</code>、<code>CO*</code>、<code>OH*</code>、<code>H2O*</code> についてこの条件を立てる。実際に解くときは、site balance と steady-state equations を同時に満たす coverage を求める。</p>
+<p><span class="math display">\[
+r_2
+= k_{2,f} P_{\mathrm{H_2}} \theta_*^2
+- k_{2,r} \theta_{\mathrm{H}}^2
+\]</span></p>
+<p><span class="math display">\[
+r_3
+= k_{3,f} \theta_{\mathrm{CO_2}} \theta_*
+- k_{3,r} \theta_{\mathrm{CO}} \theta_{\mathrm{O}}
+\]</span></p>
+<p><span class="math display">\[
+r_4
+= k_{4,f} \theta_{\mathrm{CO}}
+- k_{4,r} P_{\mathrm{CO}} \theta_*
+\]</span></p>
+<p><span class="math display">\[
+r_5
+= k_{5,f} \theta_{\mathrm{O}} \theta_{\mathrm{H}}
+- k_{5,r} \theta_{\mathrm{OH}} \theta_*
+\]</span></p>
+<p><span class="math display">\[
+r_6
+= k_{6,f} \theta_{\mathrm{OH}} \theta_{\mathrm{H}}
+- k_{6,r} \theta_{\mathrm{H_2O}} \theta_*
+\]</span></p>
+<p><span class="math display">\[
+r_7
+= k_{7,f} \theta_{\mathrm{H_2O}}
+- k_{7,r} P_{\mathrm{H_2O}} \theta_*
+\]</span></p>
+<p>これらは教材用の最小表現であり、activity coefficient や coverage dependence を含む拡張はここでは扱わない。</p>
 </section>
-<section id="balance-checks-before-interpretation" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="balance-checks-before-interpretation"><span class="header-section-number">1.7</span> Balance Checks Before Interpretation</h2>
-<p>速度式を解く前に、各 elementary step について次を確認する。</p>
+<section id="各表面被覆率の定常状態方程式" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="各表面被覆率の定常状態方程式"><span class="header-section-number">1.8</span> 各表面被覆率の定常状態方程式</h2>
+<p>表面種 <span class="math inline">\(i\)</span> の被覆率が定常状態にあるとき、生成速度と消費速度の和は0になる。</p>
+<p><span class="math display">\[
+\frac{d\theta_i}{dt}
+= \sum_j \nu_{ij} r_j
+= 0
+\]</span></p>
+<p>ここで <span class="math inline">\(\nu_{ij}\)</span> は、反応 <code>Rj</code> における表面種 <span class="math inline">\(i\)</span> の化学量論係数である。生成側を正、消費側を負とする。</p>
+<p>Fe3O4-RWGS MVP では、空サイト <code>*</code> を site balance で決め、残りの表面種について定常状態方程式を立てる。</p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{CO_2}}}{dt} = r_1 - r_3 = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{H}}}{dt} = 2r_2 - r_5 - r_6 = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{CO}}}{dt} = r_3 - r_4 = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{O}}}{dt} = r_3 - r_5 = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{OH}}}{dt} = r_5 - r_6 = 0
+\]</span></p>
+<p><span class="math display">\[
+\frac{d\theta_{\mathrm{H_2O}}}{dt} = r_6 - r_7 = 0
+\]</span></p>
+<p>これらの式と site balance を同時に満たす被覆率が、steady-state surface coverage である。</p>
+</section>
+<section id="co2-h2-co-h2oの正味生成速度" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="co2-h2-co-h2oの正味生成速度"><span class="header-section-number">1.9</span> CO2, H2, CO, H2Oの正味生成速度</h2>
+<p>気相種の正味生成速度は、対応する吸着・脱離ステップから求められる。ここでは、気相に生成される向きを正とする。</p>
+<p><span class="math display">\[
+R_{\mathrm{CO_2}} = -r_1
+\]</span></p>
+<p><span class="math display">\[
+R_{\mathrm{H_2}} = -r_2
+\]</span></p>
+<p><span class="math display">\[
+R_{\mathrm{CO}} = r_4
+\]</span></p>
+<p><span class="math display">\[
+R_{\mathrm{H_2O}} = r_7
+\]</span></p>
+<p>RWGS の正味進行が支配的であれば、<span class="math inline">\(R_{\mathrm{CO}}\)</span> と <span class="math inline">\(R_{\mathrm{H_2O}}\)</span> は生成速度、<span class="math inline">\(R_{\mathrm{CO_2}}\)</span> と <span class="math inline">\(R_{\mathrm{H_2}}\)</span> は消費速度として解釈される。</p>
+</section>
+<section id="詳細釣り合い" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="詳細釣り合い"><span class="header-section-number">1.10</span> 詳細釣り合い</h2>
+<p>平衡状態では、各素反応について前進速度と逆反応速度が等しくなる。</p>
+<p><span class="math display">\[
+r_{j,f} = r_{j,r}
+\]</span></p>
+<p>したがって、平衡定数 <span class="math inline">\(K_j\)</span> は速度定数の比と対応する。</p>
+<p><span class="math display">\[
+K_j = \frac{k_{j,f}}{k_{j,r}}
+\]</span></p>
+<p>この関係は、速度定数が熱力学と無関係に選べるわけではないことを示している。反応全体の平衡定数や各素反応の自由エネルギー差が分かっている場合、<span class="math inline">\(k_{j,f}\)</span> と <span class="math inline">\(k_{j,r}\)</span> の比はそれらと整合していなければならない。</p>
+</section>
+<section id="逆反応速度定数を独立にフィットすべきでない理由" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="逆反応速度定数を独立にフィットすべきでない理由"><span class="header-section-number">1.11</span> 逆反応速度定数を独立にフィットすべきでない理由</h2>
+<p>前進速度定数と逆反応速度定数をすべて自由なパラメータとして独立にフィットすると、見かけ上はデータに合っても、熱力学的に矛盾したモデルになることがある。</p>
+<p>たとえば、ある素反応について <span class="math inline">\(K_j\)</span> が既知または推定可能であれば、次の関係を満たす必要がある。</p>
+<p><span class="math display">\[
+k_{j,r} = \frac{k_{j,f}}{K_j}
+\]</span></p>
+<p>つまり、<span class="math inline">\(k_{j,f}\)</span> を決めたあとに <span class="math inline">\(k_{j,r}\)</span> を完全に自由に動かすと、詳細釣り合いを壊す可能性がある。microkinetic model では、速度論的フィットと熱力学整合性を同時に満たすようにパラメータを扱う必要がある。</p>
+<p>この教材では、逆反応速度定数を自由にフィットしてよいとは扱わない。必要な熱力学データが不足している場合は、仮定を明示し、<code>[citation needed]</code> を残す。</p>
+</section>
+<section id="この章の要点" class="level2" data-number="1.12">
+<h2 data-number="1.12" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">1.12</span> この章の要点</h2>
 <ul>
-<li>Elemental mass balance: C、H、O の原子数が保存される。</li>
-<li>Site balance: surface site の総数が保存される。</li>
-<li>Reversibility: reverse rate を書く場合、対応する species が定義されている。</li>
-<li>Reaction ID: <code>R1</code> から <code>R7</code> の番号と速度式の添字が一致している。</li>
+<li>正味速度は <span class="math inline">\(r_j = r_{j,f} - r_{j,r}\)</span> で定義する。</li>
+<li>mass-action kinetics では、速度は分圧と表面被覆率の積で表される。</li>
+<li>Fe3O4-RWGS MVP の site balance は、<code>*</code>, <code>CO2*</code>, <code>H*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の和が1である。</li>
+<li>定常状態では、各表面種について <span class="math inline">\(\frac{d\theta_i}{dt}=0\)</span> を満たす。</li>
+<li>詳細釣り合いにより、<span class="math inline">\(K_j = k_{j,f}/k_{j,r}\)</span> が成り立つ。</li>
+<li>逆反応速度定数を熱力学と無関係に自由フィットするのは避ける。</li>
 </ul>
-<p>これらの確認は、rate constant の値や実験との一致より前に行う。保存則を満たさない network から得た coverage や rate は、化学的に解釈できない。</p>
 </section>
-<section id="mvp-での出力" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="mvp-での出力"><span class="header-section-number">1.8</span> MVP での出力</h2>
-<p>最初の計算で目指す出力は、C2+ selectivity ではなく、次のような RWGS に限定した量である。</p>
-<ul>
-<li>Steady-state surface coverages</li>
-<li>Net CO formation rate</li>
-<li>Net H2O formation rate</li>
-<li>Rate sensitivity within the RWGS network</li>
-</ul>
-<p>FeCx-FT や chain growth を議論するには、別の species set と elementary step が必要である。この lesson では、Fe3O4-RWGS model の範囲にとどめる。</p>
+<section id="確認問題" class="level2" data-number="1.13">
+<h2 data-number="1.13" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">1.13</span> 確認問題</h2>
+<ol type="1">
+<li>正味速度 <span class="math inline">\(r_j\)</span> と前進速度 <span class="math inline">\(r_{j,f}\)</span>、逆反応速度 <span class="math inline">\(r_{j,r}\)</span> の関係を書け。</li>
+<li><code>R2: H2 + 2* &lt;=&gt; 2H*</code> の速度式を書き、<span class="math inline">\(\theta_*^2\)</span> が現れる理由を説明せよ。</li>
+<li>Fe3O4-RWGS MVP の site balance を書け。</li>
+<li><code>CO*</code> の定常状態方程式が <span class="math inline">\(r_3 - r_4 = 0\)</span> になる理由を説明せよ。</li>
+<li>逆反応速度定数をすべて独立にフィットすると、どのような問題が起こり得るか説明せよ。</li>
+</ol>
+</section>
+<section id="計算演習" class="level2" data-number="1.14">
+<h2 data-number="1.14" class="anchored" data-anchor-id="計算演習"><span class="header-section-number">1.14</span> 計算演習</h2>
+<ol type="1">
+<li>任意の被覆率セットについて site balance を計算し、1になるように正規化せよ。</li>
+<li>与えられた <span class="math inline">\(k_{1,f}\)</span>、<span class="math inline">\(k_{1,r}\)</span>、<span class="math inline">\(P_{\mathrm{CO_2}}\)</span>、<span class="math inline">\(\theta_*\)</span>、<span class="math inline">\(\theta_{\mathrm{CO_2}}\)</span> から <span class="math inline">\(r_1\)</span> を計算せよ。</li>
+<li>仮に <span class="math inline">\(K_4\)</span> と <span class="math inline">\(k_{4,f}\)</span> が与えられているとき、<span class="math inline">\(k_{4,r}=k_{4,f}/K_4\)</span> を使って逆反応速度定数を求めよ。</li>
+</ol>
 
 
 </section>

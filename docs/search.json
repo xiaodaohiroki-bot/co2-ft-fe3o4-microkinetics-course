@@ -37,9 +37,9 @@
   {
     "objectID": "lessons/03_rate_equations.html",
     "href": "lessons/03_rate_equations.html",
-    "title": "速度式と保存則",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "このレッスンでは、前の lesson で定義した Fe3O4-RWGS minimal network を mass-action form の速度式に変換する。目的は、反応速度を計算する前に、site balance、mass balance、steady-state condition の形を明確にすることである。\n\n\n\nElementary step R1 から R7 について forward rate、reverse rate、net rate を書く。\nSurface coverage と gas activity を区別する。\nEmpty-site coverage を site balance に含める。\nAdsorbed intermediates の steady-state equations を立てる。\n\n\n\n\n任意の elementary step Rj について、forward rate と reverse rate を次のように表す。\n\\[\nr_{j,f} = k_{j,f} \\prod_i a_i^{\\nu_{i,j}^{f}}\n\\]\n\\[\nr_{j,r} = k_{j,r} \\prod_i a_i^{\\nu_{i,j}^{r}}\n\\]\nNet rate は、\n\\[\nr_j = r_{j,f} - r_{j,r}\n\\]\nである。ここで \\(a_i\\) は gas species では pressure または fugacity に対応する activity、surface species では coverage に対応する量として扱う。\n\n\n\nR1 の CO2 adsorption を、\n\\[\n\\mathrm{CO_2 + * \\rightleftharpoons CO_2*}\n\\]\nと書くと、速度式は次のようになる。\n\\[\nr_1 = k_{1,f} P_{\\mathrm{CO_2}} \\theta_* - k_{1,r}\\theta_{\\mathrm{CO_2*}}\n\\]\nここで \\(P_{\\mathrm{CO_2}}\\) は CO2 pressure、\\(\\theta_*\\) は empty-site coverage、\\(\\theta_{\\mathrm{CO_2*}}\\) は adsorbed CO2 coverage である。\n\n\n\nR6 の H2O formation は、\n\\[\n\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\nと書く。この net rate は次の形になる。\n\\[\nr_6 = k_{6,f}\\theta_{\\mathrm{OH*}}\\theta_{\\mathrm{H*}} - k_{6,r}\\theta_{\\mathrm{H_2O*}}\\theta_*\n\\]\nR7 で H2O* が gas-phase H2O と empty site に戻る。\n\n\n\n単一サイト MVP では、全 coverage の和が1になる。\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{COOH*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}} = 1\n\\]\nこの式は、空サイト * も surface species として扱うことを意味する。Empty site を除外すると、吸着・脱離 step の site balance が崩れる。\n\n\n\nAdsorbed intermediate \\(X*\\) について、steady-state approximation は次の形で書ける。\n\\[\n\\frac{d\\theta_{X*}}{dt} = \\sum_j \\nu_{X*,j} r_j = 0\n\\]\nMVP では、CO2*、H*、COOH*、CO*、OH*、H2O* についてこの条件を立てる。実際に解くときは、site balance と steady-state equations を同時に満たす coverage を求める。\n\n\n\n速度式を解く前に、各 elementary step について次を確認する。\n\nElemental mass balance: C、H、O の原子数が保存される。\nSite balance: surface site の総数が保存される。\nReversibility: reverse rate を書く場合、対応する species が定義されている。\nReaction ID: R1 から R7 の番号と速度式の添字が一致している。\n\nこれらの確認は、rate constant の値や実験との一致より前に行う。保存則を満たさない network から得た coverage や rate は、化学的に解釈できない。\n\n\n\n最初の計算で目指す出力は、C2+ selectivity ではなく、次のような RWGS に限定した量である。\n\nSteady-state surface coverages\nNet CO formation rate\nNet H2O formation rate\nRate sensitivity within the RWGS network\n\nFeCx-FT や chain growth を議論するには、別の species set と elementary step が必要である。この lesson では、Fe3O4-RWGS model の範囲にとどめる。",
+    "text": "この章では、第2章で定義した Fe3O4-RWGS 最小7ステップ機構に対して、素反応速度式、サイトバランス、定常状態方程式、熱力学整合性を整理する。目的は、数値計算を始める前に、どの量を独立に与え、どの量を保存則や平衡関係から制約すべきかを明確にすることである。\nこの章では PFR、パラメータ推定、FeCx-FT の詳細は扱わない。対象は Fe3O4 上 RWGS の最小モデルに限定する。\n\n\nこの章を終えると、次のことができるようになる。\n\n素反応ごとの前進速度、逆反応速度、正味速度を定義する。\nmass-action kinetics に基づいて R1 から R7 の速度式を書く。\nFe3O4-RWGS 最小モデルの site balance を書く。\n表面被覆率の steady-state equations を立てる。\nCO2、H2、CO、H2O の正味生成速度を R1-R7 の速度で表す。\n詳細釣り合いと熱力学整合性の意味を説明する。\n逆反応速度定数を自由にフィットすべきでない理由を説明する。\n\n\n\n\n本章では、第2章と同じ反応 ID と素反応だけを使う。\n\n\n\nReaction ID\nElementary step\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\n\n\nR4\nCO* &lt;=&gt; CO + *\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\n\n\nR7\nH2O* &lt;=&gt; H2O + *\n\n\n\n余分な素反応は追加しない。\n\n\n\n素反応 Rj の正味速度 \\(r_j\\) は、前進速度 \\(r_{j,f}\\) と逆反応速度 \\(r_{j,r}\\) の差として定義する。\n\\[\nr_j = r_{j,f} - r_{j,r}\n\\]\nここで \\(r_j &gt; 0\\) は、表に書いた左辺から右辺へ進む向きを意味する。\n\n\n\nmass-action kinetics では、前進速度と逆反応速度を reactant activity の積として書く。\n\\[\nr_{j,f}\n= k_{j,f} \\prod_i a_i^{\\nu_{ij,f}}\n\\]\n\\[\nr_{j,r}\n= k_{j,r} \\prod_i a_i^{\\nu_{ij,r}}\n\\]\nここで \\(k_{j,f}\\) と \\(k_{j,r}\\) は前進・逆反応速度定数、\\(a_i\\) は species \\(i\\) の activity、\\(\\nu_{ij,f}\\) と \\(\\nu_{ij,r}\\) は前進側・逆反応側での反応次数である。\nこの MVP では、気相種の activity を分圧 \\(P_i\\)、表面種の activity を被覆率 \\(\\theta_i\\) で近似する。\n\n\n\nたとえば R1 は次の吸着・脱離反応である。\nR1: CO2 + * &lt;=&gt; CO2*\nLaTeX では次のように書く。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\nこのとき、正味速度は次のようになる。\n\\[\nr_1\n= k_{1,f} P_{\\mathrm{CO_2}} \\theta_*\n- k_{1,r} \\theta_{\\mathrm{CO_2}}\n\\]\n表面種の添字では、簡潔さのため CO2* を \\(\\theta_{\\mathrm{CO_2}}\\) と書く。以後も、\\(\\theta_{\\mathrm{H}}\\) は H*、\\(\\theta_{\\mathrm{O}}\\) は O*、\\(\\theta_{\\mathrm{H_2O}}\\) は H2O* の被覆率を表す。\n\n\n\n本MVPでは、単一種類の表面サイト * を仮定する。したがって、全表面被覆率の和は1である。\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]\nこの式は、空サイト * も表面種として数えることを意味する。空サイトを site balance に含めないと、吸着・脱離反応で表面サイト数が保存されない。\n\n\n\n第2章の7ステップに対して、mass-action form の正味速度を次のように書く。\n\\[\nr_1\n= k_{1,f} P_{\\mathrm{CO_2}} \\theta_*\n- k_{1,r} \\theta_{\\mathrm{CO_2}}\n\\]\n\\[\nr_2\n= k_{2,f} P_{\\mathrm{H_2}} \\theta_*^2\n- k_{2,r} \\theta_{\\mathrm{H}}^2\n\\]\n\\[\nr_3\n= k_{3,f} \\theta_{\\mathrm{CO_2}} \\theta_*\n- k_{3,r} \\theta_{\\mathrm{CO}} \\theta_{\\mathrm{O}}\n\\]\n\\[\nr_4\n= k_{4,f} \\theta_{\\mathrm{CO}}\n- k_{4,r} P_{\\mathrm{CO}} \\theta_*\n\\]\n\\[\nr_5\n= k_{5,f} \\theta_{\\mathrm{O}} \\theta_{\\mathrm{H}}\n- k_{5,r} \\theta_{\\mathrm{OH}} \\theta_*\n\\]\n\\[\nr_6\n= k_{6,f} \\theta_{\\mathrm{OH}} \\theta_{\\mathrm{H}}\n- k_{6,r} \\theta_{\\mathrm{H_2O}} \\theta_*\n\\]\n\\[\nr_7\n= k_{7,f} \\theta_{\\mathrm{H_2O}}\n- k_{7,r} P_{\\mathrm{H_2O}} \\theta_*\n\\]\nこれらは教材用の最小表現であり、activity coefficient や coverage dependence を含む拡張はここでは扱わない。\n\n\n\n表面種 \\(i\\) の被覆率が定常状態にあるとき、生成速度と消費速度の和は0になる。\n\\[\n\\frac{d\\theta_i}{dt}\n= \\sum_j \\nu_{ij} r_j\n= 0\n\\]\nここで \\(\\nu_{ij}\\) は、反応 Rj における表面種 \\(i\\) の化学量論係数である。生成側を正、消費側を負とする。\nFe3O4-RWGS MVP では、空サイト * を site balance で決め、残りの表面種について定常状態方程式を立てる。\n\\[\n\\frac{d\\theta_{\\mathrm{CO_2}}}{dt} = r_1 - r_3 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{H}}}{dt} = 2r_2 - r_5 - r_6 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{CO}}}{dt} = r_3 - r_4 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{O}}}{dt} = r_3 - r_5 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{OH}}}{dt} = r_5 - r_6 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{H_2O}}}{dt} = r_6 - r_7 = 0\n\\]\nこれらの式と site balance を同時に満たす被覆率が、steady-state surface coverage である。\n\n\n\n気相種の正味生成速度は、対応する吸着・脱離ステップから求められる。ここでは、気相に生成される向きを正とする。\n\\[\nR_{\\mathrm{CO_2}} = -r_1\n\\]\n\\[\nR_{\\mathrm{H_2}} = -r_2\n\\]\n\\[\nR_{\\mathrm{CO}} = r_4\n\\]\n\\[\nR_{\\mathrm{H_2O}} = r_7\n\\]\nRWGS の正味進行が支配的であれば、\\(R_{\\mathrm{CO}}\\) と \\(R_{\\mathrm{H_2O}}\\) は生成速度、\\(R_{\\mathrm{CO_2}}\\) と \\(R_{\\mathrm{H_2}}\\) は消費速度として解釈される。\n\n\n\n平衡状態では、各素反応について前進速度と逆反応速度が等しくなる。\n\\[\nr_{j,f} = r_{j,r}\n\\]\nしたがって、平衡定数 \\(K_j\\) は速度定数の比と対応する。\n\\[\nK_j = \\frac{k_{j,f}}{k_{j,r}}\n\\]\nこの関係は、速度定数が熱力学と無関係に選べるわけではないことを示している。反応全体の平衡定数や各素反応の自由エネルギー差が分かっている場合、\\(k_{j,f}\\) と \\(k_{j,r}\\) の比はそれらと整合していなければならない。\n\n\n\n前進速度定数と逆反応速度定数をすべて自由なパラメータとして独立にフィットすると、見かけ上はデータに合っても、熱力学的に矛盾したモデルになることがある。\nたとえば、ある素反応について \\(K_j\\) が既知または推定可能であれば、次の関係を満たす必要がある。\n\\[\nk_{j,r} = \\frac{k_{j,f}}{K_j}\n\\]\nつまり、\\(k_{j,f}\\) を決めたあとに \\(k_{j,r}\\) を完全に自由に動かすと、詳細釣り合いを壊す可能性がある。microkinetic model では、速度論的フィットと熱力学整合性を同時に満たすようにパラメータを扱う必要がある。\nこの教材では、逆反応速度定数を自由にフィットしてよいとは扱わない。必要な熱力学データが不足している場合は、仮定を明示し、[citation needed] を残す。\n\n\n\n\n正味速度は \\(r_j = r_{j,f} - r_{j,r}\\) で定義する。\nmass-action kinetics では、速度は分圧と表面被覆率の積で表される。\nFe3O4-RWGS MVP の site balance は、*, CO2*, H*, CO*, O*, OH*, H2O* の和が1である。\n定常状態では、各表面種について \\(\\frac{d\\theta_i}{dt}=0\\) を満たす。\n詳細釣り合いにより、\\(K_j = k_{j,f}/k_{j,r}\\) が成り立つ。\n逆反応速度定数を熱力学と無関係に自由フィットするのは避ける。\n\n\n\n\n\n正味速度 \\(r_j\\) と前進速度 \\(r_{j,f}\\)、逆反応速度 \\(r_{j,r}\\) の関係を書け。\nR2: H2 + 2* &lt;=&gt; 2H* の速度式を書き、\\(\\theta_*^2\\) が現れる理由を説明せよ。\nFe3O4-RWGS MVP の site balance を書け。\nCO* の定常状態方程式が \\(r_3 - r_4 = 0\\) になる理由を説明せよ。\n逆反応速度定数をすべて独立にフィットすると、どのような問題が起こり得るか説明せよ。\n\n\n\n\n\n任意の被覆率セットについて site balance を計算し、1になるように正規化せよ。\n与えられた \\(k_{1,f}\\)、\\(k_{1,r}\\)、\\(P_{\\mathrm{CO_2}}\\)、\\(\\theta_*\\)、\\(\\theta_{\\mathrm{CO_2}}\\) から \\(r_1\\) を計算せよ。\n仮に \\(K_4\\) と \\(k_{4,f}\\) が与えられているとき、\\(k_{4,r}=k_{4,f}/K_4\\) を使って逆反応速度定数を求めよ。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
@@ -48,86 +48,152 @@
   {
     "objectID": "lessons/03_rate_equations.html#学習目標",
     "href": "lessons/03_rate_equations.html#学習目標",
-    "title": "速度式と保存則",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "Elementary step R1 から R7 について forward rate、reverse rate、net rate を書く。\nSurface coverage と gas activity を区別する。\nEmpty-site coverage を site balance に含める。\nAdsorbed intermediates の steady-state equations を立てる。",
+    "text": "この章を終えると、次のことができるようになる。\n\n素反応ごとの前進速度、逆反応速度、正味速度を定義する。\nmass-action kinetics に基づいて R1 から R7 の速度式を書く。\nFe3O4-RWGS 最小モデルの site balance を書く。\n表面被覆率の steady-state equations を立てる。\nCO2、H2、CO、H2O の正味生成速度を R1-R7 の速度で表す。\n詳細釣り合いと熱力学整合性の意味を説明する。\n逆反応速度定数を自由にフィットすべきでない理由を説明する。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#rate-form",
-    "href": "lessons/03_rate_equations.html#rate-form",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#前提となるr1-r7機構",
+    "href": "lessons/03_rate_equations.html#前提となるr1-r7機構",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "任意の elementary step Rj について、forward rate と reverse rate を次のように表す。\n\\[\nr_{j,f} = k_{j,f} \\prod_i a_i^{\\nu_{i,j}^{f}}\n\\]\n\\[\nr_{j,r} = k_{j,r} \\prod_i a_i^{\\nu_{i,j}^{r}}\n\\]\nNet rate は、\n\\[\nr_j = r_{j,f} - r_{j,r}\n\\]\nである。ここで \\(a_i\\) は gas species では pressure または fugacity に対応する activity、surface species では coverage に対応する量として扱う。",
+    "text": "本章では、第2章と同じ反応 ID と素反応だけを使う。\n\n\n\nReaction ID\nElementary step\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\n\n\nR4\nCO* &lt;=&gt; CO + *\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\n\n\nR7\nH2O* &lt;=&gt; H2O + *\n\n\n\n余分な素反応は追加しない。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#example-r1-co2-adsorption",
-    "href": "lessons/03_rate_equations.html#example-r1-co2-adsorption",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#素反応速度式の一般形",
+    "href": "lessons/03_rate_equations.html#素反応速度式の一般形",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "R1 の CO2 adsorption を、\n\\[\n\\mathrm{CO_2 + * \\rightleftharpoons CO_2*}\n\\]\nと書くと、速度式は次のようになる。\n\\[\nr_1 = k_{1,f} P_{\\mathrm{CO_2}} \\theta_* - k_{1,r}\\theta_{\\mathrm{CO_2*}}\n\\]\nここで \\(P_{\\mathrm{CO_2}}\\) は CO2 pressure、\\(\\theta_*\\) は empty-site coverage、\\(\\theta_{\\mathrm{CO_2*}}\\) は adsorbed CO2 coverage である。",
+    "text": "素反応 Rj の正味速度 \\(r_j\\) は、前進速度 \\(r_{j,f}\\) と逆反応速度 \\(r_{j,r}\\) の差として定義する。\n\\[\nr_j = r_{j,f} - r_{j,r}\n\\]\nここで \\(r_j &gt; 0\\) は、表に書いた左辺から右辺へ進む向きを意味する。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#example-r6-h2o-formation",
-    "href": "lessons/03_rate_equations.html#example-r6-h2o-formation",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#前進速度と逆反応速度",
+    "href": "lessons/03_rate_equations.html#前進速度と逆反応速度",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "R6 の H2O formation は、\n\\[\n\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\nと書く。この net rate は次の形になる。\n\\[\nr_6 = k_{6,f}\\theta_{\\mathrm{OH*}}\\theta_{\\mathrm{H*}} - k_{6,r}\\theta_{\\mathrm{H_2O*}}\\theta_*\n\\]\nR7 で H2O* が gas-phase H2O と empty site に戻る。",
+    "text": "mass-action kinetics では、前進速度と逆反応速度を reactant activity の積として書く。\n\\[\nr_{j,f}\n= k_{j,f} \\prod_i a_i^{\\nu_{ij,f}}\n\\]\n\\[\nr_{j,r}\n= k_{j,r} \\prod_i a_i^{\\nu_{ij,r}}\n\\]\nここで \\(k_{j,f}\\) と \\(k_{j,r}\\) は前進・逆反応速度定数、\\(a_i\\) は species \\(i\\) の activity、\\(\\nu_{ij,f}\\) と \\(\\nu_{ij,r}\\) は前進側・逆反応側での反応次数である。\nこの MVP では、気相種の activity を分圧 \\(P_i\\)、表面種の activity を被覆率 \\(\\theta_i\\) で近似する。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#surface-site-balance",
-    "href": "lessons/03_rate_equations.html#surface-site-balance",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#mass-action-kinetics",
+    "href": "lessons/03_rate_equations.html#mass-action-kinetics",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "単一サイト MVP では、全 coverage の和が1になる。\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{COOH*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}} = 1\n\\]\nこの式は、空サイト * も surface species として扱うことを意味する。Empty site を除外すると、吸着・脱離 step の site balance が崩れる。",
+    "text": "たとえば R1 は次の吸着・脱離反応である。\nR1: CO2 + * &lt;=&gt; CO2*\nLaTeX では次のように書く。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\nこのとき、正味速度は次のようになる。\n\\[\nr_1\n= k_{1,f} P_{\\mathrm{CO_2}} \\theta_*\n- k_{1,r} \\theta_{\\mathrm{CO_2}}\n\\]\n表面種の添字では、簡潔さのため CO2* を \\(\\theta_{\\mathrm{CO_2}}\\) と書く。以後も、\\(\\theta_{\\mathrm{H}}\\) は H*、\\(\\theta_{\\mathrm{O}}\\) は O*、\\(\\theta_{\\mathrm{H_2O}}\\) は H2O* の被覆率を表す。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#steady-state-equations",
-    "href": "lessons/03_rate_equations.html#steady-state-equations",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#fe3o4-rwgs最小モデルのサイトバランス",
+    "href": "lessons/03_rate_equations.html#fe3o4-rwgs最小モデルのサイトバランス",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "Adsorbed intermediate \\(X*\\) について、steady-state approximation は次の形で書ける。\n\\[\n\\frac{d\\theta_{X*}}{dt} = \\sum_j \\nu_{X*,j} r_j = 0\n\\]\nMVP では、CO2*、H*、COOH*、CO*、OH*、H2O* についてこの条件を立てる。実際に解くときは、site balance と steady-state equations を同時に満たす coverage を求める。",
+    "text": "本MVPでは、単一種類の表面サイト * を仮定する。したがって、全表面被覆率の和は1である。\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]\nこの式は、空サイト * も表面種として数えることを意味する。空サイトを site balance に含めないと、吸着・脱離反応で表面サイト数が保存されない。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#balance-checks-before-interpretation",
-    "href": "lessons/03_rate_equations.html#balance-checks-before-interpretation",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#r1からr7の速度式例",
+    "href": "lessons/03_rate_equations.html#r1からr7の速度式例",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "速度式を解く前に、各 elementary step について次を確認する。\n\nElemental mass balance: C、H、O の原子数が保存される。\nSite balance: surface site の総数が保存される。\nReversibility: reverse rate を書く場合、対応する species が定義されている。\nReaction ID: R1 から R7 の番号と速度式の添字が一致している。\n\nこれらの確認は、rate constant の値や実験との一致より前に行う。保存則を満たさない network から得た coverage や rate は、化学的に解釈できない。",
+    "text": "第2章の7ステップに対して、mass-action form の正味速度を次のように書く。\n\\[\nr_1\n= k_{1,f} P_{\\mathrm{CO_2}} \\theta_*\n- k_{1,r} \\theta_{\\mathrm{CO_2}}\n\\]\n\\[\nr_2\n= k_{2,f} P_{\\mathrm{H_2}} \\theta_*^2\n- k_{2,r} \\theta_{\\mathrm{H}}^2\n\\]\n\\[\nr_3\n= k_{3,f} \\theta_{\\mathrm{CO_2}} \\theta_*\n- k_{3,r} \\theta_{\\mathrm{CO}} \\theta_{\\mathrm{O}}\n\\]\n\\[\nr_4\n= k_{4,f} \\theta_{\\mathrm{CO}}\n- k_{4,r} P_{\\mathrm{CO}} \\theta_*\n\\]\n\\[\nr_5\n= k_{5,f} \\theta_{\\mathrm{O}} \\theta_{\\mathrm{H}}\n- k_{5,r} \\theta_{\\mathrm{OH}} \\theta_*\n\\]\n\\[\nr_6\n= k_{6,f} \\theta_{\\mathrm{OH}} \\theta_{\\mathrm{H}}\n- k_{6,r} \\theta_{\\mathrm{H_2O}} \\theta_*\n\\]\n\\[\nr_7\n= k_{7,f} \\theta_{\\mathrm{H_2O}}\n- k_{7,r} P_{\\mathrm{H_2O}} \\theta_*\n\\]\nこれらは教材用の最小表現であり、activity coefficient や coverage dependence を含む拡張はここでは扱わない。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
     ]
   },
   {
-    "objectID": "lessons/03_rate_equations.html#mvp-での出力",
-    "href": "lessons/03_rate_equations.html#mvp-での出力",
-    "title": "速度式と保存則",
+    "objectID": "lessons/03_rate_equations.html#各表面被覆率の定常状態方程式",
+    "href": "lessons/03_rate_equations.html#各表面被覆率の定常状態方程式",
+    "title": "速度式・サイトバランス・熱力学整合性",
     "section": "",
-    "text": "最初の計算で目指す出力は、C2+ selectivity ではなく、次のような RWGS に限定した量である。\n\nSteady-state surface coverages\nNet CO formation rate\nNet H2O formation rate\nRate sensitivity within the RWGS network\n\nFeCx-FT や chain growth を議論するには、別の species set と elementary step が必要である。この lesson では、Fe3O4-RWGS model の範囲にとどめる。",
+    "text": "表面種 \\(i\\) の被覆率が定常状態にあるとき、生成速度と消費速度の和は0になる。\n\\[\n\\frac{d\\theta_i}{dt}\n= \\sum_j \\nu_{ij} r_j\n= 0\n\\]\nここで \\(\\nu_{ij}\\) は、反応 Rj における表面種 \\(i\\) の化学量論係数である。生成側を正、消費側を負とする。\nFe3O4-RWGS MVP では、空サイト * を site balance で決め、残りの表面種について定常状態方程式を立てる。\n\\[\n\\frac{d\\theta_{\\mathrm{CO_2}}}{dt} = r_1 - r_3 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{H}}}{dt} = 2r_2 - r_5 - r_6 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{CO}}}{dt} = r_3 - r_4 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{O}}}{dt} = r_3 - r_5 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{OH}}}{dt} = r_5 - r_6 = 0\n\\]\n\\[\n\\frac{d\\theta_{\\mathrm{H_2O}}}{dt} = r_6 - r_7 = 0\n\\]\nこれらの式と site balance を同時に満たす被覆率が、steady-state surface coverage である。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#co2-h2-co-h2oの正味生成速度",
+    "href": "lessons/03_rate_equations.html#co2-h2-co-h2oの正味生成速度",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "気相種の正味生成速度は、対応する吸着・脱離ステップから求められる。ここでは、気相に生成される向きを正とする。\n\\[\nR_{\\mathrm{CO_2}} = -r_1\n\\]\n\\[\nR_{\\mathrm{H_2}} = -r_2\n\\]\n\\[\nR_{\\mathrm{CO}} = r_4\n\\]\n\\[\nR_{\\mathrm{H_2O}} = r_7\n\\]\nRWGS の正味進行が支配的であれば、\\(R_{\\mathrm{CO}}\\) と \\(R_{\\mathrm{H_2O}}\\) は生成速度、\\(R_{\\mathrm{CO_2}}\\) と \\(R_{\\mathrm{H_2}}\\) は消費速度として解釈される。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#詳細釣り合い",
+    "href": "lessons/03_rate_equations.html#詳細釣り合い",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "平衡状態では、各素反応について前進速度と逆反応速度が等しくなる。\n\\[\nr_{j,f} = r_{j,r}\n\\]\nしたがって、平衡定数 \\(K_j\\) は速度定数の比と対応する。\n\\[\nK_j = \\frac{k_{j,f}}{k_{j,r}}\n\\]\nこの関係は、速度定数が熱力学と無関係に選べるわけではないことを示している。反応全体の平衡定数や各素反応の自由エネルギー差が分かっている場合、\\(k_{j,f}\\) と \\(k_{j,r}\\) の比はそれらと整合していなければならない。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#逆反応速度定数を独立にフィットすべきでない理由",
+    "href": "lessons/03_rate_equations.html#逆反応速度定数を独立にフィットすべきでない理由",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "前進速度定数と逆反応速度定数をすべて自由なパラメータとして独立にフィットすると、見かけ上はデータに合っても、熱力学的に矛盾したモデルになることがある。\nたとえば、ある素反応について \\(K_j\\) が既知または推定可能であれば、次の関係を満たす必要がある。\n\\[\nk_{j,r} = \\frac{k_{j,f}}{K_j}\n\\]\nつまり、\\(k_{j,f}\\) を決めたあとに \\(k_{j,r}\\) を完全に自由に動かすと、詳細釣り合いを壊す可能性がある。microkinetic model では、速度論的フィットと熱力学整合性を同時に満たすようにパラメータを扱う必要がある。\nこの教材では、逆反応速度定数を自由にフィットしてよいとは扱わない。必要な熱力学データが不足している場合は、仮定を明示し、[citation needed] を残す。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#この章の要点",
+    "href": "lessons/03_rate_equations.html#この章の要点",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "正味速度は \\(r_j = r_{j,f} - r_{j,r}\\) で定義する。\nmass-action kinetics では、速度は分圧と表面被覆率の積で表される。\nFe3O4-RWGS MVP の site balance は、*, CO2*, H*, CO*, O*, OH*, H2O* の和が1である。\n定常状態では、各表面種について \\(\\frac{d\\theta_i}{dt}=0\\) を満たす。\n詳細釣り合いにより、\\(K_j = k_{j,f}/k_{j,r}\\) が成り立つ。\n逆反応速度定数を熱力学と無関係に自由フィットするのは避ける。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#確認問題",
+    "href": "lessons/03_rate_equations.html#確認問題",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "正味速度 \\(r_j\\) と前進速度 \\(r_{j,f}\\)、逆反応速度 \\(r_{j,r}\\) の関係を書け。\nR2: H2 + 2* &lt;=&gt; 2H* の速度式を書き、\\(\\theta_*^2\\) が現れる理由を説明せよ。\nFe3O4-RWGS MVP の site balance を書け。\nCO* の定常状態方程式が \\(r_3 - r_4 = 0\\) になる理由を説明せよ。\n逆反応速度定数をすべて独立にフィットすると、どのような問題が起こり得るか説明せよ。",
+    "crumbs": [
+      "Lessons",
+      "Rate Equations"
+    ]
+  },
+  {
+    "objectID": "lessons/03_rate_equations.html#計算演習",
+    "href": "lessons/03_rate_equations.html#計算演習",
+    "title": "速度式・サイトバランス・熱力学整合性",
+    "section": "",
+    "text": "任意の被覆率セットについて site balance を計算し、1になるように正規化せよ。\n与えられた \\(k_{1,f}\\)、\\(k_{1,r}\\)、\\(P_{\\mathrm{CO_2}}\\)、\\(\\theta_*\\)、\\(\\theta_{\\mathrm{CO_2}}\\) から \\(r_1\\) を計算せよ。\n仮に \\(K_4\\) と \\(k_{4,f}\\) が与えられているとき、\\(k_{4,r}=k_{4,f}/K_4\\) を使って逆反応速度定数を求めよ。",
     "crumbs": [
       "Lessons",
       "Rate Equations"
@@ -285,9 +351,9 @@
   {
     "objectID": "lessons/02_fe3o4_rwgs_network.html",
     "href": "lessons/02_fe3o4_rwgs_network.html",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "このレッスンでは、Fe3O4-RWGS の MVP に使う最小 elementary-step network を定義する。ここでのネットワークは教育用の出発点であり、特定の Fe3O4 termination や欠陥構造を完全に表すものではない。\n\n\n\nGas species と surface species を列挙する。\n空サイト * を含む最小 RWGS network を R1 から R7 として書く。\n各 elementary step が site balance と elemental mass balance を満たすことを確認する。\n将来の拡張点を、MVP の範囲外として明確に分ける。\n\n\n\n\nMVP では、gas species を次の4種に限定する。\n\n\n\nspecies\nrole\n\n\n\n\n\\(\\mathrm{CO_2}\\)\nreactant\n\n\n\\(\\mathrm{H_2}\\)\nreactant\n\n\n\\(\\mathrm{CO}\\)\nproduct\n\n\n\\(\\mathrm{H_2O}\\)\nproduct\n\n\n\nSurface species は、generic surface site * を使って次のように表す。\n\n\n\nspecies\nmeaning\n\n\n\n\n*\nempty surface site\n\n\nCO2*\nadsorbed CO2\n\n\nH*\nadsorbed H\n\n\nCOOH*\ncarboxyl-like intermediate\n\n\nCO*\nadsorbed CO\n\n\nOH*\nadsorbed OH\n\n\nH2O*\nadsorbed H2O\n\n\n\nここでは * を単一サイトとして扱う。Fe site、O site、oxygen vacancy、interface site を分ける multi-site model は MVP では扱わない。\n\n\n\n最小ネットワークは次の7 step とする。\n\n\n\n\n\n\n\n\nID\nelementary step\nrole\n\n\n\n\nR1\n\\(\\mathrm{CO_2 + * \\rightleftharpoons CO_2*}\\)\nCO2 adsorption\n\n\nR2\n\\(\\mathrm{H_2 + 2* \\rightleftharpoons 2H*}\\)\nH2 dissociation\n\n\nR3\n\\(\\mathrm{CO_2* + H* \\rightleftharpoons COOH* + *}\\)\nCOOH formation\n\n\nR4\n\\(\\mathrm{COOH* + * \\rightleftharpoons CO* + OH*}\\)\nCOOH cleavage\n\n\nR5\n\\(\\mathrm{CO* \\rightleftharpoons CO + *}\\)\nCO desorption\n\n\nR6\n\\(\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\\)\nH2O formation\n\n\nR7\n\\(\\mathrm{H_2O* \\rightleftharpoons H_2O + *}\\)\nH2O desorption\n\n\n\nこの network は、CO2 adsorption、H2 dissociation、COOH formation、COOH cleavage、CO desorption、H2O formation、H2O desorption を含む。Formate pathway や oxygen vacancy pathway は、この初期版では追加しない。\n\n\n\n各 step は、反応前後で表面サイト数が保存されるように書く。\n\n\n\nID\nsite balance\n\n\n\n\nR1\n1 site to 1 site\n\n\nR2\n2 sites to 2 sites\n\n\nR3\n2 sites to 2 sites\n\n\nR4\n2 sites to 2 sites\n\n\nR5\n1 site to 1 site\n\n\nR6\n2 sites to 2 sites\n\n\nR7\n1 site to 1 site\n\n\n\nElemental mass balance も各 step で保存される。たとえば R4 では、\n\\[\n\\mathrm{COOH* + * \\rightleftharpoons CO* + OH*}\n\\]\nの両辺で C は1、O は2、H は1である。R6 では、\n\\[\n\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\nの両辺で O は1、H は2である。\n\n\n\n次の要素は重要だが、この lesson series の最初の実装には入れない。\n\nFormate-mediated pathway\nOxygen vacancy formation and healing\nDistinct Fe and O surface sites\nFeCx formation\nFischer-Tropsch chain growth\n\nこれらを追加する場合は、Fe3O4-RWGS model の拡張なのか、FeCx-FT model への移行なのかを明示する。",
+    "text": "この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。\n本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。\n\n\nこの章を終えると、次のことができるようになる。\n\nFe3O4-RWGS MVP で使う気相種と表面種を列挙する。\nR1 から R7 までの最小素反応機構を説明する。\n各素反応の Type と Role in the model を区別する。\n表面種 *, CO2*, H*, CO*, O*, OH*, H2O* の役割を説明する。\nこの最小モデルで説明できる範囲と、説明できない範囲を区別する。\n\n\n\n\nこの章で扱う総括反応は RWGS である。\nCO2 + H2 &lt;=&gt; CO + H2O\nLaTeX では次のように書く。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nモデルは単一種類の表面サイト * を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。\n\n\n\nMVP で扱う気相種は4つだけである。\n\n\n\nSpecies\n役割\n\n\n\n\nCO2\n反応物。RWGS の炭素源および酸素源。\n\n\nH2\n反応物。表面水素 H* の供給源。\n\n\nCO\n生成物。Fe3O4-RWGS MVP で追跡する主な炭素含有生成物。\n\n\nH2O\n生成物。表面酸素の除去先。\n\n\n\n\n\n\nMVP で扱う表面種は次の7つである。\n\n\n\n\n\n\n\nSurface species\n役割\n\n\n\n\n*\n空の表面サイト。すべての吸着・脱離・表面反応の site balance に入る。\n\n\nCO2*\n吸着 CO2。CO2 活性化の入口。\n\n\nH*\n吸着水素。O* と OH* の水素化に使われる。\n\n\nCO*\n吸着 CO。CO desorption を通じて気相 CO になる。\n\n\nO*\n表面酸素。CO2* の解離で生じ、OH* へ水素化される。\n\n\nOH*\n表面ヒドロキシ種。H* と反応して H2O* になる。\n\n\nH2O*\n吸着水。脱離して気相 H2O になる。\n\n\n\nこの表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。\n\n\n\nFe3O4-RWGS MVP では、反応 ID を必ず R1 から R7 とする。表記は以後も変えない。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\nType\nRole in the model\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nAdsorption / desorption\nCO2 を表面へ取り込む入口。\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nDissociative adsorption / recombination\nH2 から表面水素 H* を作る。\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nSurface dissociation / recombination\n吸着 CO2 を CO* と O* に分ける。\n\n\nR4\nCO* &lt;=&gt; CO + *\nDesorption / adsorption\n気相 CO を生成する出口。\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nSurface hydrogenation / dehydrogenation\n表面酸素 O* を OH* に変換する。\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nSurface hydrogenation / dehydrogenation\nOH* を H2O* に変換する。\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nDesorption / adsorption\n気相 H2O を生成し、空サイトを再生する。\n\n\n\n同じ7ステップを LaTeX で書くと次のようになる。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\n\\[\n\\mathrm{R2:\\ H_2 + 2* \\rightleftharpoons 2H*}\n\\]\n\\[\n\\mathrm{R3:\\ CO_2* + * \\rightleftharpoons CO* + O*}\n\\]\n\\[\n\\mathrm{R4:\\ CO* \\rightleftharpoons CO + *}\n\\]\n\\[\n\\mathrm{R5:\\ O* + H* \\rightleftharpoons OH* + *}\n\\]\n\\[\n\\mathrm{R6:\\ OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\n\\[\n\\mathrm{R7:\\ H_2O* \\rightleftharpoons H_2O + *}\n\\]\n\n\n\n* は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{O*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}} = 1\n\\]\nCO2* は CO2 activation の入口である。R1 で生成し、R3 で CO* と O* に変換される。\nH* は H2 dissociation により生成する表面水素である。R5 と R6 で表面酸素種を水素化する。\nCO* は CO 生成直前の表面中間体である。R4 で脱離して CO になる。\nO* は CO2* の解離で生じる表面酸素である。O* が蓄積すると空サイトが減るため、R5 と R6 を通じた水素化と水生成が重要になる。\nOH* は O* の水素化で生じる表面ヒドロキシ種である。さらに H* と反応して H2O* になる。\nH2O* は水生成直前の吸着水である。R7 で脱離して気相 H2O になり、空サイト * を再生する。\n\n\n\nこの最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。\n\nCO2 adsorption と CO2 activation\nH2 dissociation による表面水素供給\nCO* の脱離による CO 生成\nO* から OH*、H2O* を経た水生成\nsite balance を満たす steady-state surface coverage\nRWGS 範囲での CO 生成速度と H2O 生成速度\n\nこの範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。\n\n\n\nこのモデルは、次の現象を説明するためのものではない。\n\nCH4 生成の詳細機構\nC2+ hydrocarbon formation\nC-C coupling\nchain growth と chain termination\nASF distribution\nFe3O4 から FeCx への dynamic phase transformation\nFeCx site 上の FT reaction network\n\nこれらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。\n\n\n\nC2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。\nC2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。\n\n\n\n\nFe3O4-RWGS MVP では、気相種を CO2, H2, CO, H2O に限定する。\n表面種は *, CO2*, H*, CO*, O*, OH*, H2O* の7種類である。\n素反応は R1 から R7 の7ステップだけである。\nこのモデルは RWGS による CO と H2O の生成を扱う。\nC2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。\n\n\n\n\n\nFe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* が site balance を満たす理由を説明せよ。\nO*, OH*, H2O* はそれぞれ RWGS model の中でどのような役割を持つか。\nこの最小モデルで C2+生成を説明できない理由を述べよ。\nR7 が空サイト * の再生にどのように関わるか説明せよ。\n\n\n\n\n\nR1 から R7 について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。\nR3, R5, R6 について、C、H、O の elemental mass balance を確認せよ。\n任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。\n\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{O*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}}\n\\]",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
@@ -296,53 +362,130 @@
   {
     "objectID": "lessons/02_fe3o4_rwgs_network.html#学習目標",
     "href": "lessons/02_fe3o4_rwgs_network.html#学習目標",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "Gas species と surface species を列挙する。\n空サイト * を含む最小 RWGS network を R1 から R7 として書く。\n各 elementary step が site balance と elemental mass balance を満たすことを確認する。\n将来の拡張点を、MVP の範囲外として明確に分ける。",
+    "text": "この章を終えると、次のことができるようになる。\n\nFe3O4-RWGS MVP で使う気相種と表面種を列挙する。\nR1 から R7 までの最小素反応機構を説明する。\n各素反応の Type と Role in the model を区別する。\n表面種 *, CO2*, H*, CO*, O*, OH*, H2O* の役割を説明する。\nこの最小モデルで説明できる範囲と、説明できない範囲を区別する。",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
     ]
   },
   {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#species-set",
-    "href": "lessons/02_fe3o4_rwgs_network.html#species-set",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "MVP では、gas species を次の4種に限定する。\n\n\n\nspecies\nrole\n\n\n\n\n\\(\\mathrm{CO_2}\\)\nreactant\n\n\n\\(\\mathrm{H_2}\\)\nreactant\n\n\n\\(\\mathrm{CO}\\)\nproduct\n\n\n\\(\\mathrm{H_2O}\\)\nproduct\n\n\n\nSurface species は、generic surface site * を使って次のように表す。\n\n\n\nspecies\nmeaning\n\n\n\n\n*\nempty surface site\n\n\nCO2*\nadsorbed CO2\n\n\nH*\nadsorbed H\n\n\nCOOH*\ncarboxyl-like intermediate\n\n\nCO*\nadsorbed CO\n\n\nOH*\nadsorbed OH\n\n\nH2O*\nadsorbed H2O\n\n\n\nここでは * を単一サイトとして扱う。Fe site、O site、oxygen vacancy、interface site を分ける multi-site model は MVP では扱わない。",
+    "text": "この章で扱う総括反応は RWGS である。\nCO2 + H2 &lt;=&gt; CO + H2O\nLaTeX では次のように書く。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nモデルは単一種類の表面サイト * を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
     ]
   },
   {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#minimal-rwgs-network",
-    "href": "lessons/02_fe3o4_rwgs_network.html#minimal-rwgs-network",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
+    "href": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "最小ネットワークは次の7 step とする。\n\n\n\n\n\n\n\n\nID\nelementary step\nrole\n\n\n\n\nR1\n\\(\\mathrm{CO_2 + * \\rightleftharpoons CO_2*}\\)\nCO2 adsorption\n\n\nR2\n\\(\\mathrm{H_2 + 2* \\rightleftharpoons 2H*}\\)\nH2 dissociation\n\n\nR3\n\\(\\mathrm{CO_2* + H* \\rightleftharpoons COOH* + *}\\)\nCOOH formation\n\n\nR4\n\\(\\mathrm{COOH* + * \\rightleftharpoons CO* + OH*}\\)\nCOOH cleavage\n\n\nR5\n\\(\\mathrm{CO* \\rightleftharpoons CO + *}\\)\nCO desorption\n\n\nR6\n\\(\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\\)\nH2O formation\n\n\nR7\n\\(\\mathrm{H_2O* \\rightleftharpoons H_2O + *}\\)\nH2O desorption\n\n\n\nこの network は、CO2 adsorption、H2 dissociation、COOH formation、COOH cleavage、CO desorption、H2O formation、H2O desorption を含む。Formate pathway や oxygen vacancy pathway は、この初期版では追加しない。",
+    "text": "MVP で扱う気相種は4つだけである。\n\n\n\nSpecies\n役割\n\n\n\n\nCO2\n反応物。RWGS の炭素源および酸素源。\n\n\nH2\n反応物。表面水素 H* の供給源。\n\n\nCO\n生成物。Fe3O4-RWGS MVP で追跡する主な炭素含有生成物。\n\n\nH2O\n生成物。表面酸素の除去先。",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
     ]
   },
   {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#stoichiometry-check",
-    "href": "lessons/02_fe3o4_rwgs_network.html#stoichiometry-check",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
+    "href": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "各 step は、反応前後で表面サイト数が保存されるように書く。\n\n\n\nID\nsite balance\n\n\n\n\nR1\n1 site to 1 site\n\n\nR2\n2 sites to 2 sites\n\n\nR3\n2 sites to 2 sites\n\n\nR4\n2 sites to 2 sites\n\n\nR5\n1 site to 1 site\n\n\nR6\n2 sites to 2 sites\n\n\nR7\n1 site to 1 site\n\n\n\nElemental mass balance も各 step で保存される。たとえば R4 では、\n\\[\n\\mathrm{COOH* + * \\rightleftharpoons CO* + OH*}\n\\]\nの両辺で C は1、O は2、H は1である。R6 では、\n\\[\n\\mathrm{OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\nの両辺で O は1、H は2である。",
+    "text": "MVP で扱う表面種は次の7つである。\n\n\n\n\n\n\n\nSurface species\n役割\n\n\n\n\n*\n空の表面サイト。すべての吸着・脱離・表面反応の site balance に入る。\n\n\nCO2*\n吸着 CO2。CO2 活性化の入口。\n\n\nH*\n吸着水素。O* と OH* の水素化に使われる。\n\n\nCO*\n吸着 CO。CO desorption を通じて気相 CO になる。\n\n\nO*\n表面酸素。CO2* の解離で生じ、OH* へ水素化される。\n\n\nOH*\n表面ヒドロキシ種。H* と反応して H2O* になる。\n\n\nH2O*\n吸着水。脱離して気相 H2O になる。\n\n\n\nこの表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
     ]
   },
   {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#mvp-外の拡張",
-    "href": "lessons/02_fe3o4_rwgs_network.html#mvp-外の拡張",
-    "title": "Fe3O4-RWGS の最小反応ネットワーク",
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
+    "href": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
     "section": "",
-    "text": "次の要素は重要だが、この lesson series の最初の実装には入れない。\n\nFormate-mediated pathway\nOxygen vacancy formation and healing\nDistinct Fe and O surface sites\nFeCx formation\nFischer-Tropsch chain growth\n\nこれらを追加する場合は、Fe3O4-RWGS model の拡張なのか、FeCx-FT model への移行なのかを明示する。",
+    "text": "Fe3O4-RWGS MVP では、反応 ID を必ず R1 から R7 とする。表記は以後も変えない。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\nType\nRole in the model\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nAdsorption / desorption\nCO2 を表面へ取り込む入口。\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nDissociative adsorption / recombination\nH2 から表面水素 H* を作る。\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nSurface dissociation / recombination\n吸着 CO2 を CO* と O* に分ける。\n\n\nR4\nCO* &lt;=&gt; CO + *\nDesorption / adsorption\n気相 CO を生成する出口。\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nSurface hydrogenation / dehydrogenation\n表面酸素 O* を OH* に変換する。\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nSurface hydrogenation / dehydrogenation\nOH* を H2O* に変換する。\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nDesorption / adsorption\n気相 H2O を生成し、空サイトを再生する。\n\n\n\n同じ7ステップを LaTeX で書くと次のようになる。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\n\\[\n\\mathrm{R2:\\ H_2 + 2* \\rightleftharpoons 2H*}\n\\]\n\\[\n\\mathrm{R3:\\ CO_2* + * \\rightleftharpoons CO* + O*}\n\\]\n\\[\n\\mathrm{R4:\\ CO* \\rightleftharpoons CO + *}\n\\]\n\\[\n\\mathrm{R5:\\ O* + H* \\rightleftharpoons OH* + *}\n\\]\n\\[\n\\mathrm{R6:\\ OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\n\\[\n\\mathrm{R7:\\ H_2O* \\rightleftharpoons H_2O + *}\n\\]",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
+    "href": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "* は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{O*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}} = 1\n\\]\nCO2* は CO2 activation の入口である。R1 で生成し、R3 で CO* と O* に変換される。\nH* は H2 dissociation により生成する表面水素である。R5 と R6 で表面酸素種を水素化する。\nCO* は CO 生成直前の表面中間体である。R4 で脱離して CO になる。\nO* は CO2* の解離で生じる表面酸素である。O* が蓄積すると空サイトが減るため、R5 と R6 を通じた水素化と水生成が重要になる。\nOH* は O* の水素化で生じる表面ヒドロキシ種である。さらに H* と反応して H2O* になる。\nH2O* は水生成直前の吸着水である。R7 で脱離して気相 H2O になり、空サイト * を再生する。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "この最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。\n\nCO2 adsorption と CO2 activation\nH2 dissociation による表面水素供給\nCO* の脱離による CO 生成\nO* から OH*、H2O* を経た水生成\nsite balance を満たす steady-state surface coverage\nRWGS 範囲での CO 生成速度と H2O 生成速度\n\nこの範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "このモデルは、次の現象を説明するためのものではない。\n\nCH4 生成の詳細機構\nC2+ hydrocarbon formation\nC-C coupling\nchain growth と chain termination\nASF distribution\nFe3O4 から FeCx への dynamic phase transformation\nFeCx site 上の FT reaction network\n\nこれらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
+    "href": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "C2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。\nC2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "Fe3O4-RWGS MVP では、気相種を CO2, H2, CO, H2O に限定する。\n表面種は *, CO2*, H*, CO*, O*, OH*, H2O* の7種類である。\n素反応は R1 から R7 の7ステップだけである。\nこのモデルは RWGS による CO と H2O の生成を扱う。\nC2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#確認問題",
+    "href": "lessons/02_fe3o4_rwgs_network.html#確認問題",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "Fe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* が site balance を満たす理由を説明せよ。\nO*, OH*, H2O* はそれぞれ RWGS model の中でどのような役割を持つか。\nこの最小モデルで C2+生成を説明できない理由を述べよ。\nR7 が空サイト * の再生にどのように関わるか説明せよ。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#計算演習",
+    "href": "lessons/02_fe3o4_rwgs_network.html#計算演習",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "R1 から R7 について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。\nR3, R5, R6 について、C、H、O の elemental mass balance を確認せよ。\n任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。\n\n\\[\n\\theta_* + \\theta_{\\mathrm{CO_2*}} + \\theta_{\\mathrm{H*}} + \\theta_{\\mathrm{CO*}} + \\theta_{\\mathrm{O*}} + \\theta_{\\mathrm{OH*}} + \\theta_{\\mathrm{H_2O*}}\n\\]",
     "crumbs": [
       "Lessons",
       "Fe3O4-RWGS Network"
