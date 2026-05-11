@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fe3O4上RWGSの最小素反応ネットワーク – CO2-FT / Fe3O4 Microkinetics Course</title>
+<title>VASP計算演習: Fe3O4-RWGSで計算すべき構造セット – CO2-FT / Fe3O4 Microkinetics Course</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,35 +71,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -112,7 +83,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lessons/01_overview.html">Lessons</a></li><li class="breadcrumb-item"><a href="../lessons/02_fe3o4_rwgs_network.html">Fe3O4-RWGS Network</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01_vasp_rwgs_structure_set.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/01_vasp_rwgs_structure_set.html">VASP structure-set exercise</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -166,7 +137,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../lessons/02_fe3o4_rwgs_network.html" class="sidebar-item-text sidebar-link active">
+  <a href="../lessons/02_fe3o4_rwgs_network.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fe3O4-RWGS Network</span></a>
   </div>
 </li>
@@ -212,7 +183,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/01_vasp_rwgs_structure_set.html" class="sidebar-item-text sidebar-link">
+  <a href="../exercises/01_vasp_rwgs_structure_set.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">VASP structure-set exercise</span></a>
   </div>
 </li>
@@ -229,29 +200,24 @@ window.Quarto = {
    
   <ul>
   <li><a href="#学習目標" id="toc-学習目標" class="nav-link active" data-scroll-target="#学習目標"><span class="header-section-number">1</span> 学習目標</a></li>
-  <li><a href="#この章で扱うモデル範囲" id="toc-この章で扱うモデル範囲" class="nav-link" data-scroll-target="#この章で扱うモデル範囲"><span class="header-section-number">2</span> この章で扱うモデル範囲</a></li>
-  <li><a href="#気相種リスト" id="toc-気相種リスト" class="nav-link" data-scroll-target="#気相種リスト"><span class="header-section-number">3</span> 気相種リスト</a></li>
-  <li><a href="#表面種リスト" id="toc-表面種リスト" class="nav-link" data-scroll-target="#表面種リスト"><span class="header-section-number">4</span> 表面種リスト</a>
-  <ul class="collapse">
-  <li><a href="#cooh-と-hcoo-を含めない理由" id="toc-cooh-と-hcoo-を含めない理由" class="nav-link" data-scroll-target="#cooh-と-hcoo-を含めない理由"><span class="header-section-number">4.1</span> COOH* と HCOO* を含めない理由</a></li>
-  </ul></li>
-  <li><a href="#ステップ最小反応機構" id="toc-ステップ最小反応機構" class="nav-link" data-scroll-target="#ステップ最小反応機構"><span class="header-section-number">5</span> 7ステップ最小反応機構</a></li>
-  <li><a href="#各表面種の役割" id="toc-各表面種の役割" class="nav-link" data-scroll-target="#各表面種の役割"><span class="header-section-number">6</span> 各表面種の役割</a></li>
-  <li><a href="#この最小モデルで説明できること" id="toc-この最小モデルで説明できること" class="nav-link" data-scroll-target="#この最小モデルで説明できること"><span class="header-section-number">7</span> この最小モデルで説明できること</a></li>
-  <li><a href="#この最小モデルで説明できないこと" id="toc-この最小モデルで説明できないこと" class="nav-link" data-scroll-target="#この最小モデルで説明できないこと"><span class="header-section-number">8</span> この最小モデルで説明できないこと</a></li>
-  <li><a href="#c2生成に関する注意" id="toc-c2生成に関する注意" class="nav-link" data-scroll-target="#c2生成に関する注意"><span class="header-section-number">9</span> C2+生成に関する注意</a></li>
-  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">10</span> この章の要点</a></li>
-  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">11</span> 確認問題</a></li>
-  <li><a href="#計算演習" id="toc-計算演習" class="nav-link" data-scroll-target="#計算演習"><span class="header-section-number">12</span> 計算演習</a></li>
+  <li><a href="#前提条件" id="toc-前提条件" class="nav-link" data-scroll-target="#前提条件"><span class="header-section-number">2</span> 前提条件</a></li>
+  <li><a href="#推奨ディレクトリ構成" id="toc-推奨ディレクトリ構成" class="nav-link" data-scroll-target="#推奨ディレクトリ構成"><span class="header-section-number">3</span> 推奨ディレクトリ構成</a></li>
+  <li><a href="#step-1-基準構造を計算する" id="toc-step-1-基準構造を計算する" class="nav-link" data-scroll-target="#step-1-基準構造を計算する"><span class="header-section-number">4</span> Step 1: 基準構造を計算する</a></li>
+  <li><a href="#step-2-単独吸着構造を計算する" id="toc-step-2-単独吸着構造を計算する" class="nav-link" data-scroll-target="#step-2-単独吸着構造を計算する"><span class="header-section-number">5</span> Step 2: 単独吸着構造を計算する</a></li>
+  <li><a href="#step-3-共吸着構造を計算する" id="toc-step-3-共吸着構造を計算する" class="nav-link" data-scroll-target="#step-3-共吸着構造を計算する"><span class="header-section-number">6</span> Step 3: 共吸着構造を計算する</a></li>
+  <li><a href="#step-4-r1-r7に必要な構造セット" id="toc-step-4-r1-r7に必要な構造セット" class="nav-link" data-scroll-target="#step-4-r1-r7に必要な構造セット"><span class="header-section-number">7</span> Step 4: R1-R7に必要な構造セット</a></li>
+  <li><a href="#step-5-neb計算として準備する構造" id="toc-step-5-neb計算として準備する構造" class="nav-link" data-scroll-target="#step-5-neb計算として準備する構造"><span class="header-section-number">8</span> Step 5: NEB計算として準備する構造</a></li>
+  <li><a href="#提出物" id="toc-提出物" class="nav-link" data-scroll-target="#提出物"><span class="header-section-number">9</span> 提出物</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">10</span> 確認問題</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lessons/01_overview.html">Lessons</a></li><li class="breadcrumb-item"><a href="../lessons/02_fe3o4_rwgs_network.html">Fe3O4-RWGS Network</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01_vasp_rwgs_structure_set.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/01_vasp_rwgs_structure_set.html">VASP structure-set exercise</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Fe3O4上RWGSの最小素反応ネットワーク</h1>
+<h1 class="title">VASP計算演習: Fe3O4-RWGSで計算すべき構造セット</h1>
 </div>
 
 
@@ -268,62 +234,22 @@ window.Quarto = {
 </header>
 
 
-<p>この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。</p>
-<p>本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。</p>
+<p>この演習では、Fe3O4-RWGS 最小モデル R1-R7 に対して、VASP などの周期境界条件 DFT 計算で <strong>どの構造を計算すべきか</strong> を具体的に整理する。</p>
+<p>このページは VASP を自動実行するものではない。目的は、microkinetic model に必要なエネルギーを得るために、計算ディレクトリ、構造、比較すべき状態、NEB 計算候補を自分で設計できるようになることである。</p>
+<p>本演習では Fe3O4 を RWGS-active phase として扱う。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は扱わない。</p>
 <section id="学習目標" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1</span> 学習目標</h2>
-<p>この章を終えると、次のことができるようになる。</p>
+<p>この演習を終えると、次のことができるようになる。</p>
 <ul>
-<li>Fe3O4-RWGS MVP で使う気相種と表面種を列挙する。</li>
-<li>R1 から R7 までの最小素反応機構を説明する。</li>
-<li>各素反応の Type と Role in the model を区別する。</li>
-<li>表面種 <code>*</code>, <code>CO2*</code>, <code>H*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の役割を説明する。</li>
-<li>この最小モデルで説明できる範囲と、説明できない範囲を区別する。</li>
+<li>Fe3O4-RWGS R1-R7 に必要な VASP 計算構造を列挙する。</li>
+<li>clean slab、gas molecule、adsorbed state、coadsorbed state、NEB endpoint を区別する。</li>
+<li>各構造が、吸着エネルギー、反応エネルギー、活性化障壁、熱力学整合性のどれに使われるかを説明する。</li>
+<li>計算ディレクトリを、あとから microkinetic model に接続しやすい形で設計する。</li>
 </ul>
 </section>
-<section id="この章で扱うモデル範囲" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="この章で扱うモデル範囲"><span class="header-section-number">2</span> この章で扱うモデル範囲</h2>
-<p>この章で扱う総括反応は RWGS である。</p>
-<pre class="text"><code>CO2 + H2 &lt;=&gt; CO + H2O</code></pre>
-<p>LaTeX では次のように書く。</p>
-<p><span class="math display">\[
-\mathrm{CO_2 + H_2 \rightleftharpoons CO + H_2O}
-\]</span></p>
-<p>モデルは単一種類の表面サイト <code>*</code> を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。</p>
-</section>
-<section id="気相種リスト" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="気相種リスト"><span class="header-section-number">3</span> 気相種リスト</h2>
-<p>MVP で扱う気相種は4つだけである。</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Species</th>
-<th>役割</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>CO2</code></td>
-<td>反応物。RWGS の炭素源および酸素源。</td>
-</tr>
-<tr class="even">
-<td><code>H2</code></td>
-<td>反応物。表面水素 <code>H*</code> の供給源。</td>
-</tr>
-<tr class="odd">
-<td><code>CO</code></td>
-<td>生成物。Fe3O4-RWGS MVP で追跡する主な炭素含有生成物。</td>
-</tr>
-<tr class="even">
-<td><code>H2O</code></td>
-<td>生成物。表面酸素の除去先。</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="表面種リスト" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="表面種リスト"><span class="header-section-number">4</span> 表面種リスト</h2>
-<p>MVP で扱う表面種は次の7つである。</p>
+<section id="前提条件" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="前提条件"><span class="header-section-number">2</span> 前提条件</h2>
+<p>まず、ひとつの Fe3O4 表面モデルを固定する。</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -331,52 +257,210 @@ window.Quarto = {
 </colgroup>
 <thead>
 <tr class="header">
-<th>Surface species</th>
-<th>役割</th>
+<th>Item</th>
+<th>この演習で決めること</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>*</code></td>
-<td>空の表面サイト。すべての吸着・脱離・表面反応の site balance に入る。</td>
+<td>surface orientation</td>
+<td>例: Fe3O4(001), Fe3O4(011), Fe3O4(111) のどれか</td>
 </tr>
 <tr class="even">
-<td><code>CO2*</code></td>
-<td>吸着 CO2。CO2 活性化の入口。</td>
+<td>termination</td>
+<td>採用した終端を明記する</td>
 </tr>
 <tr class="odd">
-<td><code>H*</code></td>
-<td>吸着水素。O* と OH* の水素化に使われる。</td>
+<td>slab model</td>
+<td>cell size、slab thickness、vacuum thickness、固定層</td>
 </tr>
 <tr class="even">
-<td><code>CO*</code></td>
-<td>吸着 CO。CO desorption を通じて気相 CO になる。</td>
+<td>magnetic setup</td>
+<td>Fe の初期磁気モーメント、spin polarization</td>
 </tr>
 <tr class="odd">
-<td><code>O*</code></td>
-<td>表面酸素。CO2* の解離で生じ、OH* へ水素化される。</td>
-</tr>
-<tr class="even">
-<td><code>OH*</code></td>
-<td>表面ヒドロキシ種。H* と反応して H2O* になる。</td>
-</tr>
-<tr class="odd">
-<td><code>H2O*</code></td>
-<td>吸着水。脱離して気相 H2O になる。</td>
+<td>DFT setup</td>
+<td>functional、Hubbard U、ENCUT、KPOINTS、収束条件</td>
 </tr>
 </tbody>
 </table>
-<p>この表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。</p>
-<section id="cooh-と-hcoo-を含めない理由" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="cooh-と-hcoo-を含めない理由"><span class="header-section-number">4.1</span> COOH* と HCOO* を含めない理由</h3>
-<p>RWGS では、<code>CO2*</code> の直接解離経路だけでなく、<code>COOH*</code> を経由する carboxyl 経路や、<code>HCOO*</code> を経由する formate 経路も候補になり得る。</p>
-<p>本 MVP では、Fe3O4-RWGS の direct dissociation / redox 型の最小モデルを作ることを目的とするため、<code>COOH*</code> と <code>HCOO*</code> は明示的な表面種として含めない。</p>
-<p>したがって、本章の反応機構は <code>COOH*</code> や <code>HCOO*</code> が不要であると断定するものではなく、最小モデルとして意図的に省略しているものである。これらの中間体は、将来の拡張モデルで direct / COOH / HCOO 経路を比較するときに追加する。</p>
+<p>以後の全構造は、同じ slab cell、同じ固定層、同じ DFT 条件で比較する。条件を途中で変えると、同じエネルギーセットとして扱えない。</p>
 </section>
+<section id="推奨ディレクトリ構成" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="推奨ディレクトリ構成"><span class="header-section-number">3</span> 推奨ディレクトリ構成</h2>
+<p>次のようなディレクトリ構成を作る。</p>
+<pre class="text"><code>vasp/
+├── 00_bulk_fe3o4/
+├── 01_surface/
+│   └── clean_slab/
+├── 02_gas/
+│   ├── CO2/
+│   ├── H2/
+│   ├── CO/
+│   └── H2O/
+├── 03_adsorption/
+│   ├── CO2_star/
+│   ├── H_star/
+│   ├── CO_star/
+│   ├── O_star/
+│   ├── OH_star/
+│   └── H2O_star/
+├── 04_coadsorbed/
+│   ├── 2H_star/
+│   ├── CO_star_O_star/
+│   ├── O_star_H_star/
+│   └── OH_star_H_star/
+└── 05_neb/
+    ├── R2_H2_dissociation/
+    ├── R3_CO2_dissociation/
+    ├── R5_O_hydrogenation/
+    └── R6_OH_hydrogenation/</code></pre>
+<p>各ディレクトリには、少なくとも <code>POSCAR</code>, <code>INCAR</code>, <code>KPOINTS</code>, <code>POTCAR</code> を置く。実行後は <code>OUTCAR</code>, <code>OSZICAR</code>, <code>CONTCAR</code>, <code>vasprun.xml</code> などを保存し、どの構造からどのエネルギーを読んだかを記録する。</p>
 </section>
-<section id="ステップ最小反応機構" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="ステップ最小反応機構"><span class="header-section-number">5</span> 7ステップ最小反応機構</h2>
-<p>Fe3O4-RWGS MVP では、反応 ID を必ず <code>R1</code> から <code>R7</code> とする。表記は以後も変えない。</p>
+<section id="step-1-基準構造を計算する" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="step-1-基準構造を計算する"><span class="header-section-number">4</span> Step 1: 基準構造を計算する</h2>
+<p>最初に、すべてのエネルギー差の基準になる構造を計算する。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Structure ID</th>
+<th>計算対象</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>bulk_fe3o4</code></td>
+<td>bulk Fe3O4</td>
+<td>格子定数、磁気状態、DFT+U 条件の確認</td>
+</tr>
+<tr class="even">
+<td><code>clean_slab</code></td>
+<td>clean Fe3O4 surface</td>
+<td>すべての吸着エネルギーの表面基準</td>
+</tr>
+<tr class="odd">
+<td><code>gas_CO2</code></td>
+<td>isolated CO2</td>
+<td>R1, R3, RWGS全体の気相基準</td>
+</tr>
+<tr class="even">
+<td><code>gas_H2</code></td>
+<td>isolated H2</td>
+<td>R2, R5, R6 の水素基準</td>
+</tr>
+<tr class="odd">
+<td><code>gas_CO</code></td>
+<td>isolated CO</td>
+<td>R4 の脱離基準</td>
+</tr>
+<tr class="even">
+<td><code>gas_H2O</code></td>
+<td>isolated H2O</td>
+<td>R7 の脱離基準</td>
+</tr>
+</tbody>
+</table>
+<p>気相分子は十分大きな box で計算する。slab 計算と gas molecule 計算では周期境界、k点、エントロピー補正の扱いが異なるため、電子エネルギーと熱補正を分けて記録する。</p>
+</section>
+<section id="step-2-単独吸着構造を計算する" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="step-2-単独吸着構造を計算する"><span class="header-section-number">5</span> Step 2: 単独吸着構造を計算する</h2>
+<p>次に、MVP の表面種をそれぞれ clean slab 上に置いて最適化する。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Structure ID</th>
+<th>表面種</th>
+<th>対応する役割</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CO2_star</code></td>
+<td><code>CO2*</code></td>
+<td>R1 の生成物、R3 の反応物</td>
+</tr>
+<tr class="even">
+<td><code>H_star</code></td>
+<td><code>H*</code></td>
+<td>R2 の生成物、R5/R6 の水素源</td>
+</tr>
+<tr class="odd">
+<td><code>CO_star</code></td>
+<td><code>CO*</code></td>
+<td>R3 の生成物、R4 の反応物</td>
+</tr>
+<tr class="even">
+<td><code>O_star</code></td>
+<td><code>O*</code></td>
+<td>R3 の生成物、R5 の反応物</td>
+</tr>
+<tr class="odd">
+<td><code>OH_star</code></td>
+<td><code>OH*</code></td>
+<td>R5 の生成物、R6 の反応物</td>
+</tr>
+<tr class="even">
+<td><code>H2O_star</code></td>
+<td><code>H2O*</code></td>
+<td>R6 の生成物、R7 の反応物</td>
+</tr>
+</tbody>
+</table>
+<p>各吸着種について、ひとつの初期構造だけで判断しない。少なくとも複数の候補サイトを作り、最適化後のエネルギーと構造を比較する。</p>
+<p>たとえば <code>CO2_star</code> では、次を試す。</p>
+<ul>
+<li>Fe site への end-on 配位</li>
+<li>O site 近傍での bent CO2 配置</li>
+<li>carbonate-like に近い配置</li>
+<li>反応経路上で <code>CO* + O*</code> へつながりそうな配置</li>
+</ul>
+<p>ただし、この MVP では <code>COOH*</code> と <code>HCOO*</code> は明示的な反応種として追加しない。これらは将来、direct / COOH / HCOO 経路を比較する拡張計算で扱う。</p>
+</section>
+<section id="step-3-共吸着構造を計算する" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="step-3-共吸着構造を計算する"><span class="header-section-number">6</span> Step 3: 共吸着構造を計算する</h2>
+<p>R2, R3, R5, R6 では、単独吸着種だけでは反応前後の表面サイト数や配置をそろえにくい。そこで、共吸着構造を作る。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Structure ID</th>
+<th>構造</th>
+<th>主に使う反応</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>2H_star</code></td>
+<td>同じ slab 上に <code>H*</code> を2つ置く</td>
+<td>R2</td>
+</tr>
+<tr class="even">
+<td><code>CO_star_O_star</code></td>
+<td><code>CO*</code> と <code>O*</code> を同じ slab 上に置く</td>
+<td>R3</td>
+</tr>
+<tr class="odd">
+<td><code>O_star_H_star</code></td>
+<td><code>O*</code> と <code>H*</code> を同じ slab 上に置く</td>
+<td>R5</td>
+</tr>
+<tr class="even">
+<td><code>OH_star_H_star</code></td>
+<td><code>OH*</code> と <code>H*</code> を同じ slab 上に置く</td>
+<td>R6</td>
+</tr>
+</tbody>
+</table>
+<p>重要なのは、反応物側と生成物側で同じ supercell を使うことである。たとえば R5 では、<code>O_star_H_star</code> と <code>OH_star + clean_slab</code> を比較するのではなく、同じ cell 内で <code>O* + H*</code> と <code>OH* + *</code> を表現する。</p>
+</section>
+<section id="step-4-r1-r7に必要な構造セット" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="step-4-r1-r7に必要な構造セット"><span class="header-section-number">7</span> Step 4: R1-R7に必要な構造セット</h2>
+<p>各素反応について、最低限必要な構造を次にまとめる。</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -388,169 +472,195 @@ window.Quarto = {
 <tr class="header">
 <th>Reaction ID</th>
 <th>Elementary step</th>
-<th>Type</th>
-<th>Role in the model</th>
+<th>最低限計算する構造</th>
+<th>得たい量</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>R1</code></td>
 <td><code>CO2 + * &lt;=&gt; CO2*</code></td>
-<td>Adsorption / desorption</td>
-<td>CO2 を表面へ取り込む入口。</td>
+<td><code>clean_slab</code>, <code>gas_CO2</code>, <code>CO2_star</code></td>
+<td>CO2 adsorption energy</td>
 </tr>
 <tr class="even">
 <td><code>R2</code></td>
 <td><code>H2 + 2* &lt;=&gt; 2H*</code></td>
-<td>Dissociative adsorption / recombination</td>
-<td>H2 から表面水素 <code>H*</code> を作る。</td>
+<td><code>clean_slab</code>, <code>gas_H2</code>, <code>2H_star</code></td>
+<td>H2 dissociative adsorption energy</td>
 </tr>
 <tr class="odd">
 <td><code>R3</code></td>
 <td><code>CO2* + * &lt;=&gt; CO* + O*</code></td>
-<td>Surface dissociation / recombination</td>
-<td>吸着 CO2 を <code>CO*</code> と <code>O*</code> に分ける。</td>
+<td><code>CO2_star</code>, <code>CO_star_O_star</code></td>
+<td>CO2 dissociation energy</td>
 </tr>
 <tr class="even">
 <td><code>R4</code></td>
 <td><code>CO* &lt;=&gt; CO + *</code></td>
-<td>Desorption / adsorption</td>
-<td>気相 CO を生成する出口。</td>
+<td><code>CO_star</code>, <code>gas_CO</code>, <code>clean_slab</code></td>
+<td>CO desorption energy</td>
 </tr>
 <tr class="odd">
 <td><code>R5</code></td>
 <td><code>O* + H* &lt;=&gt; OH* + *</code></td>
-<td>Surface hydrogenation / dehydrogenation</td>
-<td>表面酸素 <code>O*</code> を <code>OH*</code> に変換する。</td>
+<td><code>O_star_H_star</code>, <code>OH_star</code> with same slab convention</td>
+<td>O* hydrogenation energy</td>
 </tr>
 <tr class="even">
 <td><code>R6</code></td>
 <td><code>OH* + H* &lt;=&gt; H2O* + *</code></td>
-<td>Surface hydrogenation / dehydrogenation</td>
-<td><code>OH*</code> を <code>H2O*</code> に変換する。</td>
+<td><code>OH_star_H_star</code>, <code>H2O_star</code> with same slab convention</td>
+<td>OH* hydrogenation energy</td>
 </tr>
 <tr class="odd">
 <td><code>R7</code></td>
 <td><code>H2O* &lt;=&gt; H2O + *</code></td>
-<td>Desorption / adsorption</td>
-<td>気相 H2O を生成し、空サイトを再生する。</td>
+<td><code>H2O_star</code>, <code>gas_H2O</code>, <code>clean_slab</code></td>
+<td>H2O desorption energy</td>
 </tr>
 </tbody>
 </table>
-<p>同じ7ステップを LaTeX で書くと次のようになる。</p>
-<p><span class="math display">\[
-\mathrm{R1:\ CO_2 + * \rightleftharpoons CO_2*}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R2:\ H_2 + 2* \rightleftharpoons 2H*}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R3:\ CO_2* + * \rightleftharpoons CO* + O*}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R4:\ CO* \rightleftharpoons CO + *}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R5:\ O* + H* \rightleftharpoons OH* + *}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R6:\ OH* + H* \rightleftharpoons H_2O* + *}
-\]</span></p>
-<p><span class="math display">\[
-\mathrm{R7:\ H_2O* \rightleftharpoons H_2O + *}
-\]</span></p>
+<p>R5 と R6 では、空サイト <code>*</code> を含む側と H を含む側で supercell 内の原子数がそろうように、反応物・生成物の定義を慎重に作る。</p>
 </section>
-<section id="各表面種の役割" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="各表面種の役割"><span class="header-section-number">6</span> 各表面種の役割</h2>
-<p><code>*</code> は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。</p>
-<p><span class="math display">\[
-\theta_*
-+ \theta_{\mathrm{CO_2}}
-+ \theta_{\mathrm{H}}
-+ \theta_{\mathrm{CO}}
-+ \theta_{\mathrm{O}}
-+ \theta_{\mathrm{OH}}
-+ \theta_{\mathrm{H_2O}}
-= 1
-\]</span></p>
-<p>ここで <span class="math inline">\(\theta_{\mathrm{CO_2}}\)</span> は <code>CO2*</code> の被覆率を表す。同様に、<span class="math inline">\(\theta_{\mathrm{H}}\)</span> は <code>H*</code>、<span class="math inline">\(\theta_{\mathrm{CO}}\)</span> は <code>CO*</code>、<span class="math inline">\(\theta_{\mathrm{O}}\)</span> は <code>O*</code>、<span class="math inline">\(\theta_{\mathrm{OH}}\)</span> は <code>OH*</code>、<span class="math inline">\(\theta_{\mathrm{H_2O}}\)</span> は <code>H2O*</code> の被覆率を表す。</p>
-<p><code>CO2*</code> は CO2 activation の入口である。<code>R1</code> で生成し、<code>R3</code> で <code>CO*</code> と <code>O*</code> に変換される。</p>
-<p><code>H*</code> は H2 dissociation により生成する表面水素である。<code>R5</code> と <code>R6</code> で表面酸素種を水素化する。</p>
-<p><code>CO*</code> は CO 生成直前の表面中間体である。<code>R4</code> で脱離して <code>CO</code> になる。</p>
-<p><code>O*</code> は CO2* の解離で生じる表面酸素である。<code>O*</code> が蓄積すると空サイトが減るため、<code>R5</code> と <code>R6</code> を通じた水素化と水生成が重要になる。</p>
-<p><code>OH*</code> は <code>O*</code> の水素化で生じる表面ヒドロキシ種である。さらに <code>H*</code> と反応して <code>H2O*</code> になる。</p>
-<p><code>H2O*</code> は水生成直前の吸着水である。<code>R7</code> で脱離して気相 <code>H2O</code> になり、空サイト <code>*</code> を再生する。</p>
+<section id="step-5-neb計算として準備する構造" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="step-5-neb計算として準備する構造"><span class="header-section-number">8</span> Step 5: NEB計算として準備する構造</h2>
+<p>反応速度定数に必要な活性化障壁を得るには、次の NEB 計算を優先する。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>NEB ID</th>
+<th>Initial state</th>
+<th>Final state</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R2_H2_dissociation</code></td>
+<td>H2 が表面近傍にある構造</td>
+<td><code>2H_star</code></td>
+<td>H-H 切断障壁</td>
+</tr>
+<tr class="even">
+<td><code>R3_CO2_dissociation</code></td>
+<td><code>CO2_star</code></td>
+<td><code>CO_star_O_star</code></td>
+<td>C-O 切断障壁</td>
+</tr>
+<tr class="odd">
+<td><code>R5_O_hydrogenation</code></td>
+<td><code>O_star_H_star</code></td>
+<td><code>OH_star</code> with regenerated <code>*</code></td>
+<td>O-H 形成障壁</td>
+</tr>
+<tr class="even">
+<td><code>R6_OH_hydrogenation</code></td>
+<td><code>OH_star_H_star</code></td>
+<td><code>H2O_star</code> with regenerated <code>*</code></td>
+<td>H2O* 形成障壁</td>
+</tr>
+</tbody>
+</table>
+<p>NEB では、initial state と final state の slab cell、固定層、原子数、磁気設定を一致させる。終状態を別々の単独吸着計算から雑に組み合わせると、NEB の経路として不自然になることがある。</p>
 </section>
-<section id="この最小モデルで説明できること" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="この最小モデルで説明できること"><span class="header-section-number">7</span> この最小モデルで説明できること</h2>
-<p>この最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。</p>
-<ul>
-<li>CO2 adsorption と CO2 activation</li>
-<li>H2 dissociation による表面水素供給</li>
-<li><code>CO*</code> の脱離による CO 生成</li>
-<li><code>O*</code> から <code>OH*</code>、<code>H2O*</code> を経た水生成</li>
-<li>site balance を満たす steady-state surface coverage</li>
-<li>RWGS 範囲での CO 生成速度と H2O 生成速度</li>
-</ul>
-<p>この範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。</p>
+<section id="提出物" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="提出物"><span class="header-section-number">9</span> 提出物</h2>
+<p>この演習では、実際の VASP 計算ファイル一式を作る前に、次の表を完成させる。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Reaction ID</th>
+<th>Directory</th>
+<th>POSCARの内容</th>
+<th>比較する相手</th>
+<th>得る量</th>
+<th>優先度</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R1</code></td>
+<td><code>03_adsorption/CO2_star</code></td>
+<td>CO2 adsorbed on clean slab</td>
+<td><code>clean_slab + gas_CO2</code></td>
+<td>adsorption energy</td>
+<td>high</td>
+</tr>
+<tr class="even">
+<td><code>R2</code></td>
+<td><code>04_coadsorbed/2H_star</code></td>
+<td>two H atoms on slab</td>
+<td><code>clean_slab + gas_H2</code></td>
+<td>dissociative adsorption energy</td>
+<td>high</td>
+</tr>
+<tr class="odd">
+<td><code>R3</code></td>
+<td><code>04_coadsorbed/CO_star_O_star</code></td>
+<td>CO and O on slab</td>
+<td><code>CO2_star</code></td>
+<td>dissociation energy</td>
+<td>high</td>
+</tr>
+<tr class="even">
+<td><code>R4</code></td>
+<td><code>03_adsorption/CO_star</code></td>
+<td>CO adsorbed on slab</td>
+<td><code>clean_slab + gas_CO</code></td>
+<td>desorption energy</td>
+<td>medium</td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td><code>04_coadsorbed/O_star_H_star</code> and <code>03_adsorption/OH_star</code></td>
+<td>O+H and OH states</td>
+<td>same-cell product/reactant</td>
+<td>hydrogenation energy</td>
+<td>high</td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td><code>04_coadsorbed/OH_star_H_star</code> and <code>03_adsorption/H2O_star</code></td>
+<td>OH+H and H2O states</td>
+<td>same-cell product/reactant</td>
+<td>hydrogenation energy</td>
+<td>high</td>
+</tr>
+<tr class="odd">
+<td><code>R7</code></td>
+<td><code>03_adsorption/H2O_star</code></td>
+<td>H2O adsorbed on slab</td>
+<td><code>clean_slab + gas_H2O</code></td>
+<td>desorption energy</td>
+<td>medium</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="この最小モデルで説明できないこと" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="この最小モデルで説明できないこと"><span class="header-section-number">8</span> この最小モデルで説明できないこと</h2>
-<p>このモデルは、次の現象を説明するためのものではない。</p>
-<ul>
-<li>CH4 生成の詳細機構</li>
-<li>C2+ hydrocarbon formation</li>
-<li>C-C coupling</li>
-<li>chain growth と chain termination</li>
-<li>ASF distribution</li>
-<li>Fe3O4 から FeCx への dynamic phase transformation</li>
-<li>FeCx site 上の FT reaction network</li>
-<li><code>COOH*</code> や <code>HCOO*</code> を含む competing pathway の比較</li>
-</ul>
-<p>これらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。</p>
-</section>
-<section id="c2生成に関する注意" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="c2生成に関する注意"><span class="header-section-number">9</span> C2+生成に関する注意</h2>
-<p>C2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。</p>
-<p>C2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。</p>
-</section>
-<section id="この章の要点" class="level2" data-number="10">
-<h2 data-number="10" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">10</span> この章の要点</h2>
-<ul>
-<li>Fe3O4-RWGS MVP では、気相種を <code>CO2</code>, <code>H2</code>, <code>CO</code>, <code>H2O</code> に限定する。</li>
-<li>表面種は <code>*</code>, <code>CO2*</code>, <code>H*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の7種類である。</li>
-<li>素反応は <code>R1</code> から <code>R7</code> の7ステップだけである。</li>
-<li>このモデルは RWGS による CO と H2O の生成を扱う。</li>
-<li>C2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。</li>
-</ul>
-</section>
-<section id="確認問題" class="level2" data-number="11">
-<h2 data-number="11" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">11</span> 確認問題</h2>
+<section id="確認問題" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">10</span> 確認問題</h2>
 <ol type="1">
-<li>Fe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。</li>
-<li><code>R3: CO2* + * &lt;=&gt; CO* + O*</code> が site balance を満たす理由を説明せよ。</li>
-<li><code>O*</code>, <code>OH*</code>, <code>H2O*</code> はそれぞれ RWGS model の中でどのような役割を持つか。</li>
-<li>この最小モデルで C2+生成を説明できない理由を述べよ。</li>
-<li><code>R7</code> が空サイト <code>*</code> の再生にどのように関わるか説明せよ。</li>
+<li>なぜ <code>clean_slab</code> の計算がすべての吸着エネルギーの基準になるのか説明せよ。</li>
+<li><code>R3</code> の反応エネルギーを得るために、<code>CO_star</code> と <code>O_star</code> を別々の slab で計算するだけでは不十分な理由を説明せよ。</li>
+<li><code>R5</code> と <code>R6</code> で、同じ supercell と同じ固定層を使うべき理由を説明せよ。</li>
+<li><code>R2</code>, <code>R3</code>, <code>R5</code>, <code>R6</code> を NEB 優先にする理由を説明せよ。</li>
+<li>COOH* と HCOO* をこの演習に含めない理由を、MVP の範囲と関連づけて説明せよ。</li>
 </ol>
-</section>
-<section id="計算演習" class="level2" data-number="12">
-<h2 data-number="12" class="anchored" data-anchor-id="計算演習"><span class="header-section-number">12</span> 計算演習</h2>
-<ol type="1">
-<li><code>R1</code> から <code>R7</code> について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。</li>
-<li><code>R3</code>, <code>R5</code>, <code>R6</code> について、C、H、O の elemental mass balance を確認せよ。</li>
-<li>任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。</li>
-</ol>
-<p><span class="math display">\[
-\theta_*
-+ \theta_{\mathrm{CO_2}}
-+ \theta_{\mathrm{H}}
-+ \theta_{\mathrm{CO}}
-+ \theta_{\mathrm{O}}
-+ \theta_{\mathrm{OH}}
-+ \theta_{\mathrm{H_2O}}
-= 1
-\]</span></p>
 
 
 </section>

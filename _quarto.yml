@@ -26,6 +26,10 @@ website:
         contents:
           - href: notebooks/01_rwgs_minimal_model.ipynb
             text: RWGS temperature-dependence exercise
+      - section: Exercises
+        contents:
+          - href: exercises/01_vasp_rwgs_structure_set.qmd
+            text: VASP structure-set exercise
 
 format:
   html:

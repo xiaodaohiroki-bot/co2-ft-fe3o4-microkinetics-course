@@ -376,6 +376,127 @@
     ]
   },
   {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html",
+    "href": "exercises/01_vasp_rwgs_structure_set.html",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "",
+    "text": "この演習では、Fe3O4-RWGS 最小モデル R1-R7 に対して、VASP などの周期境界条件 DFT 計算で どの構造を計算すべきか を具体的に整理する。\nこのページは VASP を自動実行するものではない。目的は、microkinetic model に必要なエネルギーを得るために、計算ディレクトリ、構造、比較すべき状態、NEB 計算候補を自分で設計できるようになることである。\n本演習では Fe3O4 を RWGS-active phase として扱う。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は扱わない。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#学習目標",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#学習目標",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "1 学習目標",
+    "text": "1 学習目標\nこの演習を終えると、次のことができるようになる。\n\nFe3O4-RWGS R1-R7 に必要な VASP 計算構造を列挙する。\nclean slab、gas molecule、adsorbed state、coadsorbed state、NEB endpoint を区別する。\n各構造が、吸着エネルギー、反応エネルギー、活性化障壁、熱力学整合性のどれに使われるかを説明する。\n計算ディレクトリを、あとから microkinetic model に接続しやすい形で設計する。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#前提条件",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#前提条件",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "2 前提条件",
+    "text": "2 前提条件\nまず、ひとつの Fe3O4 表面モデルを固定する。\n\n\n\n\n\n\n\nItem\nこの演習で決めること\n\n\n\n\nsurface orientation\n例: Fe3O4(001), Fe3O4(011), Fe3O4(111) のどれか\n\n\ntermination\n採用した終端を明記する\n\n\nslab model\ncell size、slab thickness、vacuum thickness、固定層\n\n\nmagnetic setup\nFe の初期磁気モーメント、spin polarization\n\n\nDFT setup\nfunctional、Hubbard U、ENCUT、KPOINTS、収束条件\n\n\n\n以後の全構造は、同じ slab cell、同じ固定層、同じ DFT 条件で比較する。条件を途中で変えると、同じエネルギーセットとして扱えない。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#推奨ディレクトリ構成",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#推奨ディレクトリ構成",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "3 推奨ディレクトリ構成",
+    "text": "3 推奨ディレクトリ構成\n次のようなディレクトリ構成を作る。\nvasp/\n├── 00_bulk_fe3o4/\n├── 01_surface/\n│   └── clean_slab/\n├── 02_gas/\n│   ├── CO2/\n│   ├── H2/\n│   ├── CO/\n│   └── H2O/\n├── 03_adsorption/\n│   ├── CO2_star/\n│   ├── H_star/\n│   ├── CO_star/\n│   ├── O_star/\n│   ├── OH_star/\n│   └── H2O_star/\n├── 04_coadsorbed/\n│   ├── 2H_star/\n│   ├── CO_star_O_star/\n│   ├── O_star_H_star/\n│   └── OH_star_H_star/\n└── 05_neb/\n    ├── R2_H2_dissociation/\n    ├── R3_CO2_dissociation/\n    ├── R5_O_hydrogenation/\n    └── R6_OH_hydrogenation/\n各ディレクトリには、少なくとも POSCAR, INCAR, KPOINTS, POTCAR を置く。実行後は OUTCAR, OSZICAR, CONTCAR, vasprun.xml などを保存し、どの構造からどのエネルギーを読んだかを記録する。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#step-1-基準構造を計算する",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#step-1-基準構造を計算する",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "4 Step 1: 基準構造を計算する",
+    "text": "4 Step 1: 基準構造を計算する\n最初に、すべてのエネルギー差の基準になる構造を計算する。\n\n\n\n\n\n\n\n\nStructure ID\n計算対象\n目的\n\n\n\n\nbulk_fe3o4\nbulk Fe3O4\n格子定数、磁気状態、DFT+U 条件の確認\n\n\nclean_slab\nclean Fe3O4 surface\nすべての吸着エネルギーの表面基準\n\n\ngas_CO2\nisolated CO2\nR1, R3, RWGS全体の気相基準\n\n\ngas_H2\nisolated H2\nR2, R5, R6 の水素基準\n\n\ngas_CO\nisolated CO\nR4 の脱離基準\n\n\ngas_H2O\nisolated H2O\nR7 の脱離基準\n\n\n\n気相分子は十分大きな box で計算する。slab 計算と gas molecule 計算では周期境界、k点、エントロピー補正の扱いが異なるため、電子エネルギーと熱補正を分けて記録する。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#step-2-単独吸着構造を計算する",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#step-2-単独吸着構造を計算する",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "5 Step 2: 単独吸着構造を計算する",
+    "text": "5 Step 2: 単独吸着構造を計算する\n次に、MVP の表面種をそれぞれ clean slab 上に置いて最適化する。\n\n\n\nStructure ID\n表面種\n対応する役割\n\n\n\n\nCO2_star\nCO2*\nR1 の生成物、R3 の反応物\n\n\nH_star\nH*\nR2 の生成物、R5/R6 の水素源\n\n\nCO_star\nCO*\nR3 の生成物、R4 の反応物\n\n\nO_star\nO*\nR3 の生成物、R5 の反応物\n\n\nOH_star\nOH*\nR5 の生成物、R6 の反応物\n\n\nH2O_star\nH2O*\nR6 の生成物、R7 の反応物\n\n\n\n各吸着種について、ひとつの初期構造だけで判断しない。少なくとも複数の候補サイトを作り、最適化後のエネルギーと構造を比較する。\nたとえば CO2_star では、次を試す。\n\nFe site への end-on 配位\nO site 近傍での bent CO2 配置\ncarbonate-like に近い配置\n反応経路上で CO* + O* へつながりそうな配置\n\nただし、この MVP では COOH* と HCOO* は明示的な反応種として追加しない。これらは将来、direct / COOH / HCOO 経路を比較する拡張計算で扱う。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#step-3-共吸着構造を計算する",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#step-3-共吸着構造を計算する",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "6 Step 3: 共吸着構造を計算する",
+    "text": "6 Step 3: 共吸着構造を計算する\nR2, R3, R5, R6 では、単独吸着種だけでは反応前後の表面サイト数や配置をそろえにくい。そこで、共吸着構造を作る。\n\n\n\nStructure ID\n構造\n主に使う反応\n\n\n\n\n2H_star\n同じ slab 上に H* を2つ置く\nR2\n\n\nCO_star_O_star\nCO* と O* を同じ slab 上に置く\nR3\n\n\nO_star_H_star\nO* と H* を同じ slab 上に置く\nR5\n\n\nOH_star_H_star\nOH* と H* を同じ slab 上に置く\nR6\n\n\n\n重要なのは、反応物側と生成物側で同じ supercell を使うことである。たとえば R5 では、O_star_H_star と OH_star + clean_slab を比較するのではなく、同じ cell 内で O* + H* と OH* + * を表現する。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#step-4-r1-r7に必要な構造セット",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#step-4-r1-r7に必要な構造セット",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "7 Step 4: R1-R7に必要な構造セット",
+    "text": "7 Step 4: R1-R7に必要な構造セット\n各素反応について、最低限必要な構造を次にまとめる。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\n最低限計算する構造\n得たい量\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nclean_slab, gas_CO2, CO2_star\nCO2 adsorption energy\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nclean_slab, gas_H2, 2H_star\nH2 dissociative adsorption energy\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nCO2_star, CO_star_O_star\nCO2 dissociation energy\n\n\nR4\nCO* &lt;=&gt; CO + *\nCO_star, gas_CO, clean_slab\nCO desorption energy\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nO_star_H_star, OH_star with same slab convention\nO* hydrogenation energy\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nOH_star_H_star, H2O_star with same slab convention\nOH* hydrogenation energy\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nH2O_star, gas_H2O, clean_slab\nH2O desorption energy\n\n\n\nR5 と R6 では、空サイト * を含む側と H を含む側で supercell 内の原子数がそろうように、反応物・生成物の定義を慎重に作る。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#step-5-neb計算として準備する構造",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#step-5-neb計算として準備する構造",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "8 Step 5: NEB計算として準備する構造",
+    "text": "8 Step 5: NEB計算として準備する構造\n反応速度定数に必要な活性化障壁を得るには、次の NEB 計算を優先する。\n\n\n\n\n\n\n\n\n\nNEB ID\nInitial state\nFinal state\n目的\n\n\n\n\nR2_H2_dissociation\nH2 が表面近傍にある構造\n2H_star\nH-H 切断障壁\n\n\nR3_CO2_dissociation\nCO2_star\nCO_star_O_star\nC-O 切断障壁\n\n\nR5_O_hydrogenation\nO_star_H_star\nOH_star with regenerated *\nO-H 形成障壁\n\n\nR6_OH_hydrogenation\nOH_star_H_star\nH2O_star with regenerated *\nH2O* 形成障壁\n\n\n\nNEB では、initial state と final state の slab cell、固定層、原子数、磁気設定を一致させる。終状態を別々の単独吸着計算から雑に組み合わせると、NEB の経路として不自然になることがある。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#提出物",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#提出物",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "9 提出物",
+    "text": "9 提出物\nこの演習では、実際の VASP 計算ファイル一式を作る前に、次の表を完成させる。\n\n\n\n\n\n\n\n\n\n\n\nReaction ID\nDirectory\nPOSCARの内容\n比較する相手\n得る量\n優先度\n\n\n\n\nR1\n03_adsorption/CO2_star\nCO2 adsorbed on clean slab\nclean_slab + gas_CO2\nadsorption energy\nhigh\n\n\nR2\n04_coadsorbed/2H_star\ntwo H atoms on slab\nclean_slab + gas_H2\ndissociative adsorption energy\nhigh\n\n\nR3\n04_coadsorbed/CO_star_O_star\nCO and O on slab\nCO2_star\ndissociation energy\nhigh\n\n\nR4\n03_adsorption/CO_star\nCO adsorbed on slab\nclean_slab + gas_CO\ndesorption energy\nmedium\n\n\nR5\n04_coadsorbed/O_star_H_star and 03_adsorption/OH_star\nO+H and OH states\nsame-cell product/reactant\nhydrogenation energy\nhigh\n\n\nR6\n04_coadsorbed/OH_star_H_star and 03_adsorption/H2O_star\nOH+H and H2O states\nsame-cell product/reactant\nhydrogenation energy\nhigh\n\n\nR7\n03_adsorption/H2O_star\nH2O adsorbed on slab\nclean_slab + gas_H2O\ndesorption energy\nmedium",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
+    "objectID": "exercises/01_vasp_rwgs_structure_set.html#確認問題",
+    "href": "exercises/01_vasp_rwgs_structure_set.html#確認問題",
+    "title": "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
+    "section": "10 確認問題",
+    "text": "10 確認問題\n\nなぜ clean_slab の計算がすべての吸着エネルギーの基準になるのか説明せよ。\nR3 の反応エネルギーを得るために、CO_star と O_star を別々の slab で計算するだけでは不十分な理由を説明せよ。\nR5 と R6 で、同じ supercell と同じ固定層を使うべき理由を説明せよ。\nR2, R3, R5, R6 を NEB 優先にする理由を説明せよ。\nCOOH* と HCOO* をこの演習に含めない理由を、MVP の範囲と関連づけて説明せよ。",
+    "crumbs": [
+      "Exercises",
+      "VASP structure-set exercise"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "CO2-FT / Fe3O4 Microkinetics Course",
@@ -690,11 +811,22 @@
     ]
   },
   {
+    "objectID": "lessons/04_dft_to_rate_constants.html#vaspで実際に計算すべき構造セット",
+    "href": "lessons/04_dft_to_rate_constants.html#vaspで実際に計算すべき構造セット",
+    "title": "DFTから速度定数を作る手順",
+    "section": "11 VASPで実際に計算すべき構造セット",
+    "text": "11 VASPで実際に計算すべき構造セット\nここまでの説明を、VASP で準備する具体的な構造セットに落とし込む。重要なのは、「R1-R7 の速度定数がほしい」という目的から逆算して、どの POSCAR を作るかを決めることである。\nこの段階では、ひとつの Fe3O4 表面モデルを固定する。たとえば Fe3O4(001) の特定 termination を選んだら、以後の clean slab、吸着構造、共吸着構造、NEB endpoint は同じ slab cell、同じ固定層、同じ DFT+U 条件で比較する。\n推奨する計算ディレクトリは次のように分ける。\nvasp/\n├── 00_bulk_fe3o4/\n├── 01_surface/\n│   └── clean_slab/\n├── 02_gas/\n│   ├── CO2/\n│   ├── H2/\n│   ├── CO/\n│   └── H2O/\n├── 03_adsorption/\n│   ├── CO2_star/\n│   ├── H_star/\n│   ├── CO_star/\n│   ├── O_star/\n│   ├── OH_star/\n│   └── H2O_star/\n├── 04_coadsorbed/\n│   ├── 2H_star/\n│   ├── CO_star_O_star/\n│   ├── O_star_H_star/\n│   └── OH_star_H_star/\n└── 05_neb/\n    ├── R2_H2_dissociation/\n    ├── R3_CO2_dissociation/\n    ├── R5_O_hydrogenation/\n    └── R6_OH_hydrogenation/\n各ディレクトリでは、POSCAR, INCAR, KPOINTS, POTCAR をそろえ、実行後に OUTCAR, OSZICAR, CONTCAR, vasprun.xml を保存する。どの CONTCAR からエネルギーを読んだかも記録する。\n\n11.1 基準構造\n最初に、すべてのエネルギー差の基準になる構造を計算する。\n\n\n\n\n\n\n\n\nStructure ID\n計算対象\n目的\n\n\n\n\nbulk_fe3o4\nbulk Fe3O4\n格子定数、磁気状態、DFT+U 条件の確認\n\n\nclean_slab\nclean Fe3O4 surface\n吸着エネルギーと表面反応エネルギーの基準\n\n\ngas_CO2\nisolated CO2\nR1, R3 の気相基準\n\n\ngas_H2\nisolated H2\nR2, R5, R6 の水素基準\n\n\ngas_CO\nisolated CO\nR4 の脱離基準\n\n\ngas_H2O\nisolated H2O\nR7 の脱離基準\n\n\n\n気相分子は大きな box で計算する。slab と同じ KPOINTS を使う必要はないが、エネルギーの基準、スピン、電子状態、熱補正の扱いは記録する。\n\n\n11.2 吸着構造と共吸着構造\n次に、MVP の表面種と、R2/R3/R5/R6 に必要な共吸着構造を計算する。\n\n\n\nStructure ID\n構造\n主に使う反応\n\n\n\n\nCO2_star\nCO2* on Fe3O4\nR1, R3\n\n\nH_star\nH* on Fe3O4\nH 吸着サイト確認\n\n\nCO_star\nCO* on Fe3O4\nR3, R4\n\n\nO_star\nO* on Fe3O4\nO* 安定サイト確認\n\n\nOH_star\nOH* on Fe3O4\nR5, R6\n\n\nH2O_star\nH2O* on Fe3O4\nR6, R7\n\n\n2H_star\ntwo H* on the same slab\nR2\n\n\nCO_star_O_star\nCO* and O* on the same slab\nR3\n\n\nO_star_H_star\nO* and H* on the same slab\nR5\n\n\nOH_star_H_star\nOH* and H* on the same slab\nR6\n\n\n\n単独吸着構造だけでは、反応前後の原子数や配置がそろわない場合がある。たとえば R3 では、CO* と O* を別々の slab で計算するのではなく、同じ slab 上に CO* + O* を置いた構造を作る。\n\n\n11.3 R1-R7への対応\n各素反応で最低限必要な構造は次の通りである。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\n最低限必要な構造\n得たい量\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nclean_slab, gas_CO2, CO2_star\nCO2 吸着エネルギー\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nclean_slab, gas_H2, 2H_star\nH2 解離吸着エネルギー\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nCO2_star, CO_star_O_star\nCO2 解離反応エネルギー\n\n\nR4\nCO* &lt;=&gt; CO + *\nCO_star, gas_CO, clean_slab\nCO 脱離エネルギー\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nO_star_H_star, OH_star\nO* 水素化エネルギー\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nOH_star_H_star, H2O_star\nOH* 水素化エネルギー\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nH2O_star, gas_H2O, clean_slab\nH2O 脱離エネルギー\n\n\n\nR5 と R6 は、共吸着状態と生成物状態の supercell 内の原子数、固定層、表面終端をそろえる。必要なら生成物側にも明示的な空サイト * が残る配置を作り、同じ cell 内の反応として比較する。\n\n\n11.4 NEBとして準備する構造\n活性化障壁を得るため、まず次の NEB 計算を優先する。\n\n\n\n\n\n\n\n\n\nNEB ID\nInitial state\nFinal state\n目的\n\n\n\n\nR2_H2_dissociation\nH2 が表面近傍にある構造\n2H_star\nH-H 結合切断障壁\n\n\nR3_CO2_dissociation\nCO2_star\nCO_star_O_star\nC-O 結合切断障壁\n\n\nR5_O_hydrogenation\nO_star_H_star\nOH_star と再生した *\nO-H 結合形成障壁\n\n\nR6_OH_hydrogenation\nOH_star_H_star\nH2O_star と再生した *\nH2O* 形成障壁\n\n\n\nNEB の initial state と final state は、同じ slab cell、同じ原子数、同じ固定層、同じ磁気設定でそろえる。終状態だけを別計算から雑に組み合わせると、NEB 経路として不自然になることがある。\n\n\n11.5 この演習で提出するもの\n実際に VASP を投げる前に、次の表を自分の表面モデルに合わせて完成させる。\n\n\n\n\n\n\n\n\n\n\nReaction ID\nDirectory\nPOSCARに入れる構造\n比較する相手\n得る量\n\n\n\n\nR1\n03_adsorption/CO2_star\nCO2 adsorbed on slab\nclean_slab + gas_CO2\nadsorption energy\n\n\nR2\n04_coadsorbed/2H_star\ntwo H atoms on slab\nclean_slab + gas_H2\ndissociative adsorption energy\n\n\nR3\n04_coadsorbed/CO_star_O_star\nCO and O on slab\nCO2_star\ndissociation energy\n\n\nR4\n03_adsorption/CO_star\nCO adsorbed on slab\nclean_slab + gas_CO\ndesorption energy\n\n\nR5\n04_coadsorbed/O_star_H_star\nO and H on slab\nOH_star with same slab convention\nhydrogenation energy\n\n\nR6\n04_coadsorbed/OH_star_H_star\nOH and H on slab\nH2O_star with same slab convention\nhydrogenation energy\n\n\nR7\n03_adsorption/H2O_star\nH2O adsorbed on slab\nclean_slab + gas_H2O\ndesorption energy",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
     "objectID": "lessons/04_dft_to_rate_constants.html#この章の要点",
     "href": "lessons/04_dft_to_rate_constants.html#この章の要点",
     "title": "DFTから速度定数を作る手順",
-    "section": "11 この章の要点",
-    "text": "11 この章の要点\n\nmicrokinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。\nFe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。\n反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。\n気相分子、吸着種、遷移状態では熱補正の扱いが異なる。\n逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。\nCOOH、HCOO、FeCx-FT は重要な将来拡張候補だが、本 MVP の R1-R7 には追加しない。",
+    "section": "12 この章の要点",
+    "text": "12 この章の要点\n\nmicrokinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。\nFe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。\nVASP 計算では、clean slab、gas molecule、単独吸着、共吸着、NEB endpoint を明確に分けて準備する。\n反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。\n気相分子、吸着種、遷移状態では熱補正の扱いが異なる。\n逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。\nCOOH、HCOO、FeCx-FT は重要な将来拡張候補だが、本 MVP の R1-R7 には追加しない。",
     "crumbs": [
       "Lessons",
       "DFT to Rate Constants"
@@ -704,8 +836,8 @@
     "objectID": "lessons/04_dft_to_rate_constants.html#確認問題",
     "href": "lessons/04_dft_to_rate_constants.html#確認問題",
     "title": "DFTから速度定数を作る手順",
-    "section": "12 確認問題",
-    "text": "12 確認問題\n\nmicrokinetic model で反応エネルギーだけでなく活性化障壁が必要になる理由を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* に必要な DFT 計算を列挙せよ。\n気相分子と表面吸着種で熱補正の扱いが異なる理由を説明せよ。\n\\(K_j = k_{j,f}/k_{j,r}\\) と \\(\\Delta G_j\\) の関係を説明せよ。\nCOOH* と HCOO* を本 MVP に含めない理由を説明せよ。",
+    "section": "13 確認問題",
+    "text": "13 確認問題\n\nmicrokinetic model で反応エネルギーだけでなく活性化障壁が必要になる理由を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* に必要な DFT 計算を列挙せよ。\n気相分子と表面吸着種で熱補正の扱いが異なる理由を説明せよ。\n\\(K_j = k_{j,f}/k_{j,r}\\) と \\(\\Delta G_j\\) の関係を説明せよ。\nCOOH* と HCOO* を本 MVP に含めない理由を説明せよ。",
     "crumbs": [
       "Lessons",
       "DFT to Rate Constants"
@@ -715,8 +847,19 @@
     "objectID": "lessons/04_dft_to_rate_constants.html#計算計画演習",
     "href": "lessons/04_dft_to_rate_constants.html#計算計画演習",
     "title": "DFTから速度定数を作る手順",
-    "section": "13 計算計画演習",
-    "text": "13 計算計画演習\n\nFe3O4(001) のある termination を仮定し、CO2*, CO*, O*, OH*, H2O* の吸着構造探索計画を作成せよ。\nR1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。\nある素反応について \\(\\Delta G_j(T)\\) と \\(k_{j,f}(T)\\) が与えられたとき、熱力学整合性を満たす \\(k_{j,r}(T)\\) の計算手順を書け。",
+    "section": "14 計算計画演習",
+    "text": "14 計算計画演習\n\nFe3O4(001) のある termination を仮定し、CO2*, CO*, O*, OH*, H2O* の吸着構造探索計画を作成せよ。\nR1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。\nある素反応について \\(\\Delta G_j(T)\\) と \\(k_{j,f}(T)\\) が与えられたとき、熱力学整合性を満たす \\(k_{j,r}(T)\\) の計算手順を書け。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#関連演習",
+    "href": "lessons/04_dft_to_rate_constants.html#関連演習",
+    "title": "DFTから速度定数を作る手順",
+    "section": "15 関連演習",
+    "text": "15 関連演習\n\nVASP計算演習: Fe3O4-RWGSで計算すべき構造セット",
     "crumbs": [
       "Lessons",
       "DFT to Rate Constants"

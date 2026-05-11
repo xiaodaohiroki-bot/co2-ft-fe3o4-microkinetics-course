@@ -226,10 +226,127 @@ $$
 
 この関係を無視して $k_{j,f}$ と $k_{j,r}$ を独立に調整すると、見かけ上は実験値に合っても、平衡組成や反応方向が熱力学と矛盾する可能性がある。
 
+## VASPで実際に計算すべき構造セット
+
+ここまでの説明を、VASP で準備する具体的な構造セットに落とし込む。重要なのは、「R1-R7 の速度定数がほしい」という目的から逆算して、どの `POSCAR` を作るかを決めることである。
+
+この段階では、ひとつの Fe3O4 表面モデルを固定する。たとえば Fe3O4(001) の特定 termination を選んだら、以後の clean slab、吸着構造、共吸着構造、NEB endpoint は同じ slab cell、同じ固定層、同じ DFT+U 条件で比較する。
+
+推奨する計算ディレクトリは次のように分ける。
+
+```text
+vasp/
+├── 00_bulk_fe3o4/
+├── 01_surface/
+│   └── clean_slab/
+├── 02_gas/
+│   ├── CO2/
+│   ├── H2/
+│   ├── CO/
+│   └── H2O/
+├── 03_adsorption/
+│   ├── CO2_star/
+│   ├── H_star/
+│   ├── CO_star/
+│   ├── O_star/
+│   ├── OH_star/
+│   └── H2O_star/
+├── 04_coadsorbed/
+│   ├── 2H_star/
+│   ├── CO_star_O_star/
+│   ├── O_star_H_star/
+│   └── OH_star_H_star/
+└── 05_neb/
+    ├── R2_H2_dissociation/
+    ├── R3_CO2_dissociation/
+    ├── R5_O_hydrogenation/
+    └── R6_OH_hydrogenation/
+```
+
+各ディレクトリでは、`POSCAR`, `INCAR`, `KPOINTS`, `POTCAR` をそろえ、実行後に `OUTCAR`, `OSZICAR`, `CONTCAR`, `vasprun.xml` を保存する。どの `CONTCAR` からエネルギーを読んだかも記録する。
+
+### 基準構造
+
+最初に、すべてのエネルギー差の基準になる構造を計算する。
+
+| Structure ID | 計算対象 | 目的 |
+|---|---|---|
+| `bulk_fe3o4` | bulk Fe3O4 | 格子定数、磁気状態、DFT+U 条件の確認 |
+| `clean_slab` | clean Fe3O4 surface | 吸着エネルギーと表面反応エネルギーの基準 |
+| `gas_CO2` | isolated CO2 | R1, R3 の気相基準 |
+| `gas_H2` | isolated H2 | R2, R5, R6 の水素基準 |
+| `gas_CO` | isolated CO | R4 の脱離基準 |
+| `gas_H2O` | isolated H2O | R7 の脱離基準 |
+
+気相分子は大きな box で計算する。slab と同じ KPOINTS を使う必要はないが、エネルギーの基準、スピン、電子状態、熱補正の扱いは記録する。
+
+### 吸着構造と共吸着構造
+
+次に、MVP の表面種と、R2/R3/R5/R6 に必要な共吸着構造を計算する。
+
+| Structure ID | 構造 | 主に使う反応 |
+|---|---|---|
+| `CO2_star` | `CO2*` on Fe3O4 | R1, R3 |
+| `H_star` | `H*` on Fe3O4 | H 吸着サイト確認 |
+| `CO_star` | `CO*` on Fe3O4 | R3, R4 |
+| `O_star` | `O*` on Fe3O4 | O* 安定サイト確認 |
+| `OH_star` | `OH*` on Fe3O4 | R5, R6 |
+| `H2O_star` | `H2O*` on Fe3O4 | R6, R7 |
+| `2H_star` | two `H*` on the same slab | R2 |
+| `CO_star_O_star` | `CO*` and `O*` on the same slab | R3 |
+| `O_star_H_star` | `O*` and `H*` on the same slab | R5 |
+| `OH_star_H_star` | `OH*` and `H*` on the same slab | R6 |
+
+単独吸着構造だけでは、反応前後の原子数や配置がそろわない場合がある。たとえば R3 では、`CO*` と `O*` を別々の slab で計算するのではなく、同じ slab 上に `CO* + O*` を置いた構造を作る。
+
+### R1-R7への対応
+
+各素反応で最低限必要な構造は次の通りである。
+
+| Reaction ID | Elementary step | 最低限必要な構造 | 得たい量 |
+|---|---|---|---|
+| `R1` | `CO2 + * <=> CO2*` | `clean_slab`, `gas_CO2`, `CO2_star` | CO2 吸着エネルギー |
+| `R2` | `H2 + 2* <=> 2H*` | `clean_slab`, `gas_H2`, `2H_star` | H2 解離吸着エネルギー |
+| `R3` | `CO2* + * <=> CO* + O*` | `CO2_star`, `CO_star_O_star` | CO2 解離反応エネルギー |
+| `R4` | `CO* <=> CO + *` | `CO_star`, `gas_CO`, `clean_slab` | CO 脱離エネルギー |
+| `R5` | `O* + H* <=> OH* + *` | `O_star_H_star`, `OH_star` | O* 水素化エネルギー |
+| `R6` | `OH* + H* <=> H2O* + *` | `OH_star_H_star`, `H2O_star` | OH* 水素化エネルギー |
+| `R7` | `H2O* <=> H2O + *` | `H2O_star`, `gas_H2O`, `clean_slab` | H2O 脱離エネルギー |
+
+R5 と R6 は、共吸着状態と生成物状態の supercell 内の原子数、固定層、表面終端をそろえる。必要なら生成物側にも明示的な空サイト `*` が残る配置を作り、同じ cell 内の反応として比較する。
+
+### NEBとして準備する構造
+
+活性化障壁を得るため、まず次の NEB 計算を優先する。
+
+| NEB ID | Initial state | Final state | 目的 |
+|---|---|---|---|
+| `R2_H2_dissociation` | H2 が表面近傍にある構造 | `2H_star` | H-H 結合切断障壁 |
+| `R3_CO2_dissociation` | `CO2_star` | `CO_star_O_star` | C-O 結合切断障壁 |
+| `R5_O_hydrogenation` | `O_star_H_star` | `OH_star` と再生した `*` | O-H 結合形成障壁 |
+| `R6_OH_hydrogenation` | `OH_star_H_star` | `H2O_star` と再生した `*` | H2O* 形成障壁 |
+
+NEB の initial state と final state は、同じ slab cell、同じ原子数、同じ固定層、同じ磁気設定でそろえる。終状態だけを別計算から雑に組み合わせると、NEB 経路として不自然になることがある。
+
+### この演習で提出するもの
+
+実際に VASP を投げる前に、次の表を自分の表面モデルに合わせて完成させる。
+
+| Reaction ID | Directory | POSCARに入れる構造 | 比較する相手 | 得る量 |
+|---|---|---|---|---|
+| `R1` | `03_adsorption/CO2_star` | CO2 adsorbed on slab | `clean_slab + gas_CO2` | adsorption energy |
+| `R2` | `04_coadsorbed/2H_star` | two H atoms on slab | `clean_slab + gas_H2` | dissociative adsorption energy |
+| `R3` | `04_coadsorbed/CO_star_O_star` | CO and O on slab | `CO2_star` | dissociation energy |
+| `R4` | `03_adsorption/CO_star` | CO adsorbed on slab | `clean_slab + gas_CO` | desorption energy |
+| `R5` | `04_coadsorbed/O_star_H_star` | O and H on slab | `OH_star` with same slab convention | hydrogenation energy |
+| `R6` | `04_coadsorbed/OH_star_H_star` | OH and H on slab | `H2O_star` with same slab convention | hydrogenation energy |
+| `R7` | `03_adsorption/H2O_star` | H2O adsorbed on slab | `clean_slab + gas_H2O` | desorption energy |
+
 ## この章の要点
 
 - microkinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。
 - Fe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。
+- VASP 計算では、clean slab、gas molecule、単独吸着、共吸着、NEB endpoint を明確に分けて準備する。
 - 反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。
 - 気相分子、吸着種、遷移状態では熱補正の扱いが異なる。
 - 逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。
@@ -248,3 +365,7 @@ $$
 1. Fe3O4(001) のある termination を仮定し、`CO2*`, `CO*`, `O*`, `OH*`, `H2O*` の吸着構造探索計画を作成せよ。
 2. R1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。
 3. ある素反応について $\Delta G_j(T)$ と $k_{j,f}(T)$ が与えられたとき、熱力学整合性を満たす $k_{j,r}(T)$ の計算手順を書け。
+
+## 関連演習
+
+- [VASP計算演習: Fe3O4-RWGSで計算すべき構造セット](../exercises/01_vasp_rwgs_structure_set.qmd)

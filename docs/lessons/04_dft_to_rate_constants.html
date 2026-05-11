@@ -201,6 +201,23 @@ window.Quarto = {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01_vasp_rwgs_structure_set.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VASP structure-set exercise</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -221,9 +238,18 @@ window.Quarto = {
   <li><a href="#振動解析と自由エネルギー補正" id="toc-振動解析と自由エネルギー補正" class="nav-link" data-scroll-target="#振動解析と自由エネルギー補正"><span class="header-section-number">8</span> 振動解析と自由エネルギー補正</a></li>
   <li><a href="#遷移状態理論による速度定数化" id="toc-遷移状態理論による速度定数化" class="nav-link" data-scroll-target="#遷移状態理論による速度定数化"><span class="header-section-number">9</span> 遷移状態理論による速度定数化</a></li>
   <li><a href="#熱力学整合性の確認" id="toc-熱力学整合性の確認" class="nav-link" data-scroll-target="#熱力学整合性の確認"><span class="header-section-number">10</span> 熱力学整合性の確認</a></li>
-  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">11</span> この章の要点</a></li>
-  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">12</span> 確認問題</a></li>
-  <li><a href="#計算計画演習" id="toc-計算計画演習" class="nav-link" data-scroll-target="#計算計画演習"><span class="header-section-number">13</span> 計算計画演習</a></li>
+  <li><a href="#vaspで実際に計算すべき構造セット" id="toc-vaspで実際に計算すべき構造セット" class="nav-link" data-scroll-target="#vaspで実際に計算すべき構造セット"><span class="header-section-number">11</span> VASPで実際に計算すべき構造セット</a>
+  <ul class="collapse">
+  <li><a href="#基準構造" id="toc-基準構造" class="nav-link" data-scroll-target="#基準構造"><span class="header-section-number">11.1</span> 基準構造</a></li>
+  <li><a href="#吸着構造と共吸着構造" id="toc-吸着構造と共吸着構造" class="nav-link" data-scroll-target="#吸着構造と共吸着構造"><span class="header-section-number">11.2</span> 吸着構造と共吸着構造</a></li>
+  <li><a href="#r1-r7への対応" id="toc-r1-r7への対応" class="nav-link" data-scroll-target="#r1-r7への対応"><span class="header-section-number">11.3</span> R1-R7への対応</a></li>
+  <li><a href="#nebとして準備する構造" id="toc-nebとして準備する構造" class="nav-link" data-scroll-target="#nebとして準備する構造"><span class="header-section-number">11.4</span> NEBとして準備する構造</a></li>
+  <li><a href="#この演習で提出するもの" id="toc-この演習で提出するもの" class="nav-link" data-scroll-target="#この演習で提出するもの"><span class="header-section-number">11.5</span> この演習で提出するもの</a></li>
+  </ul></li>
+  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">12</span> この章の要点</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">13</span> 確認問題</a></li>
+  <li><a href="#計算計画演習" id="toc-計算計画演習" class="nav-link" data-scroll-target="#計算計画演習"><span class="header-section-number">14</span> 計算計画演習</a></li>
+  <li><a href="#関連演習" id="toc-関連演習" class="nav-link" data-scroll-target="#関連演習"><span class="header-section-number">15</span> 関連演習</a></li>
   </ul>
 </nav>
     </div>
@@ -592,19 +618,355 @@ k_{j,r}(T)
 \]</span></p>
 <p>この関係を無視して <span class="math inline">\(k_{j,f}\)</span> と <span class="math inline">\(k_{j,r}\)</span> を独立に調整すると、見かけ上は実験値に合っても、平衡組成や反応方向が熱力学と矛盾する可能性がある。</p>
 </section>
-<section id="この章の要点" class="level2" data-number="11">
-<h2 data-number="11" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">11</span> この章の要点</h2>
+<section id="vaspで実際に計算すべき構造セット" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="vaspで実際に計算すべき構造セット"><span class="header-section-number">11</span> VASPで実際に計算すべき構造セット</h2>
+<p>ここまでの説明を、VASP で準備する具体的な構造セットに落とし込む。重要なのは、「R1-R7 の速度定数がほしい」という目的から逆算して、どの <code>POSCAR</code> を作るかを決めることである。</p>
+<p>この段階では、ひとつの Fe3O4 表面モデルを固定する。たとえば Fe3O4(001) の特定 termination を選んだら、以後の clean slab、吸着構造、共吸着構造、NEB endpoint は同じ slab cell、同じ固定層、同じ DFT+U 条件で比較する。</p>
+<p>推奨する計算ディレクトリは次のように分ける。</p>
+<pre class="text"><code>vasp/
+├── 00_bulk_fe3o4/
+├── 01_surface/
+│   └── clean_slab/
+├── 02_gas/
+│   ├── CO2/
+│   ├── H2/
+│   ├── CO/
+│   └── H2O/
+├── 03_adsorption/
+│   ├── CO2_star/
+│   ├── H_star/
+│   ├── CO_star/
+│   ├── O_star/
+│   ├── OH_star/
+│   └── H2O_star/
+├── 04_coadsorbed/
+│   ├── 2H_star/
+│   ├── CO_star_O_star/
+│   ├── O_star_H_star/
+│   └── OH_star_H_star/
+└── 05_neb/
+    ├── R2_H2_dissociation/
+    ├── R3_CO2_dissociation/
+    ├── R5_O_hydrogenation/
+    └── R6_OH_hydrogenation/</code></pre>
+<p>各ディレクトリでは、<code>POSCAR</code>, <code>INCAR</code>, <code>KPOINTS</code>, <code>POTCAR</code> をそろえ、実行後に <code>OUTCAR</code>, <code>OSZICAR</code>, <code>CONTCAR</code>, <code>vasprun.xml</code> を保存する。どの <code>CONTCAR</code> からエネルギーを読んだかも記録する。</p>
+<section id="基準構造" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="基準構造"><span class="header-section-number">11.1</span> 基準構造</h3>
+<p>最初に、すべてのエネルギー差の基準になる構造を計算する。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Structure ID</th>
+<th>計算対象</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>bulk_fe3o4</code></td>
+<td>bulk Fe3O4</td>
+<td>格子定数、磁気状態、DFT+U 条件の確認</td>
+</tr>
+<tr class="even">
+<td><code>clean_slab</code></td>
+<td>clean Fe3O4 surface</td>
+<td>吸着エネルギーと表面反応エネルギーの基準</td>
+</tr>
+<tr class="odd">
+<td><code>gas_CO2</code></td>
+<td>isolated CO2</td>
+<td>R1, R3 の気相基準</td>
+</tr>
+<tr class="even">
+<td><code>gas_H2</code></td>
+<td>isolated H2</td>
+<td>R2, R5, R6 の水素基準</td>
+</tr>
+<tr class="odd">
+<td><code>gas_CO</code></td>
+<td>isolated CO</td>
+<td>R4 の脱離基準</td>
+</tr>
+<tr class="even">
+<td><code>gas_H2O</code></td>
+<td>isolated H2O</td>
+<td>R7 の脱離基準</td>
+</tr>
+</tbody>
+</table>
+<p>気相分子は大きな box で計算する。slab と同じ KPOINTS を使う必要はないが、エネルギーの基準、スピン、電子状態、熱補正の扱いは記録する。</p>
+</section>
+<section id="吸着構造と共吸着構造" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="吸着構造と共吸着構造"><span class="header-section-number">11.2</span> 吸着構造と共吸着構造</h3>
+<p>次に、MVP の表面種と、R2/R3/R5/R6 に必要な共吸着構造を計算する。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Structure ID</th>
+<th>構造</th>
+<th>主に使う反応</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CO2_star</code></td>
+<td><code>CO2*</code> on Fe3O4</td>
+<td>R1, R3</td>
+</tr>
+<tr class="even">
+<td><code>H_star</code></td>
+<td><code>H*</code> on Fe3O4</td>
+<td>H 吸着サイト確認</td>
+</tr>
+<tr class="odd">
+<td><code>CO_star</code></td>
+<td><code>CO*</code> on Fe3O4</td>
+<td>R3, R4</td>
+</tr>
+<tr class="even">
+<td><code>O_star</code></td>
+<td><code>O*</code> on Fe3O4</td>
+<td>O* 安定サイト確認</td>
+</tr>
+<tr class="odd">
+<td><code>OH_star</code></td>
+<td><code>OH*</code> on Fe3O4</td>
+<td>R5, R6</td>
+</tr>
+<tr class="even">
+<td><code>H2O_star</code></td>
+<td><code>H2O*</code> on Fe3O4</td>
+<td>R6, R7</td>
+</tr>
+<tr class="odd">
+<td><code>2H_star</code></td>
+<td>two <code>H*</code> on the same slab</td>
+<td>R2</td>
+</tr>
+<tr class="even">
+<td><code>CO_star_O_star</code></td>
+<td><code>CO*</code> and <code>O*</code> on the same slab</td>
+<td>R3</td>
+</tr>
+<tr class="odd">
+<td><code>O_star_H_star</code></td>
+<td><code>O*</code> and <code>H*</code> on the same slab</td>
+<td>R5</td>
+</tr>
+<tr class="even">
+<td><code>OH_star_H_star</code></td>
+<td><code>OH*</code> and <code>H*</code> on the same slab</td>
+<td>R6</td>
+</tr>
+</tbody>
+</table>
+<p>単独吸着構造だけでは、反応前後の原子数や配置がそろわない場合がある。たとえば R3 では、<code>CO*</code> と <code>O*</code> を別々の slab で計算するのではなく、同じ slab 上に <code>CO* + O*</code> を置いた構造を作る。</p>
+</section>
+<section id="r1-r7への対応" class="level3" data-number="11.3">
+<h3 data-number="11.3" class="anchored" data-anchor-id="r1-r7への対応"><span class="header-section-number">11.3</span> R1-R7への対応</h3>
+<p>各素反応で最低限必要な構造は次の通りである。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Reaction ID</th>
+<th>Elementary step</th>
+<th>最低限必要な構造</th>
+<th>得たい量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R1</code></td>
+<td><code>CO2 + * &lt;=&gt; CO2*</code></td>
+<td><code>clean_slab</code>, <code>gas_CO2</code>, <code>CO2_star</code></td>
+<td>CO2 吸着エネルギー</td>
+</tr>
+<tr class="even">
+<td><code>R2</code></td>
+<td><code>H2 + 2* &lt;=&gt; 2H*</code></td>
+<td><code>clean_slab</code>, <code>gas_H2</code>, <code>2H_star</code></td>
+<td>H2 解離吸着エネルギー</td>
+</tr>
+<tr class="odd">
+<td><code>R3</code></td>
+<td><code>CO2* + * &lt;=&gt; CO* + O*</code></td>
+<td><code>CO2_star</code>, <code>CO_star_O_star</code></td>
+<td>CO2 解離反応エネルギー</td>
+</tr>
+<tr class="even">
+<td><code>R4</code></td>
+<td><code>CO* &lt;=&gt; CO + *</code></td>
+<td><code>CO_star</code>, <code>gas_CO</code>, <code>clean_slab</code></td>
+<td>CO 脱離エネルギー</td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td><code>O* + H* &lt;=&gt; OH* + *</code></td>
+<td><code>O_star_H_star</code>, <code>OH_star</code></td>
+<td>O* 水素化エネルギー</td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td><code>OH* + H* &lt;=&gt; H2O* + *</code></td>
+<td><code>OH_star_H_star</code>, <code>H2O_star</code></td>
+<td>OH* 水素化エネルギー</td>
+</tr>
+<tr class="odd">
+<td><code>R7</code></td>
+<td><code>H2O* &lt;=&gt; H2O + *</code></td>
+<td><code>H2O_star</code>, <code>gas_H2O</code>, <code>clean_slab</code></td>
+<td>H2O 脱離エネルギー</td>
+</tr>
+</tbody>
+</table>
+<p>R5 と R6 は、共吸着状態と生成物状態の supercell 内の原子数、固定層、表面終端をそろえる。必要なら生成物側にも明示的な空サイト <code>*</code> が残る配置を作り、同じ cell 内の反応として比較する。</p>
+</section>
+<section id="nebとして準備する構造" class="level3" data-number="11.4">
+<h3 data-number="11.4" class="anchored" data-anchor-id="nebとして準備する構造"><span class="header-section-number">11.4</span> NEBとして準備する構造</h3>
+<p>活性化障壁を得るため、まず次の NEB 計算を優先する。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>NEB ID</th>
+<th>Initial state</th>
+<th>Final state</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R2_H2_dissociation</code></td>
+<td>H2 が表面近傍にある構造</td>
+<td><code>2H_star</code></td>
+<td>H-H 結合切断障壁</td>
+</tr>
+<tr class="even">
+<td><code>R3_CO2_dissociation</code></td>
+<td><code>CO2_star</code></td>
+<td><code>CO_star_O_star</code></td>
+<td>C-O 結合切断障壁</td>
+</tr>
+<tr class="odd">
+<td><code>R5_O_hydrogenation</code></td>
+<td><code>O_star_H_star</code></td>
+<td><code>OH_star</code> と再生した <code>*</code></td>
+<td>O-H 結合形成障壁</td>
+</tr>
+<tr class="even">
+<td><code>R6_OH_hydrogenation</code></td>
+<td><code>OH_star_H_star</code></td>
+<td><code>H2O_star</code> と再生した <code>*</code></td>
+<td>H2O* 形成障壁</td>
+</tr>
+</tbody>
+</table>
+<p>NEB の initial state と final state は、同じ slab cell、同じ原子数、同じ固定層、同じ磁気設定でそろえる。終状態だけを別計算から雑に組み合わせると、NEB 経路として不自然になることがある。</p>
+</section>
+<section id="この演習で提出するもの" class="level3" data-number="11.5">
+<h3 data-number="11.5" class="anchored" data-anchor-id="この演習で提出するもの"><span class="header-section-number">11.5</span> この演習で提出するもの</h3>
+<p>実際に VASP を投げる前に、次の表を自分の表面モデルに合わせて完成させる。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Reaction ID</th>
+<th>Directory</th>
+<th>POSCARに入れる構造</th>
+<th>比較する相手</th>
+<th>得る量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R1</code></td>
+<td><code>03_adsorption/CO2_star</code></td>
+<td>CO2 adsorbed on slab</td>
+<td><code>clean_slab + gas_CO2</code></td>
+<td>adsorption energy</td>
+</tr>
+<tr class="even">
+<td><code>R2</code></td>
+<td><code>04_coadsorbed/2H_star</code></td>
+<td>two H atoms on slab</td>
+<td><code>clean_slab + gas_H2</code></td>
+<td>dissociative adsorption energy</td>
+</tr>
+<tr class="odd">
+<td><code>R3</code></td>
+<td><code>04_coadsorbed/CO_star_O_star</code></td>
+<td>CO and O on slab</td>
+<td><code>CO2_star</code></td>
+<td>dissociation energy</td>
+</tr>
+<tr class="even">
+<td><code>R4</code></td>
+<td><code>03_adsorption/CO_star</code></td>
+<td>CO adsorbed on slab</td>
+<td><code>clean_slab + gas_CO</code></td>
+<td>desorption energy</td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td><code>04_coadsorbed/O_star_H_star</code></td>
+<td>O and H on slab</td>
+<td><code>OH_star</code> with same slab convention</td>
+<td>hydrogenation energy</td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td><code>04_coadsorbed/OH_star_H_star</code></td>
+<td>OH and H on slab</td>
+<td><code>H2O_star</code> with same slab convention</td>
+<td>hydrogenation energy</td>
+</tr>
+<tr class="odd">
+<td><code>R7</code></td>
+<td><code>03_adsorption/H2O_star</code></td>
+<td>H2O adsorbed on slab</td>
+<td><code>clean_slab + gas_H2O</code></td>
+<td>desorption energy</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="この章の要点" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">12</span> この章の要点</h2>
 <ul>
 <li>microkinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。</li>
 <li>Fe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。</li>
+<li>VASP 計算では、clean slab、gas molecule、単独吸着、共吸着、NEB endpoint を明確に分けて準備する。</li>
 <li>反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。</li>
 <li>気相分子、吸着種、遷移状態では熱補正の扱いが異なる。</li>
 <li>逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。</li>
 <li>COOH<em>、HCOO</em>、FeCx-FT は重要な将来拡張候補だが、本 MVP の R1-R7 には追加しない。</li>
 </ul>
 </section>
-<section id="確認問題" class="level2" data-number="12">
-<h2 data-number="12" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">12</span> 確認問題</h2>
+<section id="確認問題" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">13</span> 確認問題</h2>
 <ol type="1">
 <li>microkinetic model で反応エネルギーだけでなく活性化障壁が必要になる理由を説明せよ。</li>
 <li><code>R3: CO2* + * &lt;=&gt; CO* + O*</code> に必要な DFT 計算を列挙せよ。</li>
@@ -613,13 +975,19 @@ k_{j,r}(T)
 <li>COOH* と HCOO* を本 MVP に含めない理由を説明せよ。</li>
 </ol>
 </section>
-<section id="計算計画演習" class="level2" data-number="13">
-<h2 data-number="13" class="anchored" data-anchor-id="計算計画演習"><span class="header-section-number">13</span> 計算計画演習</h2>
+<section id="計算計画演習" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="計算計画演習"><span class="header-section-number">14</span> 計算計画演習</h2>
 <ol type="1">
 <li>Fe3O4(001) のある termination を仮定し、<code>CO2*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の吸着構造探索計画を作成せよ。</li>
 <li>R1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。</li>
 <li>ある素反応について <span class="math inline">\(\Delta G_j(T)\)</span> と <span class="math inline">\(k_{j,f}(T)\)</span> が与えられたとき、熱力学整合性を満たす <span class="math inline">\(k_{j,r}(T)\)</span> の計算手順を書け。</li>
 </ol>
+</section>
+<section id="関連演習" class="level2" data-number="15">
+<h2 data-number="15" class="anchored" data-anchor-id="関連演習"><span class="header-section-number">15</span> 関連演習</h2>
+<ul>
+<li><a href="../exercises/01_vasp_rwgs_structure_set.html">VASP計算演習: Fe3O4-RWGSで計算すべき構造セット</a></li>
+</ul>
 
 
 </section>

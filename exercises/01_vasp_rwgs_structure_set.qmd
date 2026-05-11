@@ -1,0 +1,170 @@
+---
+title: "VASP計算演習: Fe3O4-RWGSで計算すべき構造セット"
+---
+
+この演習では、Fe3O4-RWGS 最小モデル R1-R7 に対して、VASP などの周期境界条件 DFT 計算で **どの構造を計算すべきか** を具体的に整理する。
+
+このページは VASP を自動実行するものではない。目的は、microkinetic model に必要なエネルギーを得るために、計算ディレクトリ、構造、比較すべき状態、NEB 計算候補を自分で設計できるようになることである。
+
+本演習では Fe3O4 を RWGS-active phase として扱う。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は扱わない。
+
+## 学習目標
+
+この演習を終えると、次のことができるようになる。
+
+- Fe3O4-RWGS R1-R7 に必要な VASP 計算構造を列挙する。
+- clean slab、gas molecule、adsorbed state、coadsorbed state、NEB endpoint を区別する。
+- 各構造が、吸着エネルギー、反応エネルギー、活性化障壁、熱力学整合性のどれに使われるかを説明する。
+- 計算ディレクトリを、あとから microkinetic model に接続しやすい形で設計する。
+
+## 前提条件
+
+まず、ひとつの Fe3O4 表面モデルを固定する。
+
+| Item | この演習で決めること |
+|---|---|
+| surface orientation | 例: Fe3O4(001), Fe3O4(011), Fe3O4(111) のどれか |
+| termination | 採用した終端を明記する |
+| slab model | cell size、slab thickness、vacuum thickness、固定層 |
+| magnetic setup | Fe の初期磁気モーメント、spin polarization |
+| DFT setup | functional、Hubbard U、ENCUT、KPOINTS、収束条件 |
+
+以後の全構造は、同じ slab cell、同じ固定層、同じ DFT 条件で比較する。条件を途中で変えると、同じエネルギーセットとして扱えない。
+
+## 推奨ディレクトリ構成
+
+次のようなディレクトリ構成を作る。
+
+```text
+vasp/
+├── 00_bulk_fe3o4/
+├── 01_surface/
+│   └── clean_slab/
+├── 02_gas/
+│   ├── CO2/
+│   ├── H2/
+│   ├── CO/
+│   └── H2O/
+├── 03_adsorption/
+│   ├── CO2_star/
+│   ├── H_star/
+│   ├── CO_star/
+│   ├── O_star/
+│   ├── OH_star/
+│   └── H2O_star/
+├── 04_coadsorbed/
+│   ├── 2H_star/
+│   ├── CO_star_O_star/
+│   ├── O_star_H_star/
+│   └── OH_star_H_star/
+└── 05_neb/
+    ├── R2_H2_dissociation/
+    ├── R3_CO2_dissociation/
+    ├── R5_O_hydrogenation/
+    └── R6_OH_hydrogenation/
+```
+
+各ディレクトリには、少なくとも `POSCAR`, `INCAR`, `KPOINTS`, `POTCAR` を置く。実行後は `OUTCAR`, `OSZICAR`, `CONTCAR`, `vasprun.xml` などを保存し、どの構造からどのエネルギーを読んだかを記録する。
+
+## Step 1: 基準構造を計算する
+
+最初に、すべてのエネルギー差の基準になる構造を計算する。
+
+| Structure ID | 計算対象 | 目的 |
+|---|---|---|
+| `bulk_fe3o4` | bulk Fe3O4 | 格子定数、磁気状態、DFT+U 条件の確認 |
+| `clean_slab` | clean Fe3O4 surface | すべての吸着エネルギーの表面基準 |
+| `gas_CO2` | isolated CO2 | R1, R3, RWGS全体の気相基準 |
+| `gas_H2` | isolated H2 | R2, R5, R6 の水素基準 |
+| `gas_CO` | isolated CO | R4 の脱離基準 |
+| `gas_H2O` | isolated H2O | R7 の脱離基準 |
+
+気相分子は十分大きな box で計算する。slab 計算と gas molecule 計算では周期境界、k点、エントロピー補正の扱いが異なるため、電子エネルギーと熱補正を分けて記録する。
+
+## Step 2: 単独吸着構造を計算する
+
+次に、MVP の表面種をそれぞれ clean slab 上に置いて最適化する。
+
+| Structure ID | 表面種 | 対応する役割 |
+|---|---|---|
+| `CO2_star` | `CO2*` | R1 の生成物、R3 の反応物 |
+| `H_star` | `H*` | R2 の生成物、R5/R6 の水素源 |
+| `CO_star` | `CO*` | R3 の生成物、R4 の反応物 |
+| `O_star` | `O*` | R3 の生成物、R5 の反応物 |
+| `OH_star` | `OH*` | R5 の生成物、R6 の反応物 |
+| `H2O_star` | `H2O*` | R6 の生成物、R7 の反応物 |
+
+各吸着種について、ひとつの初期構造だけで判断しない。少なくとも複数の候補サイトを作り、最適化後のエネルギーと構造を比較する。
+
+たとえば `CO2_star` では、次を試す。
+
+- Fe site への end-on 配位
+- O site 近傍での bent CO2 配置
+- carbonate-like に近い配置
+- 反応経路上で `CO* + O*` へつながりそうな配置
+
+ただし、この MVP では `COOH*` と `HCOO*` は明示的な反応種として追加しない。これらは将来、direct / COOH / HCOO 経路を比較する拡張計算で扱う。
+
+## Step 3: 共吸着構造を計算する
+
+R2, R3, R5, R6 では、単独吸着種だけでは反応前後の表面サイト数や配置をそろえにくい。そこで、共吸着構造を作る。
+
+| Structure ID | 構造 | 主に使う反応 |
+|---|---|---|
+| `2H_star` | 同じ slab 上に `H*` を2つ置く | R2 |
+| `CO_star_O_star` | `CO*` と `O*` を同じ slab 上に置く | R3 |
+| `O_star_H_star` | `O*` と `H*` を同じ slab 上に置く | R5 |
+| `OH_star_H_star` | `OH*` と `H*` を同じ slab 上に置く | R6 |
+
+重要なのは、反応物側と生成物側で同じ supercell を使うことである。たとえば R5 では、`O_star_H_star` と `OH_star + clean_slab` を比較するのではなく、同じ cell 内で `O* + H*` と `OH* + *` を表現する。
+
+## Step 4: R1-R7に必要な構造セット
+
+各素反応について、最低限必要な構造を次にまとめる。
+
+| Reaction ID | Elementary step | 最低限計算する構造 | 得たい量 |
+|---|---|---|---|
+| `R1` | `CO2 + * <=> CO2*` | `clean_slab`, `gas_CO2`, `CO2_star` | CO2 adsorption energy |
+| `R2` | `H2 + 2* <=> 2H*` | `clean_slab`, `gas_H2`, `2H_star` | H2 dissociative adsorption energy |
+| `R3` | `CO2* + * <=> CO* + O*` | `CO2_star`, `CO_star_O_star` | CO2 dissociation energy |
+| `R4` | `CO* <=> CO + *` | `CO_star`, `gas_CO`, `clean_slab` | CO desorption energy |
+| `R5` | `O* + H* <=> OH* + *` | `O_star_H_star`, `OH_star` with same slab convention | O* hydrogenation energy |
+| `R6` | `OH* + H* <=> H2O* + *` | `OH_star_H_star`, `H2O_star` with same slab convention | OH* hydrogenation energy |
+| `R7` | `H2O* <=> H2O + *` | `H2O_star`, `gas_H2O`, `clean_slab` | H2O desorption energy |
+
+R5 と R6 では、空サイト `*` を含む側と H を含む側で supercell 内の原子数がそろうように、反応物・生成物の定義を慎重に作る。
+
+## Step 5: NEB計算として準備する構造
+
+反応速度定数に必要な活性化障壁を得るには、次の NEB 計算を優先する。
+
+| NEB ID | Initial state | Final state | 目的 |
+|---|---|---|---|
+| `R2_H2_dissociation` | H2 が表面近傍にある構造 | `2H_star` | H-H 切断障壁 |
+| `R3_CO2_dissociation` | `CO2_star` | `CO_star_O_star` | C-O 切断障壁 |
+| `R5_O_hydrogenation` | `O_star_H_star` | `OH_star` with regenerated `*` | O-H 形成障壁 |
+| `R6_OH_hydrogenation` | `OH_star_H_star` | `H2O_star` with regenerated `*` | H2O* 形成障壁 |
+
+NEB では、initial state と final state の slab cell、固定層、原子数、磁気設定を一致させる。終状態を別々の単独吸着計算から雑に組み合わせると、NEB の経路として不自然になることがある。
+
+## 提出物
+
+この演習では、実際の VASP 計算ファイル一式を作る前に、次の表を完成させる。
+
+| Reaction ID | Directory | POSCARの内容 | 比較する相手 | 得る量 | 優先度 |
+|---|---|---|---|---|---|
+| `R1` | `03_adsorption/CO2_star` | CO2 adsorbed on clean slab | `clean_slab + gas_CO2` | adsorption energy | high |
+| `R2` | `04_coadsorbed/2H_star` | two H atoms on slab | `clean_slab + gas_H2` | dissociative adsorption energy | high |
+| `R3` | `04_coadsorbed/CO_star_O_star` | CO and O on slab | `CO2_star` | dissociation energy | high |
+| `R4` | `03_adsorption/CO_star` | CO adsorbed on slab | `clean_slab + gas_CO` | desorption energy | medium |
+| `R5` | `04_coadsorbed/O_star_H_star` and `03_adsorption/OH_star` | O+H and OH states | same-cell product/reactant | hydrogenation energy | high |
+| `R6` | `04_coadsorbed/OH_star_H_star` and `03_adsorption/H2O_star` | OH+H and H2O states | same-cell product/reactant | hydrogenation energy | high |
+| `R7` | `03_adsorption/H2O_star` | H2O adsorbed on slab | `clean_slab + gas_H2O` | desorption energy | medium |
+
+## 確認問題
+
+1. なぜ `clean_slab` の計算がすべての吸着エネルギーの基準になるのか説明せよ。
+2. `R3` の反応エネルギーを得るために、`CO_star` と `O_star` を別々の slab で計算するだけでは不十分な理由を説明せよ。
+3. `R5` と `R6` で、同じ supercell と同じ固定層を使うべき理由を説明せよ。
+4. `R2`, `R3`, `R5`, `R6` を NEB 優先にする理由を説明せよ。
+5. COOH* と HCOO* をこの演習に含めない理由を、MVP の範囲と関連づけて説明せよ。
