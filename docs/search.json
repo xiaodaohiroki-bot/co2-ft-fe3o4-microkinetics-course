@@ -101,298 +101,6 @@
     ]
   },
   {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html",
-    "href": "lessons/02_fe3o4_rwgs_network.html",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "",
-    "text": "この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。\n本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#学習目標",
-    "href": "lessons/02_fe3o4_rwgs_network.html#学習目標",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "1 学習目標",
-    "text": "1 学習目標\nこの章を終えると、次のことができるようになる。\n\nFe3O4-RWGS MVP で使う気相種と表面種を列挙する。\nR1 から R7 までの最小素反応機構を説明する。\n各素反応の Type と Role in the model を区別する。\n表面種 *, CO2*, H*, CO*, O*, OH*, H2O* の役割を説明する。\nこの最小モデルで説明できる範囲と、説明できない範囲を区別する。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
-    "href": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "2 この章で扱うモデル範囲",
-    "text": "2 この章で扱うモデル範囲\nこの章で扱う総括反応は RWGS である。\nCO2 + H2 &lt;=&gt; CO + H2O\nLaTeX では次のように書く。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nモデルは単一種類の表面サイト * を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
-    "href": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "3 気相種リスト",
-    "text": "3 気相種リスト\nMVP で扱う気相種は4つだけである。\n\n\n\nSpecies\n役割\n\n\n\n\nCO2\n反応物。RWGS の炭素源および酸素源。\n\n\nH2\n反応物。表面水素 H* の供給源。\n\n\nCO\n生成物。Fe3O4-RWGS MVP で追跡する主な炭素含有生成物。\n\n\nH2O\n生成物。表面酸素の除去先。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
-    "href": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "4 表面種リスト",
-    "text": "4 表面種リスト\nMVP で扱う表面種は次の7つである。\n\n\n\n\n\n\n\nSurface species\n役割\n\n\n\n\n*\n空の表面サイト。すべての吸着・脱離・表面反応の site balance に入る。\n\n\nCO2*\n吸着 CO2。CO2 活性化の入口。\n\n\nH*\n吸着水素。O* と OH* の水素化に使われる。\n\n\nCO*\n吸着 CO。CO desorption を通じて気相 CO になる。\n\n\nO*\n表面酸素。CO2* の解離で生じ、OH* へ水素化される。\n\n\nOH*\n表面ヒドロキシ種。H* と反応して H2O* になる。\n\n\nH2O*\n吸着水。脱離して気相 H2O になる。\n\n\n\nこの表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。\n\n4.1 COOH* と HCOO* を含めない理由\nRWGS では、CO2* の直接解離経路だけでなく、COOH* を経由する carboxyl 経路や、HCOO* を経由する formate 経路も候補になり得る。\n本 MVP では、Fe3O4-RWGS の direct dissociation / redox 型の最小モデルを作ることを目的とするため、COOH* と HCOO* は明示的な表面種として含めない。\nしたがって、本章の反応機構は COOH* や HCOO* が不要であると断定するものではなく、最小モデルとして意図的に省略しているものである。これらの中間体は、将来の拡張モデルで direct / COOH / HCOO 経路を比較するときに追加する。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
-    "href": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "5 7ステップ最小反応機構",
-    "text": "5 7ステップ最小反応機構\nFe3O4-RWGS MVP では、反応 ID を必ず R1 から R7 とする。表記は以後も変えない。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\nType\nRole in the model\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nAdsorption / desorption\nCO2 を表面へ取り込む入口。\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nDissociative adsorption / recombination\nH2 から表面水素 H* を作る。\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nSurface dissociation / recombination\n吸着 CO2 を CO* と O* に分ける。\n\n\nR4\nCO* &lt;=&gt; CO + *\nDesorption / adsorption\n気相 CO を生成する出口。\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nSurface hydrogenation / dehydrogenation\n表面酸素 O* を OH* に変換する。\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nSurface hydrogenation / dehydrogenation\nOH* を H2O* に変換する。\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nDesorption / adsorption\n気相 H2O を生成し、空サイトを再生する。\n\n\n\n同じ7ステップを LaTeX で書くと次のようになる。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\n\\[\n\\mathrm{R2:\\ H_2 + 2* \\rightleftharpoons 2H*}\n\\]\n\\[\n\\mathrm{R3:\\ CO_2* + * \\rightleftharpoons CO* + O*}\n\\]\n\\[\n\\mathrm{R4:\\ CO* \\rightleftharpoons CO + *}\n\\]\n\\[\n\\mathrm{R5:\\ O* + H* \\rightleftharpoons OH* + *}\n\\]\n\\[\n\\mathrm{R6:\\ OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\n\\[\n\\mathrm{R7:\\ H_2O* \\rightleftharpoons H_2O + *}\n\\]",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
-    "href": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "6 各表面種の役割",
-    "text": "6 各表面種の役割\n* は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]\nここで \\(\\theta_{\\mathrm{CO_2}}\\) は CO2* の被覆率を表す。同様に、\\(\\theta_{\\mathrm{H}}\\) は H*、\\(\\theta_{\\mathrm{CO}}\\) は CO*、\\(\\theta_{\\mathrm{O}}\\) は O*、\\(\\theta_{\\mathrm{OH}}\\) は OH*、\\(\\theta_{\\mathrm{H_2O}}\\) は H2O* の被覆率を表す。\nCO2* は CO2 activation の入口である。R1 で生成し、R3 で CO* と O* に変換される。\nH* は H2 dissociation により生成する表面水素である。R5 と R6 で表面酸素種を水素化する。\nCO* は CO 生成直前の表面中間体である。R4 で脱離して CO になる。\nO* は CO2* の解離で生じる表面酸素である。O* が蓄積すると空サイトが減るため、R5 と R6 を通じた水素化と水生成が重要になる。\nOH* は O* の水素化で生じる表面ヒドロキシ種である。さらに H* と反応して H2O* になる。\nH2O* は水生成直前の吸着水である。R7 で脱離して気相 H2O になり、空サイト * を再生する。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
-    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "7 この最小モデルで説明できること",
-    "text": "7 この最小モデルで説明できること\nこの最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。\n\nCO2 adsorption と CO2 activation\nH2 dissociation による表面水素供給\nCO* の脱離による CO 生成\nO* から OH*、H2O* を経た水生成\nsite balance を満たす steady-state surface coverage\nRWGS 範囲での CO 生成速度と H2O 生成速度\n\nこの範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
-    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "8 この最小モデルで説明できないこと",
-    "text": "8 この最小モデルで説明できないこと\nこのモデルは、次の現象を説明するためのものではない。\n\nCH4 生成の詳細機構\nC2+ hydrocarbon formation\nC-C coupling\nchain growth と chain termination\nASF distribution\nFe3O4 から FeCx への dynamic phase transformation\nFeCx site 上の FT reaction network\nCOOH* や HCOO* を含む competing pathway の比較\n\nこれらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
-    "href": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "9 C2+生成に関する注意",
-    "text": "9 C2+生成に関する注意\nC2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。\nC2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
-    "href": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "10 この章の要点",
-    "text": "10 この章の要点\n\nFe3O4-RWGS MVP では、気相種を CO2, H2, CO, H2O に限定する。\n表面種は *, CO2*, H*, CO*, O*, OH*, H2O* の7種類である。\n素反応は R1 から R7 の7ステップだけである。\nこのモデルは RWGS による CO と H2O の生成を扱う。\nC2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#確認問題",
-    "href": "lessons/02_fe3o4_rwgs_network.html#確認問題",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "11 確認問題",
-    "text": "11 確認問題\n\nFe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* が site balance を満たす理由を説明せよ。\nO*, OH*, H2O* はそれぞれ RWGS model の中でどのような役割を持つか。\nこの最小モデルで C2+生成を説明できない理由を述べよ。\nR7 が空サイト * の再生にどのように関わるか説明せよ。",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "lessons/02_fe3o4_rwgs_network.html#計算演習",
-    "href": "lessons/02_fe3o4_rwgs_network.html#計算演習",
-    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
-    "section": "12 計算演習",
-    "text": "12 計算演習\n\nR1 から R7 について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。\nR3, R5, R6 について、C、H、O の elemental mass balance を確認せよ。\n任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。\n\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]",
-    "crumbs": [
-      "Lessons",
-      "Fe3O4-RWGS Network"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "CO2-FT / Fe3O4 Microkinetics Course",
-    "section": "",
-    "text": "このサイトは、CO2 hydrogenation と Fe 系触媒を題材に、microkinetic model の作り方を学ぶための Quarto 教材である。最初の実装対象は Fe3O4 上の RWGS (reverse water-gas shift) 最小モデル に限定する。\nFe3O4 はここでは主に RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明するとは主張しない。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は、将来拡張として明示的に分けて扱う。",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#教材の目的",
-    "href": "index.html#教材の目的",
-    "title": "CO2-FT / Fe3O4 Microkinetics Course",
-    "section": "1 教材の目的",
-    "text": "1 教材の目的\nこの教材の目的は、反応機構を「もっともらしい図」として眺めるだけでなく、保存則と速度式に落とし込める形で記述することである。\n具体的には、次の流れを扱う。\n\ngas species と surface species を定義する。\nelementary step を反応 ID 付きで書く。\nsite balance と elemental mass balance を確認する。\nmass-action rate expression を作る。\nsteady-state surface coverage を数値的に解く。\nCO 生成速度や H2O 生成速度を、RWGS の範囲で解釈する。",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#対象読者",
-    "href": "index.html#対象読者",
-    "title": "CO2-FT / Fe3O4 Microkinetics Course",
-    "section": "2 対象読者",
-    "text": "2 対象読者\n想定読者は、触媒反応工学、表面化学、DFT 計算、反応速度論に関心を持つ大学院生、研究者、技術者である。\nPython と数値計算に慣れていると進めやすいが、最初の教材では式の意味、保存則、実装の対応関係を丁寧に確認する。",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#mvp-の範囲",
-    "href": "index.html#mvp-の範囲",
-    "title": "CO2-FT / Fe3O4 Microkinetics Course",
-    "section": "3 MVP の範囲",
-    "text": "3 MVP の範囲\nMVP では、次の総括反応を対象にする。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\n扱う表面種は、最小 Fe3O4-RWGS model に必要なものに限定する。\n\n*\nCO2*\nH*\nCO*\nO*\nOH*\nH2O*\n\nこの段階では、FeCx 上の Fischer-Tropsch chain growth、C-C coupling、ASF 分布、相変化 kinetics は実装しない。必要な文献や機構上の根拠が未整理の箇所は [citation needed] として残す。",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#入口",
-    "href": "index.html#入口",
-    "title": "CO2-FT / Fe3O4 Microkinetics Course",
-    "section": "4 入口",
-    "text": "4 入口\n\nRoadmap\n概要: Fe3O4-RWGS マイクロキネティクス\nFe3O4-RWGS の最小反応ネットワーク\n速度式と保存則",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html",
-    "href": "lessons/01_overview.html",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "",
-    "text": "この章では、CO2 hydrogenation を Fe 系触媒で考えるときの全体像を整理する。特に、CO2 Fischer-Tropsch (CO2-FT) を RWGS (reverse water-gas shift) と FT (Fischer-Tropsch synthesis) の組み合わせとして見る理由を説明し、この教材の MVP を Fe3O4 上の RWGS 最小モデルに限定する意味を明確にする。\nここで重要なのは、Fe3O4、Fe metal、Fe carbide (FeCx) を同じ役割の相として扱わないことである。本教材の初期モデルでは、Fe3O4 を RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明できるとは主張しない。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#学習目標",
-    "href": "lessons/01_overview.html#学習目標",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "1 学習目標",
-    "text": "1 学習目標\nこの章を終えると、次のことを説明できるようになる。\n\nCO2-FT を CO2 hydrogenation の一部として位置づける。\nCO2 hydrogenation を RWGS + FT として分けて考える理由を説明する。\nFe3O4、Fe metal、Fe carbide 相の役割を区別する。\nこの教材の MVP を Fe3O4-RWGS に限定する理由を説明する。\nCO2転化率、CO選択率、CH4選択率、C2+選択率を炭素基準で定義する。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#co2-ftとは何か",
-    "href": "lessons/01_overview.html#co2-ftとは何か",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "2 CO2-FTとは何か",
-    "text": "2 CO2-FTとは何か\nCO2-FT は、CO2 と H2 から炭化水素を合成する反応群を指す。一般には、CO2 が直接長鎖炭化水素へ変換される単一反応としてではなく、複数の反応過程が結合したものとして扱う方が理解しやすい。\n最も基本的な入口は RWGS である。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nこの反応で生じた CO は、条件と触媒相が適切であれば FT 型の炭化水素生成へ進む可能性がある。ただし、RWGS と FT は同じ活性点、同じ相、同じ律速過程で進むとは限らない。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#co2水素化を-rwgs-ft-として見る理由",
-    "href": "lessons/01_overview.html#co2水素化を-rwgs-ft-として見る理由",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "3 CO2水素化を RWGS + FT として見る理由",
-    "text": "3 CO2水素化を RWGS + FT として見る理由\nCO2 hydrogenation では、生成物として CO、CH4、C2+ hydrocarbons、H2O などが観測され得る。これらを一つの総括反応だけで扱うと、どの過程が CO2 活性化を支配し、どの過程が炭素鎖成長を支配しているのかが見えにくくなる。\nそこで、まず次のように分けて考える。\n\n\n\n過程\n主な役割\n代表的な生成物\n\n\n\n\nRWGS\nCO2 から CO を作る\nCO, H2O\n\n\nFT\nCO 由来の C1 種から炭化水素を作る\nCH4, C2+ hydrocarbons\n\n\n\nこの分解は、モデル化にも有効である。RWGS の microkinetic model では、CO2 adsorption、H2 dissociation、O removal、CO desorption などを明示する。一方、FT model では、C1 intermediate、C-C coupling、chain growth、chain termination などが必要になる。\n本教材では、最初に RWGS 部分だけを扱う。FT 部分は将来拡張として扱い、MVP には含めない。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#fe3o4fe金属fe-carbide相の役割分担",
-    "href": "lessons/01_overview.html#fe3o4fe金属fe-carbide相の役割分担",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "4 Fe3O4、Fe金属、Fe carbide相の役割分担",
-    "text": "4 Fe3O4、Fe金属、Fe carbide相の役割分担\nFe 系触媒は反応条件下で複数の相を取り得る。ここでは、教材上の役割を次のように分ける。\n\n\n\n\n\n\n\n\n相\n教材での扱い\n注意点\n\n\n\n\nFe3O4\nMVP では RWGS-active phase として扱う\nCO2 activation と H2O 生成に注目する\n\n\nFe metal\n将来拡張で扱う可能性がある\n還元状態、炭化への入口として重要になり得る [citation needed]\n\n\nFe carbide (FeCx)\nFeCx-FT の将来拡張で扱う\nC-C coupling や chain growth を議論するには別モデルが必要\n\n\n\nこの整理は、Fe3O4 の重要性を小さく見るためではない。むしろ、Fe3O4 が担う可能性のある RWGS と、FeCx が担う可能性のある FT を分けることで、モデルの仮定を検証しやすくするためである。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#なぜmvpをfe3o4-rwgsに限定するのか",
-    "href": "lessons/01_overview.html#なぜmvpをfe3o4-rwgsに限定するのか",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "5 なぜMVPをFe3O4-RWGSに限定するのか",
-    "text": "5 なぜMVPをFe3O4-RWGSに限定するのか\nMVP を Fe3O4-RWGS に限定する理由は3つある。\n第一に、RWGS は CO2 hydrogenation の入口として重要であり、CO2、H2、CO、H2O だけでも mass balance と site balance の訓練ができる。\n第二に、Fe3O4 上の RWGS 最小モデルは、表面被覆率、空サイト、吸着・脱離、酸素除去を含むため、microkinetic model の基本要素を学ぶのに適している。\n第三に、C2+ 生成や ASF 分布を扱うには、FeCx 相、C-C coupling、chain growth、termination などの別の仮定が必要になる。これらを最初から混ぜると、どの仮定がどの結果を生んだのかが分かりにくくなる。\nしたがって、本教材の初期段階では Fe3O4-RWGS の最小7ステップ機構を扱う。FeCx-FT、C2+ selectivity、ASF distribution、dynamic phase transformation は、機構・パラメータ・検証方法を分けた将来拡張とする。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#反応指標の定義",
-    "href": "lessons/01_overview.html#反応指標の定義",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "6 反応指標の定義",
-    "text": "6 反応指標の定義\nここでは、炭素基準でよく使う指標を定義する。入口 CO2 のモル流量を \\(F_{\\mathrm{CO_2,in}}\\)、出口 CO2 のモル流量を \\(F_{\\mathrm{CO_2,out}}\\) とする。\n\n6.1 CO2転化率\nCO2転化率 \\(X_{\\mathrm{CO_2}}\\) は、入口 CO2 のうち反応で消費された割合である。\n\\[\nX_{\\mathrm{CO_2}}\n= \\frac{F_{\\mathrm{CO_2,in}} - F_{\\mathrm{CO_2,out}}}\n{F_{\\mathrm{CO_2,in}}}\n\\]\n\n\n6.2 炭素基準の選択率\n炭素数 \\(n_i\\) を持つ炭素含有生成物 \\(i\\) の出口モル流量を \\(F_i\\) とすると、炭素基準の選択率 \\(S_i\\) は次のように書ける。\n\\[\nS_i\n= \\frac{n_i F_i}\n{\\sum_j n_j F_j}\n\\]\nここで和は、CO、CH4、C2+ hydrocarbons など、炭素を含む生成物全体について取る。\n\n\n6.3 CO選択率\nCO は炭素数1の生成物なので、CO選択率は次のように表せる。\n\\[\nS_{\\mathrm{CO}}\n= \\frac{F_{\\mathrm{CO}}}\n{\\sum_j n_j F_j}\n\\]\nFe3O4-RWGS MVP では、主にこの CO 生成を追跡する。\n\n\n6.4 CH4選択率\nCH4 も炭素数1の生成物なので、CH4選択率は次のように表せる。\n\\[\nS_{\\mathrm{CH_4}}\n= \\frac{F_{\\mathrm{CH_4}}}\n{\\sum_j n_j F_j}\n\\]\nただし、CH4 生成を説明するには RWGS だけでは不十分であり、追加の C1 hydrogenation model が必要になる。\n\n\n6.5 C2+選択率\nC2+選択率は、炭素数2以上の炭化水素への炭素配分を表す。\n\\[\nS_{\\mathrm{C2+}}\n= \\frac{\\sum_{i \\in \\mathrm{C2+}} n_i F_i}\n{\\sum_j n_j F_j}\n\\]\nC2+選択率をモデル化するには、C-C coupling、chain growth、chain termination を含む FeCx-FT model が必要である。本教材の MVP では、C2+生成は実装しない。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#この章の要点",
-    "href": "lessons/01_overview.html#この章の要点",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "7 この章の要点",
-    "text": "7 この章の要点\n\nCO2-FT は、RWGS と FT を分けて考えると機構を整理しやすい。\nFe3O4 は MVP では RWGS-active phase として扱う。\nFe3O4 単独で C2+ 炭化水素生成を説明するとは書かない。\nFeCx-FT、C2+生成、ASF分布、動的相変化は将来拡張として扱う。\n反応指標は、CO2転化率と炭素基準選択率を分けて定義する。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "lessons/01_overview.html#確認問題",
-    "href": "lessons/01_overview.html#確認問題",
-    "title": "CO2-FTとFe系触媒の全体像",
-    "section": "8 確認問題",
-    "text": "8 確認問題\n\nCO2 hydrogenation を RWGS + FT として分けて考える利点を説明せよ。\n本教材の MVP で Fe3O4 をどのような相として扱うか説明せよ。\nFe3O4-RWGS model だけでは C2+選択率を説明できない理由を述べよ。\nCO2転化率 \\(X_{\\mathrm{CO_2}}\\) の定義式を書き、各記号の意味を説明せよ。\n炭素基準の \\(S_{\\mathrm{C2+}}\\) を定義し、CH4選択率との違いを説明せよ。",
-    "crumbs": [
-      "Lessons",
-      "Overview"
-    ]
-  },
-  {
     "objectID": "lessons/03_rate_equations.html",
     "href": "lessons/03_rate_equations.html",
     "title": "速度式・サイトバランス・熱力学整合性",
@@ -569,6 +277,452 @@
     ]
   },
   {
+    "objectID": "lessons/01_overview.html",
+    "href": "lessons/01_overview.html",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "",
+    "text": "この章では、CO2 hydrogenation を Fe 系触媒で考えるときの全体像を整理する。特に、CO2 Fischer-Tropsch (CO2-FT) を RWGS (reverse water-gas shift) と FT (Fischer-Tropsch synthesis) の組み合わせとして見る理由を説明し、この教材の MVP を Fe3O4 上の RWGS 最小モデルに限定する意味を明確にする。\nここで重要なのは、Fe3O4、Fe metal、Fe carbide (FeCx) を同じ役割の相として扱わないことである。本教材の初期モデルでは、Fe3O4 を RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明できるとは主張しない。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#学習目標",
+    "href": "lessons/01_overview.html#学習目標",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "1 学習目標",
+    "text": "1 学習目標\nこの章を終えると、次のことを説明できるようになる。\n\nCO2-FT を CO2 hydrogenation の一部として位置づける。\nCO2 hydrogenation を RWGS + FT として分けて考える理由を説明する。\nFe3O4、Fe metal、Fe carbide 相の役割を区別する。\nこの教材の MVP を Fe3O4-RWGS に限定する理由を説明する。\nCO2転化率、CO選択率、CH4選択率、C2+選択率を炭素基準で定義する。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#co2-ftとは何か",
+    "href": "lessons/01_overview.html#co2-ftとは何か",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "2 CO2-FTとは何か",
+    "text": "2 CO2-FTとは何か\nCO2-FT は、CO2 と H2 から炭化水素を合成する反応群を指す。一般には、CO2 が直接長鎖炭化水素へ変換される単一反応としてではなく、複数の反応過程が結合したものとして扱う方が理解しやすい。\n最も基本的な入口は RWGS である。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nこの反応で生じた CO は、条件と触媒相が適切であれば FT 型の炭化水素生成へ進む可能性がある。ただし、RWGS と FT は同じ活性点、同じ相、同じ律速過程で進むとは限らない。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#co2水素化を-rwgs-ft-として見る理由",
+    "href": "lessons/01_overview.html#co2水素化を-rwgs-ft-として見る理由",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "3 CO2水素化を RWGS + FT として見る理由",
+    "text": "3 CO2水素化を RWGS + FT として見る理由\nCO2 hydrogenation では、生成物として CO、CH4、C2+ hydrocarbons、H2O などが観測され得る。これらを一つの総括反応だけで扱うと、どの過程が CO2 活性化を支配し、どの過程が炭素鎖成長を支配しているのかが見えにくくなる。\nそこで、まず次のように分けて考える。\n\n\n\n過程\n主な役割\n代表的な生成物\n\n\n\n\nRWGS\nCO2 から CO を作る\nCO, H2O\n\n\nFT\nCO 由来の C1 種から炭化水素を作る\nCH4, C2+ hydrocarbons\n\n\n\nこの分解は、モデル化にも有効である。RWGS の microkinetic model では、CO2 adsorption、H2 dissociation、O removal、CO desorption などを明示する。一方、FT model では、C1 intermediate、C-C coupling、chain growth、chain termination などが必要になる。\n本教材では、最初に RWGS 部分だけを扱う。FT 部分は将来拡張として扱い、MVP には含めない。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#fe3o4fe金属fe-carbide相の役割分担",
+    "href": "lessons/01_overview.html#fe3o4fe金属fe-carbide相の役割分担",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "4 Fe3O4、Fe金属、Fe carbide相の役割分担",
+    "text": "4 Fe3O4、Fe金属、Fe carbide相の役割分担\nFe 系触媒は反応条件下で複数の相を取り得る。ここでは、教材上の役割を次のように分ける。\n\n\n\n\n\n\n\n\n相\n教材での扱い\n注意点\n\n\n\n\nFe3O4\nMVP では RWGS-active phase として扱う\nCO2 activation と H2O 生成に注目する\n\n\nFe metal\n将来拡張で扱う可能性がある\n還元状態、炭化への入口として重要になり得る [citation needed]\n\n\nFe carbide (FeCx)\nFeCx-FT の将来拡張で扱う\nC-C coupling や chain growth を議論するには別モデルが必要\n\n\n\nこの整理は、Fe3O4 の重要性を小さく見るためではない。むしろ、Fe3O4 が担う可能性のある RWGS と、FeCx が担う可能性のある FT を分けることで、モデルの仮定を検証しやすくするためである。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#なぜmvpをfe3o4-rwgsに限定するのか",
+    "href": "lessons/01_overview.html#なぜmvpをfe3o4-rwgsに限定するのか",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "5 なぜMVPをFe3O4-RWGSに限定するのか",
+    "text": "5 なぜMVPをFe3O4-RWGSに限定するのか\nMVP を Fe3O4-RWGS に限定する理由は3つある。\n第一に、RWGS は CO2 hydrogenation の入口として重要であり、CO2、H2、CO、H2O だけでも mass balance と site balance の訓練ができる。\n第二に、Fe3O4 上の RWGS 最小モデルは、表面被覆率、空サイト、吸着・脱離、酸素除去を含むため、microkinetic model の基本要素を学ぶのに適している。\n第三に、C2+ 生成や ASF 分布を扱うには、FeCx 相、C-C coupling、chain growth、termination などの別の仮定が必要になる。これらを最初から混ぜると、どの仮定がどの結果を生んだのかが分かりにくくなる。\nしたがって、本教材の初期段階では Fe3O4-RWGS の最小7ステップ機構を扱う。FeCx-FT、C2+ selectivity、ASF distribution、dynamic phase transformation は、機構・パラメータ・検証方法を分けた将来拡張とする。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#反応指標の定義",
+    "href": "lessons/01_overview.html#反応指標の定義",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "6 反応指標の定義",
+    "text": "6 反応指標の定義\nここでは、炭素基準でよく使う指標を定義する。入口 CO2 のモル流量を \\(F_{\\mathrm{CO_2,in}}\\)、出口 CO2 のモル流量を \\(F_{\\mathrm{CO_2,out}}\\) とする。\n\n6.1 CO2転化率\nCO2転化率 \\(X_{\\mathrm{CO_2}}\\) は、入口 CO2 のうち反応で消費された割合である。\n\\[\nX_{\\mathrm{CO_2}}\n= \\frac{F_{\\mathrm{CO_2,in}} - F_{\\mathrm{CO_2,out}}}\n{F_{\\mathrm{CO_2,in}}}\n\\]\n\n\n6.2 炭素基準の選択率\n炭素数 \\(n_i\\) を持つ炭素含有生成物 \\(i\\) の出口モル流量を \\(F_i\\) とすると、炭素基準の選択率 \\(S_i\\) は次のように書ける。\n\\[\nS_i\n= \\frac{n_i F_i}\n{\\sum_j n_j F_j}\n\\]\nここで和は、CO、CH4、C2+ hydrocarbons など、炭素を含む生成物全体について取る。\n\n\n6.3 CO選択率\nCO は炭素数1の生成物なので、CO選択率は次のように表せる。\n\\[\nS_{\\mathrm{CO}}\n= \\frac{F_{\\mathrm{CO}}}\n{\\sum_j n_j F_j}\n\\]\nFe3O4-RWGS MVP では、主にこの CO 生成を追跡する。\n\n\n6.4 CH4選択率\nCH4 も炭素数1の生成物なので、CH4選択率は次のように表せる。\n\\[\nS_{\\mathrm{CH_4}}\n= \\frac{F_{\\mathrm{CH_4}}}\n{\\sum_j n_j F_j}\n\\]\nただし、CH4 生成を説明するには RWGS だけでは不十分であり、追加の C1 hydrogenation model が必要になる。\n\n\n6.5 C2+選択率\nC2+選択率は、炭素数2以上の炭化水素への炭素配分を表す。\n\\[\nS_{\\mathrm{C2+}}\n= \\frac{\\sum_{i \\in \\mathrm{C2+}} n_i F_i}\n{\\sum_j n_j F_j}\n\\]\nC2+選択率をモデル化するには、C-C coupling、chain growth、chain termination を含む FeCx-FT model が必要である。本教材の MVP では、C2+生成は実装しない。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#この章の要点",
+    "href": "lessons/01_overview.html#この章の要点",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "7 この章の要点",
+    "text": "7 この章の要点\n\nCO2-FT は、RWGS と FT を分けて考えると機構を整理しやすい。\nFe3O4 は MVP では RWGS-active phase として扱う。\nFe3O4 単独で C2+ 炭化水素生成を説明するとは書かない。\nFeCx-FT、C2+生成、ASF分布、動的相変化は将来拡張として扱う。\n反応指標は、CO2転化率と炭素基準選択率を分けて定義する。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "lessons/01_overview.html#確認問題",
+    "href": "lessons/01_overview.html#確認問題",
+    "title": "CO2-FTとFe系触媒の全体像",
+    "section": "8 確認問題",
+    "text": "8 確認問題\n\nCO2 hydrogenation を RWGS + FT として分けて考える利点を説明せよ。\n本教材の MVP で Fe3O4 をどのような相として扱うか説明せよ。\nFe3O4-RWGS model だけでは C2+選択率を説明できない理由を述べよ。\nCO2転化率 \\(X_{\\mathrm{CO_2}}\\) の定義式を書き、各記号の意味を説明せよ。\n炭素基準の \\(S_{\\mathrm{C2+}}\\) を定義し、CH4選択率との違いを説明せよ。",
+    "crumbs": [
+      "Lessons",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "CO2-FT / Fe3O4 Microkinetics Course",
+    "section": "",
+    "text": "このサイトは、CO2 hydrogenation と Fe 系触媒を題材に、microkinetic model の作り方を学ぶための Quarto 教材である。最初の実装対象は Fe3O4 上の RWGS (reverse water-gas shift) 最小モデル に限定する。\nFe3O4 はここでは主に RWGS-active phase として扱う。Fe3O4 単独で C2+ 炭化水素生成を説明するとは主張しない。FeCx-FT、C2+ 生成、ASF 分布、動的相変化は、将来拡張として明示的に分けて扱う。",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#教材の目的",
+    "href": "index.html#教材の目的",
+    "title": "CO2-FT / Fe3O4 Microkinetics Course",
+    "section": "1 教材の目的",
+    "text": "1 教材の目的\nこの教材の目的は、反応機構を「もっともらしい図」として眺めるだけでなく、保存則と速度式に落とし込める形で記述することである。\n具体的には、次の流れを扱う。\n\ngas species と surface species を定義する。\nelementary step を反応 ID 付きで書く。\nsite balance と elemental mass balance を確認する。\nmass-action rate expression を作る。\nsteady-state surface coverage を数値的に解く。\nCO 生成速度や H2O 生成速度を、RWGS の範囲で解釈する。",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#対象読者",
+    "href": "index.html#対象読者",
+    "title": "CO2-FT / Fe3O4 Microkinetics Course",
+    "section": "2 対象読者",
+    "text": "2 対象読者\n想定読者は、触媒反応工学、表面化学、DFT 計算、反応速度論に関心を持つ大学院生、研究者、技術者である。\nPython と数値計算に慣れていると進めやすいが、最初の教材では式の意味、保存則、実装の対応関係を丁寧に確認する。",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#mvp-の範囲",
+    "href": "index.html#mvp-の範囲",
+    "title": "CO2-FT / Fe3O4 Microkinetics Course",
+    "section": "3 MVP の範囲",
+    "text": "3 MVP の範囲\nMVP では、次の総括反応を対象にする。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\n扱う表面種は、最小 Fe3O4-RWGS model に必要なものに限定する。\n\n*\nCO2*\nH*\nCO*\nO*\nOH*\nH2O*\n\nこの段階では、FeCx 上の Fischer-Tropsch chain growth、C-C coupling、ASF 分布、相変化 kinetics は実装しない。必要な文献や機構上の根拠が未整理の箇所は [citation needed] として残す。",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#入口",
+    "href": "index.html#入口",
+    "title": "CO2-FT / Fe3O4 Microkinetics Course",
+    "section": "4 入口",
+    "text": "4 入口\n\nRoadmap\n概要: Fe3O4-RWGS マイクロキネティクス\nFe3O4-RWGS の最小反応ネットワーク\n速度式と保存則",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html",
+    "href": "lessons/02_fe3o4_rwgs_network.html",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "",
+    "text": "この章では、Fe3O4 上の RWGS (reverse water-gas shift) を記述するための最小素反応ネットワークを定義する。目的は、CO2 と H2 から CO と H2O が生成する過程を、site balance と elemental mass balance を保った形で microkinetic model に落とし込むことである。\n本章で扱う Fe3O4 は、MVP では RWGS-active phase として扱う。FeCx site、C-C coupling、chain growth はこの章では実装しない。FeCx-FT は将来拡張として必要になる可能性があるが、ここでは Fe3O4-RWGS の最小モデルに集中する。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#学習目標",
+    "href": "lessons/02_fe3o4_rwgs_network.html#学習目標",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "1 学習目標",
+    "text": "1 学習目標\nこの章を終えると、次のことができるようになる。\n\nFe3O4-RWGS MVP で使う気相種と表面種を列挙する。\nR1 から R7 までの最小素反応機構を説明する。\n各素反応の Type と Role in the model を区別する。\n表面種 *, CO2*, H*, CO*, O*, OH*, H2O* の役割を説明する。\nこの最小モデルで説明できる範囲と、説明できない範囲を区別する。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この章で扱うモデル範囲",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "2 この章で扱うモデル範囲",
+    "text": "2 この章で扱うモデル範囲\nこの章で扱う総括反応は RWGS である。\nCO2 + H2 &lt;=&gt; CO + H2O\nLaTeX では次のように書く。\n\\[\n\\mathrm{CO_2 + H_2 \\rightleftharpoons CO + H_2O}\n\\]\nモデルは単一種類の表面サイト * を仮定する。したがって、Fe site と O site を分ける multi-site model、oxygen vacancy を明示するモデル、FeCx 上の FT model は扱わない。この単純化により、最初に site balance、mass balance、steady-state coverage の計算に集中できる。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
+    "href": "lessons/02_fe3o4_rwgs_network.html#気相種リスト",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "3 気相種リスト",
+    "text": "3 気相種リスト\nMVP で扱う気相種は4つだけである。\n\n\n\nSpecies\n役割\n\n\n\n\nCO2\n反応物。RWGS の炭素源および酸素源。\n\n\nH2\n反応物。表面水素 H* の供給源。\n\n\nCO\n生成物。Fe3O4-RWGS MVP で追跡する主な炭素含有生成物。\n\n\nH2O\n生成物。表面酸素の除去先。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
+    "href": "lessons/02_fe3o4_rwgs_network.html#表面種リスト",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "4 表面種リスト",
+    "text": "4 表面種リスト\nMVP で扱う表面種は次の7つである。\n\n\n\n\n\n\n\nSurface species\n役割\n\n\n\n\n*\n空の表面サイト。すべての吸着・脱離・表面反応の site balance に入る。\n\n\nCO2*\n吸着 CO2。CO2 活性化の入口。\n\n\nH*\n吸着水素。O* と OH* の水素化に使われる。\n\n\nCO*\n吸着 CO。CO desorption を通じて気相 CO になる。\n\n\nO*\n表面酸素。CO2* の解離で生じ、OH* へ水素化される。\n\n\nOH*\n表面ヒドロキシ種。H* と反応して H2O* になる。\n\n\nH2O*\n吸着水。脱離して気相 H2O になる。\n\n\n\nこの表面種セットは、上の7種類だけに限定する。別経路に由来する中間体は重要になり得るが、本MVPでは余分な素反応を追加しない。\n\n4.1 COOH* と HCOO* を含めない理由\nRWGS では、CO2* の直接解離経路だけでなく、COOH* を経由する carboxyl 経路や、HCOO* を経由する formate 経路も候補になり得る。\n本 MVP では、Fe3O4-RWGS の direct dissociation / redox 型の最小モデルを作ることを目的とするため、COOH* と HCOO* は明示的な表面種として含めない。\nしたがって、本章の反応機構は COOH* や HCOO* が不要であると断定するものではなく、最小モデルとして意図的に省略しているものである。これらの中間体は、将来の拡張モデルで direct / COOH / HCOO 経路を比較するときに追加する。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
+    "href": "lessons/02_fe3o4_rwgs_network.html#ステップ最小反応機構",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "5 7ステップ最小反応機構",
+    "text": "5 7ステップ最小反応機構\nFe3O4-RWGS MVP では、反応 ID を必ず R1 から R7 とする。表記は以後も変えない。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\nType\nRole in the model\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nAdsorption / desorption\nCO2 を表面へ取り込む入口。\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nDissociative adsorption / recombination\nH2 から表面水素 H* を作る。\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nSurface dissociation / recombination\n吸着 CO2 を CO* と O* に分ける。\n\n\nR4\nCO* &lt;=&gt; CO + *\nDesorption / adsorption\n気相 CO を生成する出口。\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nSurface hydrogenation / dehydrogenation\n表面酸素 O* を OH* に変換する。\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nSurface hydrogenation / dehydrogenation\nOH* を H2O* に変換する。\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nDesorption / adsorption\n気相 H2O を生成し、空サイトを再生する。\n\n\n\n同じ7ステップを LaTeX で書くと次のようになる。\n\\[\n\\mathrm{R1:\\ CO_2 + * \\rightleftharpoons CO_2*}\n\\]\n\\[\n\\mathrm{R2:\\ H_2 + 2* \\rightleftharpoons 2H*}\n\\]\n\\[\n\\mathrm{R3:\\ CO_2* + * \\rightleftharpoons CO* + O*}\n\\]\n\\[\n\\mathrm{R4:\\ CO* \\rightleftharpoons CO + *}\n\\]\n\\[\n\\mathrm{R5:\\ O* + H* \\rightleftharpoons OH* + *}\n\\]\n\\[\n\\mathrm{R6:\\ OH* + H* \\rightleftharpoons H_2O* + *}\n\\]\n\\[\n\\mathrm{R7:\\ H_2O* \\rightleftharpoons H_2O + *}\n\\]",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
+    "href": "lessons/02_fe3o4_rwgs_network.html#各表面種の役割",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "6 各表面種の役割",
+    "text": "6 各表面種の役割\n* は空サイトであり、吸着、脱離、表面反応のすべてに関わる。被覆率の合計は次の site balance を満たす。\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]\nここで \\(\\theta_{\\mathrm{CO_2}}\\) は CO2* の被覆率を表す。同様に、\\(\\theta_{\\mathrm{H}}\\) は H*、\\(\\theta_{\\mathrm{CO}}\\) は CO*、\\(\\theta_{\\mathrm{O}}\\) は O*、\\(\\theta_{\\mathrm{OH}}\\) は OH*、\\(\\theta_{\\mathrm{H_2O}}\\) は H2O* の被覆率を表す。\nCO2* は CO2 activation の入口である。R1 で生成し、R3 で CO* と O* に変換される。\nH* は H2 dissociation により生成する表面水素である。R5 と R6 で表面酸素種を水素化する。\nCO* は CO 生成直前の表面中間体である。R4 で脱離して CO になる。\nO* は CO2* の解離で生じる表面酸素である。O* が蓄積すると空サイトが減るため、R5 と R6 を通じた水素化と水生成が重要になる。\nOH* は O* の水素化で生じる表面ヒドロキシ種である。さらに H* と反応して H2O* になる。\nH2O* は水生成直前の吸着水である。R7 で脱離して気相 H2O になり、空サイト * を再生する。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できること",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "7 この最小モデルで説明できること",
+    "text": "7 この最小モデルで説明できること\nこの最小モデルで説明できるのは、Fe3O4 を RWGS-active phase と見なしたときの基本的な表面反応である。\n\nCO2 adsorption と CO2 activation\nH2 dissociation による表面水素供給\nCO* の脱離による CO 生成\nO* から OH*、H2O* を経た水生成\nsite balance を満たす steady-state surface coverage\nRWGS 範囲での CO 生成速度と H2O 生成速度\n\nこの範囲では、CO2 から CO と H2O が生成する過程を、最小限の表面種で追跡できる。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この最小モデルで説明できないこと",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "8 この最小モデルで説明できないこと",
+    "text": "8 この最小モデルで説明できないこと\nこのモデルは、次の現象を説明するためのものではない。\n\nCH4 生成の詳細機構\nC2+ hydrocarbon formation\nC-C coupling\nchain growth と chain termination\nASF distribution\nFe3O4 から FeCx への dynamic phase transformation\nFeCx site 上の FT reaction network\nCOOH* や HCOO* を含む competing pathway の比較\n\nこれらを扱うには、別の species set、別の elementary step、別の検証項目が必要である。FeCx については将来拡張として扱うが、本章では実装しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
+    "href": "lessons/02_fe3o4_rwgs_network.html#c2生成に関する注意",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "9 C2+生成に関する注意",
+    "text": "9 C2+生成に関する注意\nC2+生成は、この MVP の範囲外である。Fe3O4-RWGS model で CO 生成を説明できても、それは Fe3O4 単独で C2+ 炭化水素生成を説明できることを意味しない。\nC2+選択率を扱う段階では、FeCx-FT、C-C coupling、chain growth、termination を含む別モデルを定義する必要がある。そのときも、Fe3O4-RWGS と FeCx-FT の役割を混同しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
+    "href": "lessons/02_fe3o4_rwgs_network.html#この章の要点",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "10 この章の要点",
+    "text": "10 この章の要点\n\nFe3O4-RWGS MVP では、気相種を CO2, H2, CO, H2O に限定する。\n表面種は *, CO2*, H*, CO*, O*, OH*, H2O* の7種類である。\n素反応は R1 から R7 の7ステップだけである。\nこのモデルは RWGS による CO と H2O の生成を扱う。\nC2+生成、ASF分布、FeCx-FT は将来拡張であり、本MVPでは実装しない。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#確認問題",
+    "href": "lessons/02_fe3o4_rwgs_network.html#確認問題",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "11 確認問題",
+    "text": "11 確認問題\n\nFe3O4-RWGS MVP で扱う4つの気相種を挙げ、それぞれの役割を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* が site balance を満たす理由を説明せよ。\nO*, OH*, H2O* はそれぞれ RWGS model の中でどのような役割を持つか。\nこの最小モデルで C2+生成を説明できない理由を述べよ。\nR7 が空サイト * の再生にどのように関わるか説明せよ。",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/02_fe3o4_rwgs_network.html#計算演習",
+    "href": "lessons/02_fe3o4_rwgs_network.html#計算演習",
+    "title": "Fe3O4上RWGSの最小素反応ネットワーク",
+    "section": "12 計算演習",
+    "text": "12 計算演習\n\nR1 から R7 について、反応前後の表面サイト数を数え、すべての反応で site balance が保存されることを確認せよ。\nR3, R5, R6 について、C、H、O の elemental mass balance を確認せよ。\n任意の被覆率セットを仮定し、次の site balance が1になるように正規化せよ。\n\n\\[\n\\theta_*\n+ \\theta_{\\mathrm{CO_2}}\n+ \\theta_{\\mathrm{H}}\n+ \\theta_{\\mathrm{CO}}\n+ \\theta_{\\mathrm{O}}\n+ \\theta_{\\mathrm{OH}}\n+ \\theta_{\\mathrm{H_2O}}\n= 1\n\\]",
+    "crumbs": [
+      "Lessons",
+      "Fe3O4-RWGS Network"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html",
+    "href": "lessons/04_dft_to_rate_constants.html",
+    "title": "DFTから速度定数を作る手順",
+    "section": "",
+    "text": "この章では、Fe3O4-RWGS 最小モデルを microkinetic model として使うために、DFT 計算から速度定数を作るまでの流れを整理する。対象は第2章で定義した R1-R7 のみであり、FeCx-FT、C2+ 生成、ASF 分布、動的相変化は扱わない。\nここで示すのは、実験値や文献値ではなく、計算計画を立てるための手順である。実際の数値を使う段階では、計算条件、収束性、表面構造、熱補正、標準状態をすべて明示する必要がある。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#学習目標",
+    "href": "lessons/04_dft_to_rate_constants.html#学習目標",
+    "title": "DFTから速度定数を作る手順",
+    "section": "1 学習目標",
+    "text": "1 学習目標\nこの章を終えると、次のことを説明できるようになる。\n\nmicrokinetic model に必要な DFT 計算の種類を列挙する。\nFe3O4-RWGS R1-R7 の各ステップに必要な吸着エネルギー、反応エネルギー、活性化障壁を対応づける。\nDFT エネルギーから自由エネルギー、平衡定数、速度定数へ変換する流れを説明する。\n逆反応速度定数を熱力学整合性と無関係に自由フィットしてはいけない理由を説明する。\nMVP で扱わない COOH、HCOO、FeCx-FT を計算計画から分離する。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#マイクロキネティクスにdft計算が必要な理由",
+    "href": "lessons/04_dft_to_rate_constants.html#マイクロキネティクスにdft計算が必要な理由",
+    "title": "DFTから速度定数を作る手順",
+    "section": "2 マイクロキネティクスにDFT計算が必要な理由",
+    "text": "2 マイクロキネティクスにDFT計算が必要な理由\nmicrokinetic model では、各素反応の速度を次のように書く。\n\\[\nr_j = r_{j,f} - r_{j,r}\n\\]\nmass-action kinetics を使う場合、速度式そのものは第3章で定義できる。しかし、速度定数 \\(k_{j,f}\\) と \\(k_{j,r}\\) を物理的に意味のある値として与えるには、各素反応の energetics が必要である。\nDFT 計算で主に求める量は、次の3つである。\n\n\n\n\n\n\n\n\nQuantity\n役割\nmicrokinetic model での使い道\n\n\n\n\n吸着エネルギー\n気相種が表面へどれだけ安定に吸着するか\n吸着・脱離平衡、表面被覆率の傾向\n\n\n反応エネルギー\n反応前後の安定性差\n平衡定数、熱力学整合性\n\n\n活性化障壁\n遷移状態までの自由エネルギー差\n前進・逆反応速度定数\n\n\n\nつまり、DFT 計算は「反応式を書くため」ではなく、「反応式に入る速度定数を制約するため」に必要である。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#fe3o4表面モデルの準備",
+    "href": "lessons/04_dft_to_rate_constants.html#fe3o4表面モデルの準備",
+    "title": "DFTから速度定数を作る手順",
+    "section": "3 Fe3O4表面モデルの準備",
+    "text": "3 Fe3O4表面モデルの準備\n最初に、どの Fe3O4 表面を model surface として使うかを決める。表面を決めずに吸着エネルギーや障壁だけを集めても、同じ速度定数セットとして比較できない。\n最低限、次を決めて記録する。\n\nexchange-correlation functional\nHubbard \\(U\\) の扱い\nspin polarization と初期磁気モーメント\nbulk Fe3O4 の格子定数と磁気状態\nsurface orientation\nsurface termination\nslab thickness\nvacuum thickness\n固定層と緩和層\nk-point mesh\nenergy cutoff\ndipole correction の有無\n\nFe3O4 は酸化数、磁気状態、表面終端に敏感である。したがって、bulk の妥当性を確認してから slab を作る。Fe3O4(001) のように複数の終端や再構成が候補になる面では、どの termination を採用したかを計算条件として明示する必要がある [citation needed]。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#気相分子計算",
+    "href": "lessons/04_dft_to_rate_constants.html#気相分子計算",
+    "title": "DFTから速度定数を作る手順",
+    "section": "4 気相分子計算",
+    "text": "4 気相分子計算\nFe3O4-RWGS MVP では、気相種は次の4つである。\n\n\n\nGas species\n用途\n\n\n\n\nCO2\nCO2 吸着、CO2 消費速度、炭素源\n\n\nH2\nH2 解離吸着、表面 H* 供給\n\n\nCO\nCO 脱離、CO 生成速度\n\n\nH2O\nH2O 脱離、酸素除去先\n\n\n\n気相分子では、電子エネルギーだけでなく、温度依存の熱補正も必要になる。特に、気相分子では並進、回転、振動の寄与が大きいため、表面吸着種と同じ扱いにしない。\n気相分子 \\(i\\) の自由エネルギーは、概念的には次の形で整理する。\n\\[\nG_i(T, P_i)\n= E_{i,\\mathrm{DFT}}\n+ ZPE_i\n+ H_{i,\\mathrm{thermal}}(T)\n- T S_i(T, P_i)\n\\]\nここで \\(P_i\\) は気相種の分圧である。標準状態をどう置くかは、吸着・脱離速度定数の単位に直接影響する。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#吸着種計算",
+    "href": "lessons/04_dft_to_rate_constants.html#吸着種計算",
+    "title": "DFTから速度定数を作る手順",
+    "section": "5 吸着種計算",
+    "text": "5 吸着種計算\nMVP で扱う表面種は次の7つである。\n\n\n\nSurface species\nDFTで確認すること\n\n\n\n\n*\nclean surface の基準エネルギー\n\n\nCO2*\nCO2 の吸着構造、曲がり、電荷移動の有無\n\n\nH*\nH2 解離後の H 吸着サイト\n\n\nCO*\nCO 脱離前の吸着構造\n\n\nO*\nCO2 解離後の表面酸素サイト\n\n\nOH*\nO* 水素化後のヒドロキシ構造\n\n\nH2O*\nH2O 脱離前の吸着水構造\n\n\n\n吸着エネルギーは、たとえば CO2* について次のように定義できる。\n\\[\n\\Delta E_{\\mathrm{ads}}(\\mathrm{CO_2})\n= E(\\mathrm{CO_2*})\n- E(*)\n- E(\\mathrm{CO_2})\n\\]\nただし、吸着構造が複数ある場合は、最安定構造だけでなく、反応経路につながる準安定構造も候補として残す。最安定構造が必ずしも反応経路上の入口構造とは限らないためである。\nCOOH* と HCOO* は RWGS の競合経路候補になり得る。しかし本章では、R1-R7 の direct dissociation / redox 型 MVP に限定するため、明示的な表面種としては扱わない。これらは将来、direct / COOH / HCOO 経路を比較する拡張章で追加する。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#r1-r7ごとに必要なdft計算表",
+    "href": "lessons/04_dft_to_rate_constants.html#r1-r7ごとに必要なdft計算表",
+    "title": "DFTから速度定数を作る手順",
+    "section": "6 R1-R7ごとに必要なDFT計算表",
+    "text": "6 R1-R7ごとに必要なDFT計算表\n次の表は、R1-R7 を DFT 計算へ落とし込むときに必要な情報を整理したものである。\n\n\n\n\n\n\n\n\n\nReaction ID\nElementary step\n主に必要なDFT計算\n得られる量\n\n\n\n\nR1\nCO2 + * &lt;=&gt; CO2*\nclean surface、gas CO2、CO2*\nCO2 吸着エネルギー、吸着自由エネルギー\n\n\nR2\nH2 + 2* &lt;=&gt; 2H*\nclean surface、gas H2、2H*、必要なら H2 dissociation TS\nH2 解離吸着エネルギー、解離障壁\n\n\nR3\nCO2* + * &lt;=&gt; CO* + O*\nCO2、CO + O*、CO2 dissociation TS\nCO2 解離反応エネルギー、解離障壁\n\n\nR4\nCO* &lt;=&gt; CO + *\nCO*、gas CO、clean surface\nCO 脱離エネルギー、脱離自由エネルギー\n\n\nR5\nO* + H* &lt;=&gt; OH* + *\nO* + H、OH、hydrogenation TS\nO* 水素化反応エネルギー、障壁\n\n\nR6\nOH* + H* &lt;=&gt; H2O* + *\nOH* + H、H2O、hydrogenation TS\nOH* 水素化反応エネルギー、障壁\n\n\nR7\nH2O* &lt;=&gt; H2O + *\nH2O*、gas H2O、clean surface\nH2O 脱離エネルギー、脱離自由エネルギー\n\n\n\nこの表は、必要な計算を最小限に整理するためのものである。実際には、吸着サイト、被覆率、表面終端が変わると、同じ R1-R7 でも異なるエネルギーセットになる。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#nebts計算で求める活性化障壁",
+    "href": "lessons/04_dft_to_rate_constants.html#nebts計算で求める活性化障壁",
+    "title": "DFTから速度定数を作る手順",
+    "section": "7 NEB/TS計算で求める活性化障壁",
+    "text": "7 NEB/TS計算で求める活性化障壁\n反応エネルギーだけでは速度定数は決まらない。速度定数を作るには、反応物状態から遷移状態までの活性化自由エネルギーが必要である。\n優先的に TS または NEB 計算を行うべきステップは、結合の生成・切断を伴う表面反応である。\n\n\n\n\n\n\n\n\nStep\nTS/NEB の重要度\n理由\n\n\n\n\nR2\n高\nH-H 結合の切断を伴う\n\n\nR3\n高\nCO2* の C-O 結合切断を伴う\n\n\nR5\n高\nO-H 結合形成を伴う\n\n\nR6\n高\nO-H 結合形成と H2O* 形成を伴う\n\n\nR1, R4, R7\n条件依存\n吸着・脱離を障壁なし近似するか、明示的に扱うかを決める\n\n\n\nNEB では初期状態と終状態を同じ surface cell、同じ stoichiometry、同じ固定層条件でそろえる。得られた候補遷移状態は、振動解析により虚振動が反応座標に対応しているかを確認する。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#振動解析と自由エネルギー補正",
+    "href": "lessons/04_dft_to_rate_constants.html#振動解析と自由エネルギー補正",
+    "title": "DFTから速度定数を作る手順",
+    "section": "8 振動解析と自由エネルギー補正",
+    "text": "8 振動解析と自由エネルギー補正\nDFT の電子エネルギー \\(E_{\\mathrm{DFT}}\\) をそのまま速度定数に入れるのは不十分である。温度依存の速度定数を作るには、各状態の自由エネルギーをそろえる。\n表面状態 \\(X*\\) については、概念的に次の形で整理する。\n\\[\nG(X*, T)\n= E_{\\mathrm{DFT}}(X*)\n+ ZPE(X*)\n+ H_{\\mathrm{vib}}(X*, T)\n- T S_{\\mathrm{vib}}(X*, T)\n\\]\n遷移状態では、反応座標に対応する虚振動を熱補正から除く。気相分子では、並進・回転・振動の寄与を含め、分圧依存も標準状態と一貫して扱う。\nこの段階で、各素反応の反応自由エネルギーを次のように作る。\n\\[\n\\Delta G_j(T)\n= G_{\\mathrm{products},j}(T)\n- G_{\\mathrm{reactants},j}(T)\n\\]\nまた、前進方向の活性化自由エネルギーは次のように定義する。\n\\[\n\\Delta G_{j,f}^{\\ddagger}(T)\n= G_j^{\\ddagger}(T)\n- G_{\\mathrm{reactants},j}(T)\n\\]\n逆方向についても同様に定義できる。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#遷移状態理論による速度定数化",
+    "href": "lessons/04_dft_to_rate_constants.html#遷移状態理論による速度定数化",
+    "title": "DFTから速度定数を作る手順",
+    "section": "9 遷移状態理論による速度定数化",
+    "text": "9 遷移状態理論による速度定数化\n表面反応の速度定数は、遷移状態理論を使って概念的に次のように表せる。\n\\[\nk_{j,f}(T)\n= \\frac{k_{\\mathrm{B}}T}{h}\n\\exp\\left(\n-\\frac{\\Delta G_{j,f}^{\\ddagger}(T)}{RT}\n\\right)\n\\]\nここで \\(k_{\\mathrm{B}}\\) は Boltzmann constant、\\(h\\) は Planck constant、\\(R\\) は gas constant である。\n吸着ステップでは、速度定数の単位が分圧の定義に依存する。たとえば R1 の速度式を\n\\[\nr_1\n= k_{1,f} P_{\\mathrm{CO_2}} \\theta_*\n- k_{1,r}\\theta_{\\mathrm{CO_2}}\n\\]\nと書くなら、\\(k_{1,f}\\) は \\(P_{\\mathrm{CO_2}}\\) と掛けたときに表面反応速度の単位になるように定義する必要がある。sticking coefficient を使う場合も、圧力、面積、サイト密度、分子質量の扱いを明示する。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#熱力学整合性の確認",
+    "href": "lessons/04_dft_to_rate_constants.html#熱力学整合性の確認",
+    "title": "DFTから速度定数を作る手順",
+    "section": "10 熱力学整合性の確認",
+    "text": "10 熱力学整合性の確認\n前進・逆反応速度定数は、反応自由エネルギーと整合していなければならない。各素反応について、平衡定数は次の関係を満たす。\n\\[\nK_j(T)\n= \\frac{k_{j,f}(T)}{k_{j,r}(T)}\n\\]\n一方、DFT から得た反応自由エネルギーを使えば、\n\\[\nK_j(T)\n= \\exp\\left(\n-\\frac{\\Delta G_j(T)}{RT}\n\\right)\n\\]\nと書ける。したがって、片方向の速度定数と \\(\\Delta G_j(T)\\) が決まれば、もう一方の速度定数は次のように制約される。\n\\[\nk_{j,r}(T)\n= \\frac{k_{j,f}(T)}{K_j(T)}\n\\]\nこの関係を無視して \\(k_{j,f}\\) と \\(k_{j,r}\\) を独立に調整すると、見かけ上は実験値に合っても、平衡組成や反応方向が熱力学と矛盾する可能性がある。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#この章の要点",
+    "href": "lessons/04_dft_to_rate_constants.html#この章の要点",
+    "title": "DFTから速度定数を作る手順",
+    "section": "11 この章の要点",
+    "text": "11 この章の要点\n\nmicrokinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。\nFe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。\n反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。\n気相分子、吸着種、遷移状態では熱補正の扱いが異なる。\n逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。\nCOOH、HCOO、FeCx-FT は重要な将来拡張候補だが、本 MVP の R1-R7 には追加しない。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#確認問題",
+    "href": "lessons/04_dft_to_rate_constants.html#確認問題",
+    "title": "DFTから速度定数を作る手順",
+    "section": "12 確認問題",
+    "text": "12 確認問題\n\nmicrokinetic model で反応エネルギーだけでなく活性化障壁が必要になる理由を説明せよ。\nR3: CO2* + * &lt;=&gt; CO* + O* に必要な DFT 計算を列挙せよ。\n気相分子と表面吸着種で熱補正の扱いが異なる理由を説明せよ。\n\\(K_j = k_{j,f}/k_{j,r}\\) と \\(\\Delta G_j\\) の関係を説明せよ。\nCOOH* と HCOO* を本 MVP に含めない理由を説明せよ。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
+    "objectID": "lessons/04_dft_to_rate_constants.html#計算計画演習",
+    "href": "lessons/04_dft_to_rate_constants.html#計算計画演習",
+    "title": "DFTから速度定数を作る手順",
+    "section": "13 計算計画演習",
+    "text": "13 計算計画演習\n\nFe3O4(001) のある termination を仮定し、CO2*, CO*, O*, OH*, H2O* の吸着構造探索計画を作成せよ。\nR1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。\nある素反応について \\(\\Delta G_j(T)\\) と \\(k_{j,f}(T)\\) が与えられたとき、熱力学整合性を満たす \\(k_{j,r}(T)\\) の計算手順を書け。",
+    "crumbs": [
+      "Lessons",
+      "DFT to Rate Constants"
+    ]
+  },
+  {
     "objectID": "roadmap.html",
     "href": "roadmap.html",
     "title": "Roadmap",
@@ -593,7 +747,7 @@
     "href": "roadmap.html#phase-2-パラメータと検証",
     "title": "Roadmap",
     "section": "2 Phase 2: パラメータと検証",
-    "text": "2 Phase 2: パラメータと検証\n次に、速度定数、吸着平衡、温度依存性を扱う。\n\nArrhenius parameter の入力形式を整理する。\npressure と activity の扱いを明確にする。\n熱力学整合性を確認するためのチェックを追加する。\n文献値を入れる場合は出典を明記し、不明な箇所は [citation needed] とする。",
+    "text": "2 Phase 2: パラメータと検証\n次に、速度定数、吸着平衡、温度依存性を扱う。\n\nArrhenius parameter の入力形式を整理する。\nDFT 計算から吸着エネルギー、反応エネルギー、活性化障壁、速度定数を作る手順を整理する。\npressure と activity の扱いを明確にする。\n熱力学整合性を確認するためのチェックを追加する。\n文献値を入れる場合は出典を明記し、不明な箇所は [citation needed] とする。",
     "crumbs": [
       "Roadmap"
     ]

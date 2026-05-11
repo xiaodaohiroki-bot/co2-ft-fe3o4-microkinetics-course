@@ -20,6 +20,8 @@ website:
             text: Fe3O4-RWGS Network
           - href: lessons/03_rate_equations.qmd
             text: Rate Equations
+          - href: lessons/04_dft_to_rate_constants.qmd
+            text: DFT to Rate Constants
       - section: Notebooks
         contents:
           - href: notebooks/01_rwgs_minimal_model.ipynb

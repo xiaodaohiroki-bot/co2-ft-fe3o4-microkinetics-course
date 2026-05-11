@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fe3O4-RWGS最小モデルの温度依存性 – CO2-FT / Fe3O4 Microkinetics Course</title>
+<title>DFTから速度定数を作る手順 – CO2-FT / Fe3O4 Microkinetics Course</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -106,6 +71,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -118,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_rwgs_minimal_model.html">Notebooks</a></li><li class="breadcrumb-item"><a href="../notebooks/01_rwgs_minimal_model.html">RWGS temperature-dependence exercise</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lessons/01_overview.html">Lessons</a></li><li class="breadcrumb-item"><a href="../lessons/04_dft_to_rate_constants.html">DFT to Rate Constants</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -184,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../lessons/04_dft_to_rate_constants.html" class="sidebar-item-text sidebar-link">
+  <a href="../lessons/04_dft_to_rate_constants.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">DFT to Rate Constants</span></a>
   </div>
 </li>
@@ -201,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/01_rwgs_minimal_model.html" class="sidebar-item-text sidebar-link active">
+  <a href="../notebooks/01_rwgs_minimal_model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">RWGS temperature-dependence exercise</span></a>
   </div>
 </li>
@@ -217,20 +211,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#入力条件" id="toc-入力条件" class="nav-link active" data-scroll-target="#入力条件"><span class="header-section-number">1</span> 入力条件</a></li>
-  <li><a href="#計算" id="toc-計算" class="nav-link" data-scroll-target="#計算"><span class="header-section-number">2</span> 計算</a></li>
-  <li><a href="#可視化" id="toc-可視化" class="nav-link" data-scroll-target="#可視化"><span class="header-section-number">3</span> 可視化</a></li>
-  <li><a href="#考察" id="toc-考察" class="nav-link" data-scroll-target="#考察"><span class="header-section-number">4</span> 考察</a></li>
-  <li><a href="#演習問題" id="toc-演習問題" class="nav-link" data-scroll-target="#演習問題"><span class="header-section-number">5</span> 演習問題</a></li>
+  <li><a href="#学習目標" id="toc-学習目標" class="nav-link active" data-scroll-target="#学習目標"><span class="header-section-number">1</span> 学習目標</a></li>
+  <li><a href="#マイクロキネティクスにdft計算が必要な理由" id="toc-マイクロキネティクスにdft計算が必要な理由" class="nav-link" data-scroll-target="#マイクロキネティクスにdft計算が必要な理由"><span class="header-section-number">2</span> マイクロキネティクスにDFT計算が必要な理由</a></li>
+  <li><a href="#fe3o4表面モデルの準備" id="toc-fe3o4表面モデルの準備" class="nav-link" data-scroll-target="#fe3o4表面モデルの準備"><span class="header-section-number">3</span> Fe3O4表面モデルの準備</a></li>
+  <li><a href="#気相分子計算" id="toc-気相分子計算" class="nav-link" data-scroll-target="#気相分子計算"><span class="header-section-number">4</span> 気相分子計算</a></li>
+  <li><a href="#吸着種計算" id="toc-吸着種計算" class="nav-link" data-scroll-target="#吸着種計算"><span class="header-section-number">5</span> 吸着種計算</a></li>
+  <li><a href="#r1-r7ごとに必要なdft計算表" id="toc-r1-r7ごとに必要なdft計算表" class="nav-link" data-scroll-target="#r1-r7ごとに必要なdft計算表"><span class="header-section-number">6</span> R1-R7ごとに必要なDFT計算表</a></li>
+  <li><a href="#nebts計算で求める活性化障壁" id="toc-nebts計算で求める活性化障壁" class="nav-link" data-scroll-target="#nebts計算で求める活性化障壁"><span class="header-section-number">7</span> NEB/TS計算で求める活性化障壁</a></li>
+  <li><a href="#振動解析と自由エネルギー補正" id="toc-振動解析と自由エネルギー補正" class="nav-link" data-scroll-target="#振動解析と自由エネルギー補正"><span class="header-section-number">8</span> 振動解析と自由エネルギー補正</a></li>
+  <li><a href="#遷移状態理論による速度定数化" id="toc-遷移状態理論による速度定数化" class="nav-link" data-scroll-target="#遷移状態理論による速度定数化"><span class="header-section-number">9</span> 遷移状態理論による速度定数化</a></li>
+  <li><a href="#熱力学整合性の確認" id="toc-熱力学整合性の確認" class="nav-link" data-scroll-target="#熱力学整合性の確認"><span class="header-section-number">10</span> 熱力学整合性の確認</a></li>
+  <li><a href="#この章の要点" id="toc-この章の要点" class="nav-link" data-scroll-target="#この章の要点"><span class="header-section-number">11</span> この章の要点</a></li>
+  <li><a href="#確認問題" id="toc-確認問題" class="nav-link" data-scroll-target="#確認問題"><span class="header-section-number">12</span> 確認問題</a></li>
+  <li><a href="#計算計画演習" id="toc-計算計画演習" class="nav-link" data-scroll-target="#計算計画演習"><span class="header-section-number">13</span> 計算計画演習</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_rwgs_minimal_model.html">Notebooks</a></li><li class="breadcrumb-item"><a href="../notebooks/01_rwgs_minimal_model.html">RWGS temperature-dependence exercise</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../lessons/01_overview.html">Lessons</a></li><li class="breadcrumb-item"><a href="../lessons/04_dft_to_rate_constants.html">DFT to Rate Constants</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Fe3O4-RWGS最小モデルの温度依存性</h1>
+<h1 class="title">DFTから速度定数を作る手順</h1>
 </div>
 
 
@@ -247,141 +249,376 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>このNotebookでは、Fe3O4上RWGSの7ステップ最小モデルを使って、温度に対するCO生成速度と表面被覆率の変化を確認します。</p>
-<p>ここで扱う範囲はFe3O4-RWGSのみです。FeCx-FT、C2+生成、相変化を含むモデルは扱いません。</p>
-<div id="cell-2" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>repo_root <span class="op">=</span> Path.cwd()</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="kw">not</span> (repo_root <span class="op">/</span> <span class="st">"src"</span>).exists() <span class="kw">and</span> repo_root <span class="op">!=</span> repo_root.parent:</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    repo_root <span class="op">=</span> repo_root.parent</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>src_path <span class="op">=</span> repo_root <span class="op">/</span> <span class="st">"src"</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">str</span>(src_path) <span class="kw">not</span> <span class="kw">in</span> sys.path:</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    sys.path.insert(<span class="dv">0</span>, <span class="bu">str</span>(src_path))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> microkinetics.rates <span class="im">import</span> RATE_CONSTANT_NAMES</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> microkinetics.solver <span class="im">import</span> co_production_rate_from_result, solve_steady_state</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="入力条件" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="入力条件"><span class="header-section-number">1</span> 入力条件</h2>
-<p>温度範囲、気相分圧、速度定数を設定します。速度定数は計算手順を確認するための仮の値であり、実験値や文献値ではありません。</p>
-<div id="cell-4" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>temperatures <span class="op">=</span> np.linspace(<span class="fl">450.0</span>, <span class="fl">700.0</span>, <span class="dv">11</span>)  <span class="co"># K</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>partial_pressures <span class="op">=</span> {</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CO2"</span>: <span class="fl">0.25</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"H2"</span>: <span class="fl">0.75</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CO"</span>: <span class="fl">1.0e-6</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"H2O"</span>: <span class="fl">1.0e-6</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>R_GAS <span class="op">=</span> <span class="fl">8.314462618</span>  <span class="co"># J mol^-1 K^-1</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> arrhenius(prefactor, activation_energy_j_mol):</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return a temperature-dependent example rate constant."""</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">lambda</span> temperature: prefactor <span class="op">*</span> np.exp(</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span>activation_energy_j_mol <span class="op">/</span> (R_GAS <span class="op">*</span> temperature)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>rate_constants <span class="op">=</span> {}</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, name <span class="kw">in</span> <span class="bu">enumerate</span>(RATE_CONSTANT_NAMES, start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    prefactor <span class="op">=</span> <span class="fl">1.0e2</span> <span class="cf">if</span> name.endswith(<span class="st">"f"</span>) <span class="cf">else</span> <span class="fl">5.0e1</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    activation_energy <span class="op">=</span> <span class="fl">20_000.0</span> <span class="op">+</span> <span class="fl">750.0</span> <span class="op">*</span> index</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    rate_constants[name] <span class="op">=</span> arrhenius(prefactor, activation_energy)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>partial_pressures</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>この章では、Fe3O4-RWGS 最小モデルを microkinetic model として使うために、DFT 計算から速度定数を作るまでの流れを整理する。対象は第2章で定義した R1-R7 のみであり、FeCx-FT、C2+ 生成、ASF 分布、動的相変化は扱わない。</p>
+<p>ここで示すのは、実験値や文献値ではなく、計算計画を立てるための手順である。実際の数値を使う段階では、計算条件、収束性、表面構造、熱補正、標準状態をすべて明示する必要がある。</p>
+<section id="学習目標" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="学習目標"><span class="header-section-number">1</span> 学習目標</h2>
+<p>この章を終えると、次のことを説明できるようになる。</p>
+<ul>
+<li>microkinetic model に必要な DFT 計算の種類を列挙する。</li>
+<li>Fe3O4-RWGS R1-R7 の各ステップに必要な吸着エネルギー、反応エネルギー、活性化障壁を対応づける。</li>
+<li>DFT エネルギーから自由エネルギー、平衡定数、速度定数へ変換する流れを説明する。</li>
+<li>逆反応速度定数を熱力学整合性と無関係に自由フィットしてはいけない理由を説明する。</li>
+<li>MVP で扱わない COOH<em>、HCOO</em>、FeCx-FT を計算計画から分離する。</li>
+</ul>
 </section>
-<section id="計算" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="計算"><span class="header-section-number">2</span> 計算</h2>
-<p>各温度で定常表面被覆率を解き、R4に対応するCO生成速度を取り出します。結果は<code>pandas.DataFrame</code>として整理します。</p>
-<div id="cell-6" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> temperature <span class="kw">in</span> temperatures:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> solve_steady_state(</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">float</span>(temperature),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        partial_pressures<span class="op">=</span>partial_pressures,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        rate_constants<span class="op">=</span>rate_constants,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> result.success:</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"Steady-state solve failed at </span><span class="sc">{</span>temperature<span class="sc">:.1f}</span><span class="ss"> K: </span><span class="sc">{</span>result<span class="sc">.</span>message<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> {</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"temperature_K"</span>: <span class="bu">float</span>(temperature),</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"co_production_rate"</span>: co_production_rate_from_result(result),</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    row.update({<span class="ss">f"theta_</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>: value <span class="cf">for</span> name, value <span class="kw">in</span> result.coverages.items()})</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    rows.append(row)</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(rows)</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="マイクロキネティクスにdft計算が必要な理由" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="マイクロキネティクスにdft計算が必要な理由"><span class="header-section-number">2</span> マイクロキネティクスにDFT計算が必要な理由</h2>
+<p>microkinetic model では、各素反応の速度を次のように書く。</p>
+<p><span class="math display">\[
+r_j = r_{j,f} - r_{j,r}
+\]</span></p>
+<p>mass-action kinetics を使う場合、速度式そのものは第3章で定義できる。しかし、速度定数 <span class="math inline">\(k_{j,f}\)</span> と <span class="math inline">\(k_{j,r}\)</span> を物理的に意味のある値として与えるには、各素反応の energetics が必要である。</p>
+<p>DFT 計算で主に求める量は、次の3つである。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th>役割</th>
+<th>microkinetic model での使い道</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>吸着エネルギー</td>
+<td>気相種が表面へどれだけ安定に吸着するか</td>
+<td>吸着・脱離平衡、表面被覆率の傾向</td>
+</tr>
+<tr class="even">
+<td>反応エネルギー</td>
+<td>反応前後の安定性差</td>
+<td>平衡定数、熱力学整合性</td>
+</tr>
+<tr class="odd">
+<td>活性化障壁</td>
+<td>遷移状態までの自由エネルギー差</td>
+<td>前進・逆反応速度定数</td>
+</tr>
+</tbody>
+</table>
+<p>つまり、DFT 計算は「反応式を書くため」ではなく、「反応式に入る速度定数を制約するため」に必要である。</p>
 </section>
-<section id="可視化" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="可視化"><span class="header-section-number">3</span> 可視化</h2>
-<p>温度に対するCO生成速度をプロットします。単位はここではモデル内の速度定数に依存する任意単位として扱います。</p>
-<div id="cell-8" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ax.plot(df[<span class="st">"temperature_K"</span>], df[<span class="st">"co_production_rate"</span>], marker<span class="op">=</span><span class="st">"o"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Temperature / K"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"CO production rate / arbitrary units"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Fe3O4-RWGS minimal model"</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>主要な表面被覆率の温度依存性も確認します。</p>
-<div id="cell-10" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>coverage_columns <span class="op">=</span> [</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_*"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_H*"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_CO*"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_O*"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_OH*"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theta_H2O*"</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> coverage_columns:</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ax.plot(</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"temperature_K"</span>],</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        df[column],</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        marker<span class="op">=</span><span class="st">"o"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span>column.replace(<span class="st">"theta_"</span>, <span class="st">"theta "</span>),</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Temperature / K"</span>)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Coverage"</span>)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="fl">0.0</span>, <span class="fl">1.0</span>)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>ax.legend(ncol<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="fe3o4表面モデルの準備" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="fe3o4表面モデルの準備"><span class="header-section-number">3</span> Fe3O4表面モデルの準備</h2>
+<p>最初に、どの Fe3O4 表面を model surface として使うかを決める。表面を決めずに吸着エネルギーや障壁だけを集めても、同じ速度定数セットとして比較できない。</p>
+<p>最低限、次を決めて記録する。</p>
+<ul>
+<li>exchange-correlation functional</li>
+<li>Hubbard <span class="math inline">\(U\)</span> の扱い</li>
+<li>spin polarization と初期磁気モーメント</li>
+<li>bulk Fe3O4 の格子定数と磁気状態</li>
+<li>surface orientation</li>
+<li>surface termination</li>
+<li>slab thickness</li>
+<li>vacuum thickness</li>
+<li>固定層と緩和層</li>
+<li>k-point mesh</li>
+<li>energy cutoff</li>
+<li>dipole correction の有無</li>
+</ul>
+<p>Fe3O4 は酸化数、磁気状態、表面終端に敏感である。したがって、bulk の妥当性を確認してから slab を作る。Fe3O4(001) のように複数の終端や再構成が候補になる面では、どの termination を採用したかを計算条件として明示する必要がある [citation needed]。</p>
 </section>
-<section id="考察" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="考察"><span class="header-section-number">4</span> 考察</h2>
-<p>この仮パラメータでは、温度上昇に伴ってCO生成速度が増加します。これはArrhenius型の温度依存性を持つ仮の速度定数を使っているためであり、実触媒の活性や見かけ活性化エネルギーを示すものではありません。</p>
-<p>温度を変えると、<code>H*</code>、<code>O*</code>、<code>OH*</code>などの被覆率も変化し得ます。RWGSではCO2の解離、H2解離吸着、O*の水素化、H2O脱離が連動するため、ひとつのステップだけではなく、表面中間体全体のバランスとして速度が決まります。</p>
-<p>このNotebookの限界は、速度定数が仮の値であること、熱力学整合性を厳密に課したパラメータセットではないこと、被覆率依存性や複数サイトを含めていないことです。FeCx-FTやC2+生成はこのNotebookの範囲外です。</p>
+<section id="気相分子計算" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="気相分子計算"><span class="header-section-number">4</span> 気相分子計算</h2>
+<p>Fe3O4-RWGS MVP では、気相種は次の4つである。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Gas species</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CO2</code></td>
+<td>CO2 吸着、CO2 消費速度、炭素源</td>
+</tr>
+<tr class="even">
+<td><code>H2</code></td>
+<td>H2 解離吸着、表面 H* 供給</td>
+</tr>
+<tr class="odd">
+<td><code>CO</code></td>
+<td>CO 脱離、CO 生成速度</td>
+</tr>
+<tr class="even">
+<td><code>H2O</code></td>
+<td>H2O 脱離、酸素除去先</td>
+</tr>
+</tbody>
+</table>
+<p>気相分子では、電子エネルギーだけでなく、温度依存の熱補正も必要になる。特に、気相分子では並進、回転、振動の寄与が大きいため、表面吸着種と同じ扱いにしない。</p>
+<p>気相分子 <span class="math inline">\(i\)</span> の自由エネルギーは、概念的には次の形で整理する。</p>
+<p><span class="math display">\[
+G_i(T, P_i)
+= E_{i,\mathrm{DFT}}
++ ZPE_i
++ H_{i,\mathrm{thermal}}(T)
+- T S_i(T, P_i)
+\]</span></p>
+<p>ここで <span class="math inline">\(P_i\)</span> は気相種の分圧である。標準状態をどう置くかは、吸着・脱離速度定数の単位に直接影響する。</p>
 </section>
-<section id="演習問題" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="演習問題"><span class="header-section-number">5</span> 演習問題</h2>
+<section id="吸着種計算" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="吸着種計算"><span class="header-section-number">5</span> 吸着種計算</h2>
+<p>MVP で扱う表面種は次の7つである。</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Surface species</th>
+<th>DFTで確認すること</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>*</code></td>
+<td>clean surface の基準エネルギー</td>
+</tr>
+<tr class="even">
+<td><code>CO2*</code></td>
+<td>CO2 の吸着構造、曲がり、電荷移動の有無</td>
+</tr>
+<tr class="odd">
+<td><code>H*</code></td>
+<td>H2 解離後の H 吸着サイト</td>
+</tr>
+<tr class="even">
+<td><code>CO*</code></td>
+<td>CO 脱離前の吸着構造</td>
+</tr>
+<tr class="odd">
+<td><code>O*</code></td>
+<td>CO2 解離後の表面酸素サイト</td>
+</tr>
+<tr class="even">
+<td><code>OH*</code></td>
+<td>O* 水素化後のヒドロキシ構造</td>
+</tr>
+<tr class="odd">
+<td><code>H2O*</code></td>
+<td>H2O 脱離前の吸着水構造</td>
+</tr>
+</tbody>
+</table>
+<p>吸着エネルギーは、たとえば <code>CO2*</code> について次のように定義できる。</p>
+<p><span class="math display">\[
+\Delta E_{\mathrm{ads}}(\mathrm{CO_2})
+= E(\mathrm{CO_2*})
+- E(*)
+- E(\mathrm{CO_2})
+\]</span></p>
+<p>ただし、吸着構造が複数ある場合は、最安定構造だけでなく、反応経路につながる準安定構造も候補として残す。最安定構造が必ずしも反応経路上の入口構造とは限らないためである。</p>
+<p>COOH* と HCOO* は RWGS の競合経路候補になり得る。しかし本章では、R1-R7 の direct dissociation / redox 型 MVP に限定するため、明示的な表面種としては扱わない。これらは将来、direct / COOH / HCOO 経路を比較する拡張章で追加する。</p>
+</section>
+<section id="r1-r7ごとに必要なdft計算表" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="r1-r7ごとに必要なdft計算表"><span class="header-section-number">6</span> R1-R7ごとに必要なDFT計算表</h2>
+<p>次の表は、R1-R7 を DFT 計算へ落とし込むときに必要な情報を整理したものである。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Reaction ID</th>
+<th>Elementary step</th>
+<th>主に必要なDFT計算</th>
+<th>得られる量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R1</code></td>
+<td><code>CO2 + * &lt;=&gt; CO2*</code></td>
+<td>clean surface、gas CO2、CO2*</td>
+<td>CO2 吸着エネルギー、吸着自由エネルギー</td>
+</tr>
+<tr class="even">
+<td><code>R2</code></td>
+<td><code>H2 + 2* &lt;=&gt; 2H*</code></td>
+<td>clean surface、gas H2、2H*、必要なら H2 dissociation TS</td>
+<td>H2 解離吸着エネルギー、解離障壁</td>
+</tr>
+<tr class="odd">
+<td><code>R3</code></td>
+<td><code>CO2* + * &lt;=&gt; CO* + O*</code></td>
+<td>CO2<em>、CO</em> + O*、CO2 dissociation TS</td>
+<td>CO2 解離反応エネルギー、解離障壁</td>
+</tr>
+<tr class="even">
+<td><code>R4</code></td>
+<td><code>CO* &lt;=&gt; CO + *</code></td>
+<td>CO*、gas CO、clean surface</td>
+<td>CO 脱離エネルギー、脱離自由エネルギー</td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td><code>O* + H* &lt;=&gt; OH* + *</code></td>
+<td>O* + H<em>、OH</em>、hydrogenation TS</td>
+<td>O* 水素化反応エネルギー、障壁</td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td><code>OH* + H* &lt;=&gt; H2O* + *</code></td>
+<td>OH* + H<em>、H2O</em>、hydrogenation TS</td>
+<td>OH* 水素化反応エネルギー、障壁</td>
+</tr>
+<tr class="odd">
+<td><code>R7</code></td>
+<td><code>H2O* &lt;=&gt; H2O + *</code></td>
+<td>H2O*、gas H2O、clean surface</td>
+<td>H2O 脱離エネルギー、脱離自由エネルギー</td>
+</tr>
+</tbody>
+</table>
+<p>この表は、必要な計算を最小限に整理するためのものである。実際には、吸着サイト、被覆率、表面終端が変わると、同じ R1-R7 でも異なるエネルギーセットになる。</p>
+</section>
+<section id="nebts計算で求める活性化障壁" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="nebts計算で求める活性化障壁"><span class="header-section-number">7</span> NEB/TS計算で求める活性化障壁</h2>
+<p>反応エネルギーだけでは速度定数は決まらない。速度定数を作るには、反応物状態から遷移状態までの活性化自由エネルギーが必要である。</p>
+<p>優先的に TS または NEB 計算を行うべきステップは、結合の生成・切断を伴う表面反応である。</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>TS/NEB の重要度</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>R2</code></td>
+<td>高</td>
+<td>H-H 結合の切断を伴う</td>
+</tr>
+<tr class="even">
+<td><code>R3</code></td>
+<td>高</td>
+<td>CO2* の C-O 結合切断を伴う</td>
+</tr>
+<tr class="odd">
+<td><code>R5</code></td>
+<td>高</td>
+<td>O-H 結合形成を伴う</td>
+</tr>
+<tr class="even">
+<td><code>R6</code></td>
+<td>高</td>
+<td>O-H 結合形成と H2O* 形成を伴う</td>
+</tr>
+<tr class="odd">
+<td><code>R1</code>, <code>R4</code>, <code>R7</code></td>
+<td>条件依存</td>
+<td>吸着・脱離を障壁なし近似するか、明示的に扱うかを決める</td>
+</tr>
+</tbody>
+</table>
+<p>NEB では初期状態と終状態を同じ surface cell、同じ stoichiometry、同じ固定層条件でそろえる。得られた候補遷移状態は、振動解析により虚振動が反応座標に対応しているかを確認する。</p>
+</section>
+<section id="振動解析と自由エネルギー補正" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="振動解析と自由エネルギー補正"><span class="header-section-number">8</span> 振動解析と自由エネルギー補正</h2>
+<p>DFT の電子エネルギー <span class="math inline">\(E_{\mathrm{DFT}}\)</span> をそのまま速度定数に入れるのは不十分である。温度依存の速度定数を作るには、各状態の自由エネルギーをそろえる。</p>
+<p>表面状態 <span class="math inline">\(X*\)</span> については、概念的に次の形で整理する。</p>
+<p><span class="math display">\[
+G(X*, T)
+= E_{\mathrm{DFT}}(X*)
++ ZPE(X*)
++ H_{\mathrm{vib}}(X*, T)
+- T S_{\mathrm{vib}}(X*, T)
+\]</span></p>
+<p>遷移状態では、反応座標に対応する虚振動を熱補正から除く。気相分子では、並進・回転・振動の寄与を含め、分圧依存も標準状態と一貫して扱う。</p>
+<p>この段階で、各素反応の反応自由エネルギーを次のように作る。</p>
+<p><span class="math display">\[
+\Delta G_j(T)
+= G_{\mathrm{products},j}(T)
+- G_{\mathrm{reactants},j}(T)
+\]</span></p>
+<p>また、前進方向の活性化自由エネルギーは次のように定義する。</p>
+<p><span class="math display">\[
+\Delta G_{j,f}^{\ddagger}(T)
+= G_j^{\ddagger}(T)
+- G_{\mathrm{reactants},j}(T)
+\]</span></p>
+<p>逆方向についても同様に定義できる。</p>
+</section>
+<section id="遷移状態理論による速度定数化" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="遷移状態理論による速度定数化"><span class="header-section-number">9</span> 遷移状態理論による速度定数化</h2>
+<p>表面反応の速度定数は、遷移状態理論を使って概念的に次のように表せる。</p>
+<p><span class="math display">\[
+k_{j,f}(T)
+= \frac{k_{\mathrm{B}}T}{h}
+\exp\left(
+-\frac{\Delta G_{j,f}^{\ddagger}(T)}{RT}
+\right)
+\]</span></p>
+<p>ここで <span class="math inline">\(k_{\mathrm{B}}\)</span> は Boltzmann constant、<span class="math inline">\(h\)</span> は Planck constant、<span class="math inline">\(R\)</span> は gas constant である。</p>
+<p>吸着ステップでは、速度定数の単位が分圧の定義に依存する。たとえば <code>R1</code> の速度式を</p>
+<p><span class="math display">\[
+r_1
+= k_{1,f} P_{\mathrm{CO_2}} \theta_*
+- k_{1,r}\theta_{\mathrm{CO_2}}
+\]</span></p>
+<p>と書くなら、<span class="math inline">\(k_{1,f}\)</span> は <span class="math inline">\(P_{\mathrm{CO_2}}\)</span> と掛けたときに表面反応速度の単位になるように定義する必要がある。sticking coefficient を使う場合も、圧力、面積、サイト密度、分子質量の扱いを明示する。</p>
+</section>
+<section id="熱力学整合性の確認" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="熱力学整合性の確認"><span class="header-section-number">10</span> 熱力学整合性の確認</h2>
+<p>前進・逆反応速度定数は、反応自由エネルギーと整合していなければならない。各素反応について、平衡定数は次の関係を満たす。</p>
+<p><span class="math display">\[
+K_j(T)
+= \frac{k_{j,f}(T)}{k_{j,r}(T)}
+\]</span></p>
+<p>一方、DFT から得た反応自由エネルギーを使えば、</p>
+<p><span class="math display">\[
+K_j(T)
+= \exp\left(
+-\frac{\Delta G_j(T)}{RT}
+\right)
+\]</span></p>
+<p>と書ける。したがって、片方向の速度定数と <span class="math inline">\(\Delta G_j(T)\)</span> が決まれば、もう一方の速度定数は次のように制約される。</p>
+<p><span class="math display">\[
+k_{j,r}(T)
+= \frac{k_{j,f}(T)}{K_j(T)}
+\]</span></p>
+<p>この関係を無視して <span class="math inline">\(k_{j,f}\)</span> と <span class="math inline">\(k_{j,r}\)</span> を独立に調整すると、見かけ上は実験値に合っても、平衡組成や反応方向が熱力学と矛盾する可能性がある。</p>
+</section>
+<section id="この章の要点" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="この章の要点"><span class="header-section-number">11</span> この章の要点</h2>
+<ul>
+<li>microkinetic model には、反応式だけでなく速度定数を制約する energetics が必要である。</li>
+<li>Fe3O4-RWGS MVP では、R1-R7 に対応する気相分子、吸着種、遷移状態を DFT で整理する。</li>
+<li>反応エネルギーは平衡定数を、活性化自由エネルギーは速度定数を制約する。</li>
+<li>気相分子、吸着種、遷移状態では熱補正の扱いが異なる。</li>
+<li>逆反応速度定数は、熱力学整合性を満たすように前進速度定数と反応自由エネルギーから決める。</li>
+<li>COOH<em>、HCOO</em>、FeCx-FT は重要な将来拡張候補だが、本 MVP の R1-R7 には追加しない。</li>
+</ul>
+</section>
+<section id="確認問題" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="確認問題"><span class="header-section-number">12</span> 確認問題</h2>
 <ol type="1">
-<li><code>partial_pressures["CO2"]</code>を変え、CO生成速度と<code>CO2*</code>被覆率がどう変わるか調べよ。</li>
-<li><code>partial_pressures["H2"]</code>を変え、<code>H*</code>、<code>OH*</code>、<code>H2O*</code>被覆率への影響を調べよ。</li>
-<li><code>partial_pressures["H2O"]</code>を大きくして、H2O添加がCO生成速度に与える影響を確認せよ。</li>
-<li>特定の反応、たとえばR3またはR5の速度定数を変え、CO生成速度の感度を比較せよ。</li>
+<li>microkinetic model で反応エネルギーだけでなく活性化障壁が必要になる理由を説明せよ。</li>
+<li><code>R3: CO2* + * &lt;=&gt; CO* + O*</code> に必要な DFT 計算を列挙せよ。</li>
+<li>気相分子と表面吸着種で熱補正の扱いが異なる理由を説明せよ。</li>
+<li><span class="math inline">\(K_j = k_{j,f}/k_{j,r}\)</span> と <span class="math inline">\(\Delta G_j\)</span> の関係を説明せよ。</li>
+<li>COOH* と HCOO* を本 MVP に含めない理由を説明せよ。</li>
+</ol>
+</section>
+<section id="計算計画演習" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="計算計画演習"><span class="header-section-number">13</span> 計算計画演習</h2>
+<ol type="1">
+<li>Fe3O4(001) のある termination を仮定し、<code>CO2*</code>, <code>CO*</code>, <code>O*</code>, <code>OH*</code>, <code>H2O*</code> の吸着構造探索計画を作成せよ。</li>
+<li>R1-R7 のうち、NEB/TS 計算を優先すべきステップを3つ選び、その理由を説明せよ。</li>
+<li>ある素反応について <span class="math inline">\(\Delta G_j(T)\)</span> と <span class="math inline">\(k_{j,f}(T)\)</span> が与えられたとき、熱力学整合性を満たす <span class="math inline">\(k_{j,r}(T)\)</span> の計算手順を書け。</li>
 </ol>
 
 
